@@ -1,0 +1,13 @@
+.detail_select {
+  margin-bottom: 10px;
+}
+
+.tracking {
+  width: 100%;
+  display: flex;
+}
+
+.tracking_time {
+  flex: 1;
+  line-height: 30px;
+}
