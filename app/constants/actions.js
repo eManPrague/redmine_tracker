@@ -17,4 +17,5 @@ export const SET_ACTIVITIES = 'SET_ACTIVITIES';
 
 /** Entry actions */
 export const START_ENTRY = 'START_ENTRY';
+export const UPDATE_ENTRY = 'UPDATE_ENTRY';
 export const STOP_ENTRY = 'STOP_ENTRY';

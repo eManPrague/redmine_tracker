@@ -3,21 +3,29 @@ import Immutable from 'immutable';
 
 import {
   START_ENTRY,
+  UPDATE_ENTRY,
   STOP_ENTRY
 } from '../constants/actions';
 
 const initialState = Immutable.fromJS({
-  currentEntry: null,
+  current: {
+    project: '',
+    issue: 0,
+    activity: 0,
+    description: '',
+    startTime: 0,
+    stopTime: 0
+  },
   history: []
 });
 
 export default (state: Immutable.Map<string, mixed> = initialState, action: any) => {
   switch (action.type) {
-    case START_ENTRY:
-      return state.set('current', Immutable.fromJS(action));
-
-    case STOP_ENTRY:
-      return state.set('current', null);
+    case UPDATE_ENTRY:
+      return state.set(
+        'current',
+        state.get('current').merge(action)
+      );
 
     default:
       return state;

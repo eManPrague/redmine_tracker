@@ -140,7 +140,7 @@ class RedmineClient {
     this.constructor.assertResponse(initialResponse);
 
     // Get total count
-    const totalCount = initialResponse.json.get('total_count');
+    const totalCount = 20; // initialResponse.json.get('total_count');
     const limit = 40;
 
     // Create promise with limit + offset accoring

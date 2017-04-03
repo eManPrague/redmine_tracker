@@ -12,20 +12,17 @@ import UpdateTimer from './UpdateTimer';
 import { fetchProjects } from '../actions/projects';
 import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
-import { startEntry, stopEntry } from '../actions/entries';
+
+import {
+  startEntry,
+  closeEntry,
+  updateEntry
+} from '../actions/entries';
 
 // Styles
 import styles from './TrackDialog.css';
 
 class TrackDialog extends Component {
-  state: {
-    currentProject: string,
-    currentIssue: number,
-    currentActivity: number,
-    currentDescription: string,
-    startTime: ?moment
-  };
-
   props: {
     projects: Immutable.List<Immutable.Map<string, string>>,
     loadProjects: () => void,
@@ -33,23 +30,12 @@ class TrackDialog extends Component {
     loadIssues: (projectIdentifier: string) => void,
     activities: Immutable.Map<number, string>,
     loadActivities: () => void,
-    startNewEntry: (project: string, issue: number, activity: number,
+    startCurrentEntry: (project: string, issue: number, activity: number,
       description: string, startTime: number) => void,
-    stopNewEntry: (endTime: number) => void
-    // currentEntry: ?Immutable.Map<string, mixed>
+    updateCurrentEntry: (data: any) => void,
+    stopCurrentEntry: (endTime: number) => void,
+    currentEntry: Immutable.Map<string, mixed>
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentProject: '',
-      currentIssue: 0,
-      currentActivity: 0,
-      currentDescription: '',
-      startTime: null
-    };
-  }
 
   componentDidMount() {
     const {
@@ -68,65 +54,63 @@ class TrackDialog extends Component {
     }
   }
 
+  componentWillReceiveProps(newProps: any) {
+    const current = newProps.currentEntry;
+    const currentProject = current.get('project');
+
+    if (newProps.projects.size > 0 &&
+      currentProject.length > 0 &&
+      !newProps.issues.has(currentProject)) {
+      this.props.loadIssues(currentProject);
+    }
+  }
+
   projectChange = (project: ?{ value: string, label: string }) => {
     if (project) {
-      this.setState({
-        currentProject: project.value
+      this.props.updateCurrentEntry({
+        project: project.value
       });
     } else {
       // Project was removed
-      this.setState({
-        currentProject: '',
-        currentIssue: 0,
-        currentActivity: 0
+      this.props.updateCurrentEntry({
+        project: '',
+        issue: 0,
+        activity: 0
       });
     }
   }
 
   issueChange = (issue: ?{ value: number, label: string }) => {
-    this.setState({
-      currentIssue: issue ? issue.value : 0
+    this.props.updateCurrentEntry({
+      issue: issue ? issue.value : 0
     });
   };
 
   activityChange = (activity: ?{ value: number, label: string }) => {
-    this.setState({
-      currentActivity: activity ? activity.value : 0
+    this.props.updateCurrentEntry({
+      activity: activity ? activity.value : 0
     });
   }
 
   descriptionChange = (evt: any) => {
-    this.setState({
-      currentDescription: evt.target.value
+    this.props.updateCurrentEntry({
+      description: evt.target.value
     });
   }
 
   handleTracking = () => {
     // If state startTime is null
-    if (this.state.startTime) {
-      // Stop tracking
-      this.setState({
-        startTime: null
+    if (this.props.currentEntry && this.props.currentEntry.get('startTime') > 0) {
+      this.props.updateCurrentEntry({
+        stopTime: 0
       });
-
-      this.props.stopNewEntry(
-        moment().unix()
-      );
     } else {
       // Start tracking
       const startTime = moment();
 
-      this.setState({
-        startTime
+      this.props.updateCurrentEntry({
+        startTime: startTime.unix()
       });
-
-      this.props.startNewEntry(
-        this.state.currentProject,
-        this.state.currentIssue,
-        this.state.currentActivity,
-        this.state.currentDescription,
-        startTime.unix()
-      );
     }
   }
 
@@ -136,27 +120,27 @@ class TrackDialog extends Component {
     const activities: Array<{value: string, label: string}> = [];
 
     const {
-      currentProject,
-      currentIssue,
-      currentActivity,
-      currentDescription,
+      project,
+      issue,
+      activity,
+      description,
       startTime
-    } = this.state;
+    } = this.props.currentEntry.toJS();
 
     const btnEnabled = (
-      currentProject.length > 0 &&
-      currentIssue > 0 &&
-      currentActivity > 0 &&
-      currentDescription.length > 0
+      project.length > 0 &&
+      issue > 0 &&
+      activity > 0 &&
+      description.length > 0
     );
 
     const tracking = startTime != null;
 
-    if (currentProject.length > 0 && !this.props.issues.has(currentProject)) {
-      this.props.loadIssues(currentProject);
-    } else if (this.props.issues.has(currentProject)) {
+    // if (currentProject.length > 0 && !this.props.issues.has(currentProject)) {
+    //   this.props.loadIssues(currentProject);
+    if (this.props.issues.has(project)) {
       // Transform issues into usable object for select
-      this.props.issues.get(currentProject).forEach((label, value) => {
+      this.props.issues.get(project).forEach((label, value) => {
         issues.push({ label, value });
       });
     }
@@ -185,7 +169,7 @@ class TrackDialog extends Component {
         <Select
           name="project"
           className={styles.detail_select}
-          value={currentProject}
+          value={project}
           options={projects}
           onChange={this.projectChange}
           placeholder="Select project"
@@ -194,7 +178,7 @@ class TrackDialog extends Component {
         <Select
           name="issue"
           className={styles.detail_select}
-          value={currentIssue}
+          value={issue}
           options={issues}
           onChange={this.issueChange}
           placeholder="Select issue"
@@ -203,14 +187,14 @@ class TrackDialog extends Component {
         <Select
           name="activity"
           className={styles.detail_select}
-          value={currentActivity}
+          value={activity}
           options={activities}
           onChange={this.activityChange}
           placeholder="Select activity"
         />
 
         <div className="input_field">
-          <textarea name="description" placeholder="Description" value={currentDescription} onChange={this.descriptionChange} />
+          <textarea name="description" placeholder="Description" value={description} onChange={this.descriptionChange} />
         </div>
 
         <div className={styles.tracking}>
@@ -228,13 +212,13 @@ class TrackDialog extends Component {
 
 const mapStateToProps = (state) => {
   const data = state.get('data');
-  // const entries = state.get('entries');
+  const entries = state.get('entries');
 
   return {
     projects: data.get('projects'),
     issues: data.get('issues'),
-    activities: data.get('activities')
-    // currentEntry: entries.get('current')
+    activities: data.get('activities'),
+    currentEntry: entries.get('current')
   };
 };
 
@@ -248,12 +232,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadActivities: () => {
     dispatch(fetchActivities());
   },
-  startNewEntry: (project: string, issue: number, activity: number,
-    description: string, startTime: number) => {
-    dispatch(startEntry(project, issue, description, activity, startTime));
+  startCurrentEntry: (startTime: number) => {
+    dispatch(startEntry(startTime));
   },
-  stopNewEntry: (endTime: number) => {
-    dispatch(stopEntry(endTime));
+  updateCurrentEntry: (data: any) => {
+    dispatch(updateEntry(data));
+  },
+  stopCurrentEntry: (endTime: number, autoSync: boolean) => {
+    dispatch(closeEntry(endTime, autoSync));
   }
 });
 
