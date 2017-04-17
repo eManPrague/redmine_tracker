@@ -63,7 +63,7 @@ const installExtensions = async () => {
   }
 };
 
-app.on('ready', async () => {
+const createMainWindow = async () => {
   await installExtensions();
 
   mainWindow = new BrowserWindow({
@@ -88,4 +88,17 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+};
+
+app.on('ready', createMainWindow);
+
+// On darwin platfrom - click on bar icon
+// wil reopen / focus main window.
+app.on('activate', async () => {
+  if (!mainWindow) {
+    createMainWindow();
+  } else {
+    mainWindow.show();
+    mainWindow.focus();
+  }
 });
