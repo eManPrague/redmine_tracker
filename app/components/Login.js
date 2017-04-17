@@ -56,7 +56,7 @@ class Login extends Component {
             </div>
             <div className="input_field">
               <label htmlFor="token">Token</label>
-              <input type="text" id="token" value={this.state.token} name="token" onChange={this.handleInput} />
+              <input type="password" id="token" value={this.state.token} name="token" onChange={this.handleInput} />
             </div>
             <div className="form_button">
               <button onClick={this.loginBtn} className="primary">

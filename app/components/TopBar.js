@@ -1,9 +1,11 @@
 // @flow
 import React, { Component } from 'react';
+import Immutable from 'immutable';
 import { connect } from 'react-redux';
 
 // Actions
 import { userLogOut } from '../actions/user';
+import resetData from '../actions/data';
 
 // Styles
 import styles from './TopBar.css';
@@ -11,6 +13,8 @@ import styles from './TopBar.css';
 class TopBar extends Component {
   props: {
     logoutUser: () => void,
+    refreshData: () => void,
+    currentEntry: Immutable.Map<string, mixed>,
     user: any
   };
 
@@ -19,7 +23,14 @@ class TopBar extends Component {
   }
 
   handleRefresh = () => {
-    // TODO
+    this.props.refreshData();
+  }
+
+  currentNotCounting = (): boolean => {
+    const entry = this.props.currentEntry;
+    return (entry.get('project').length === 0 &&
+      entry.get('issue') === 0 &&
+      entry.get('description').length === 0);
   }
 
   render() {
@@ -32,7 +43,7 @@ class TopBar extends Component {
           {userName}
         </div>
         <div className={styles.action_buttons}>
-          <button type="button" onClick={this.handleRefresh} className={styles.reload_button} />
+          <button type="button" onClick={this.handleRefresh} disabled={!this.currentNotCounting()} className={styles.reload_button} />
           <button type="button" onClick={this.handleLogout} className={styles.logout_button} />
         </div>
       </div>
@@ -43,7 +54,14 @@ class TopBar extends Component {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   logoutUser: () => {
     dispatch(userLogOut());
+  },
+  refreshData: () => {
+    dispatch(resetData());
   }
 });
 
-export default connect(undefined, mapDispatchToProps)(TopBar);
+const mapStateToProps = (state) => ({
+  currentEntry: state.get('entries').get('current')
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar);

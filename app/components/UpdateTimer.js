@@ -2,23 +2,22 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
+type Props = {
+  startTime: moment
+};
+
 export default class UpdateTimer extends Component {
   state: {
-    seconds: number
+    ms: number
   };
 
-  props: {
-    startTime: moment
-  };
+  props: Props;
 
-  // Set interval result
-  interval: any;
-
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      seconds: 0
+      ms: 0
     };
   }
 
@@ -30,16 +29,25 @@ export default class UpdateTimer extends Component {
     clearInterval(this.interval);
   }
 
+  // Set interval result
+  interval: any;
+
   tick = () => {
     this.setState({
-      seconds: moment().diff(this.props.startTime)
+      ms: moment().diff(this.props.startTime)
     });
+  }
+
+  formatDiff(): string {
+    const ms = this.state.ms;
+    const d = moment.duration(ms);
+    return Math.floor(d.asHours()) + moment.utc(ms).format(':mm:ss');
   }
 
   render() {
     return (
       <div>
-        {moment.utc(this.state.seconds).format('HH:mm:ss')}
+        {this.formatDiff()}
       </div>
     );
   }

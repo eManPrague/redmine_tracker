@@ -7,6 +7,10 @@
   display: flex;
 }
 
+.tracking button {
+  margin-left: 5px;
+}
+
 .tracking_time {
   flex: 1;
   line-height: 30px;

@@ -16,22 +16,25 @@ import {
   electronAlert
 } from '../utils/ElectronHelper';
 
-export const setActivities = (activities: Immutable.Map<number, string>) => ({
-  type: SET_ACTIVITIES,
-  activities
-});
+export const setActivities = (projectIdentifier: string,
+  activities: Immutable.Map<number, string>) => ({
+    type: SET_ACTIVITIES,
+    projectIdentifier,
+    activities
+  });
 
 export const clearActivities = () => ({
   type: SET_ACTIVITIES,
   activities: []
 });
 
-export const fetchActivities = () => async (dispatch: Dispatch) => {
+export const fetchActivities = (projectIdentifier: string) => async (dispatch: Dispatch) => {
   dispatch(showLoading('activities', 'Fetching activities...'));
 
   try {
     dispatch(setActivities(
-      await redmineClient.getActivities()
+      projectIdentifier,
+      await redmineClient.getActivities(projectIdentifier)
     ));
   } catch (e) {
     electronAlert(e.message);

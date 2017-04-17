@@ -14,7 +14,6 @@ import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
 
 import {
-  startEntry,
   closeEntry,
   updateEntry
 } from '../actions/entries';
@@ -22,46 +21,51 @@ import {
 // Styles
 import styles from './TrackDialog.css';
 
+// Props
+type Props = {
+  projects: Immutable.List<Immutable.Map<string, string>>,
+  loadProjects: () => void,
+  issues: Immutable.Map<string, Immutable.Map<number, string>>,
+  loadIssues: (projectIdentifier: string) => void,
+  activities: Immutable.Map<string, Immutable.Map<number, string>>,
+  loadActivities: (project: string) => void,
+  updateCurrentEntry: (data: any) => void,
+  stopCurrentEntry: (endTime: number, autoSync: boolean) => void,
+  currentEntry: Immutable.Map<string, mixed>
+};
+
 class TrackDialog extends Component {
-  props: {
-    projects: Immutable.List<Immutable.Map<string, string>>,
-    loadProjects: () => void,
-    issues: Immutable.Map<string, Immutable.Map<number, string>>,
-    loadIssues: (projectIdentifier: string) => void,
-    activities: Immutable.Map<number, string>,
-    loadActivities: () => void,
-    startCurrentEntry: (project: string, issue: number, activity: number,
-      description: string, startTime: number) => void,
-    updateCurrentEntry: (data: any) => void,
-    stopCurrentEntry: (endTime: number) => void,
-    currentEntry: Immutable.Map<string, mixed>
-  };
+  props: Props;
 
   componentDidMount() {
     const {
       projects,
-      loadProjects,
-      activities,
-      loadActivities
+      loadProjects
     } = this.props;
-
-    if (activities.size === 0) {
-      loadActivities();
-    }
 
     if (projects.size === 0) {
       loadProjects();
     }
   }
 
-  componentWillReceiveProps(newProps: any) {
+  componentWillReceiveProps(newProps: Props) {
     const current = newProps.currentEntry;
     const currentProject = current.get('project');
 
-    if (newProps.projects.size > 0 &&
-      currentProject.length > 0 &&
-      !newProps.issues.has(currentProject)) {
-      this.props.loadIssues(currentProject);
+    // Don't remove this, we can force to refresh data
+    // but in that case componentDidMount won't be called.
+    if (newProps.projects.size === 0) {
+      this.props.loadProjects();
+    }
+
+    if (newProps.projects.size > 0 && currentProject.length > 0) {
+      if (!newProps.activities.has(currentProject)) {
+        this.props.loadActivities(currentProject);
+      }
+
+      if (!newProps.issues.has(currentProject)) {
+        this.props.loadIssues(currentProject);
+      }
     }
   }
 
@@ -98,18 +102,17 @@ class TrackDialog extends Component {
     });
   }
 
-  handleTracking = () => {
-    // If state startTime is null
-    if (this.props.currentEntry && this.props.currentEntry.get('startTime') > 0) {
-      this.props.updateCurrentEntry({
-        stopTime: 0
-      });
-    } else {
-      // Start tracking
-      const startTime = moment();
+  trackingInProgress = (): boolean => this.props.currentEntry && this.props.currentEntry.get('startTime') > 0
 
+  handleTracking = () => {
+    const currentTime = moment().unix();
+
+    // If state startTime is null
+    if (this.trackingInProgress()) {
+      this.props.stopCurrentEntry(currentTime, false);
+    } else {
       this.props.updateCurrentEntry({
-        startTime: startTime.unix()
+        startTime: currentTime
       });
     }
   }
@@ -134,10 +137,8 @@ class TrackDialog extends Component {
       description.length > 0
     );
 
-    const tracking = startTime != null;
+    const tracking = startTime > 0;
 
-    // if (currentProject.length > 0 && !this.props.issues.has(currentProject)) {
-    //   this.props.loadIssues(currentProject);
     if (this.props.issues.has(project)) {
       // Transform issues into usable object for select
       this.props.issues.get(project).forEach((label, value) => {
@@ -145,9 +146,9 @@ class TrackDialog extends Component {
       });
     }
 
-    if (this.props.activities.size > 0) {
+    if (this.props.activities.has(project)) {
       // Transform issues into usable object for select
-      this.props.activities.forEach((label, value) => {
+      this.props.activities.get(project).forEach((label, value) => {
         activities.push({ label, value });
       });
     }
@@ -160,7 +161,7 @@ class TrackDialog extends Component {
     let timeText = 'Not tracking...';
     if (tracking) {
       timeText = (
-        <UpdateTimer startTime={moment(startTime)} />
+        <UpdateTimer startTime={moment.unix(startTime)} />
       );
     }
 
@@ -204,6 +205,9 @@ class TrackDialog extends Component {
           <button className={buttonClass} disabled={!btnEnabled} onClick={this.handleTracking}>
             {buttonText}
           </button>
+          <button className={'default'} disabled={btnEnabled}>
+            Cancel
+          </button>
         </div>
       </div>
     );
@@ -229,11 +233,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   loadIssues: (projectIdentifier: string) => {
     dispatch(fetchIssues(projectIdentifier));
   },
-  loadActivities: () => {
-    dispatch(fetchActivities());
-  },
-  startCurrentEntry: (startTime: number) => {
-    dispatch(startEntry(startTime));
+  loadActivities: (projectIdentifier: string) => {
+    dispatch(fetchActivities(projectIdentifier));
   },
   updateCurrentEntry: (data: any) => {
     dispatch(updateEntry(data));

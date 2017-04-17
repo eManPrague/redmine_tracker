@@ -2,20 +2,22 @@
 import Immutable from 'immutable';
 
 import {
-  START_ENTRY,
   UPDATE_ENTRY,
   STOP_ENTRY
 } from '../constants/actions';
 
+const emptyCurrent = Immutable.fromJS({
+  project: '',
+  issue: 0,
+  activity: 0,
+  description: '',
+  startTime: 0,
+  stopTime: 0,
+  synced: false
+});
+
 const initialState = Immutable.fromJS({
-  current: {
-    project: '',
-    issue: 0,
-    activity: 0,
-    description: '',
-    startTime: 0,
-    stopTime: 0
-  },
+  current: emptyCurrent,
   history: []
 });
 
@@ -26,6 +28,10 @@ export default (state: Immutable.Map<string, mixed> = initialState, action: any)
         'current',
         state.get('current').merge(action)
       );
+
+    case STOP_ENTRY:
+      return state.update('history', arr => arr.push(state.get('current').merge(action)))
+        .set('current', emptyCurrent);
 
     default:
       return state;

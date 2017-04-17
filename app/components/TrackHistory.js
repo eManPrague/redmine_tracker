@@ -1,17 +1,22 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Immutable from 'immutable';
+
+// Types
+import type { EntryType } from '../types/EntryType';
 
 // Styles
 import styles from './TrackHistory.css';
 
-export default class TrackHistory extends Component {
+class TrackHistory extends Component {
   props: {
-    items: Array<any>,
+    entries: Immutable.List<EntryType>,
     title: string
   };
 
   render() {
-    const itemCount = this.props.items.length;
+    const itemCount = this.props.entries.size;
 
     return (
       <div>
@@ -22,3 +27,9 @@ export default class TrackHistory extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  entries: state.get('entries').get('history')
+});
+
+export default connect(mapStateToProps)(TrackHistory);

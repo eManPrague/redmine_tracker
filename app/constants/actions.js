@@ -15,6 +15,9 @@ export const SET_ISSUES = 'SET_ISSUES';
 /** Activities actions */
 export const SET_ACTIVITIES = 'SET_ACTIVITIES';
 
+/** RESET ALL */
+export const RESET_ALL = 'RESET_ALL';
+
 /** Entry actions */
 export const START_ENTRY = 'START_ENTRY';
 export const UPDATE_ENTRY = 'UPDATE_ENTRY';

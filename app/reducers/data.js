@@ -1,3 +1,4 @@
+// @flow
 /**
  * Reducer for loaded redmine data:
  * 1) Projects
@@ -7,7 +8,7 @@
 import Immutable from 'immutable';
 
 import {
-  SET_PROJECTS, SET_ISSUES, SET_ACTIVITIES
+  SET_PROJECTS, SET_ISSUES, SET_ACTIVITIES, RESET_ALL
 } from '../constants/actions';
 
 const initialState = Immutable.fromJS({
@@ -16,14 +17,16 @@ const initialState = Immutable.fromJS({
   activities: {}
 });
 
-export default (state = initialState, action) => {
+export default (state: Immutable.Map<string, mixed> = initialState, action: any) => {
   switch (action.type) {
     case SET_PROJECTS:
       return state.set('projects', action.projects);
     case SET_ISSUES:
       return state.setIn(['issues', action.projectIdentifier], action.issues);
     case SET_ACTIVITIES:
-      return state.set('activities', action.activities);
+      return state.setIn(['activities', action.projectIdentifier], action.activities);
+    case RESET_ALL:
+      return initialState;
     default:
       return state;
   }
