@@ -7,11 +7,13 @@ import {
 
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
+import { createStore, applyMiddleware } from 'redux';
 
 import {
   SETTINGS_LOAD_ERROR, ERROR_ALERT
 } from './constants/dialogs';
-import MenuBuilder from './menu';
+import configureStore from './store/configureStore';
+import MenuBuilder from './main/MenuBuilder';
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';

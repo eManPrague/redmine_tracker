@@ -188,6 +188,7 @@
     "electron-debug": "^1.1.0",
     "electron-json-storage": "^3.0.2",
     "electron-log": "^2.0.2",
+    "electron-redux": "^1.2.5",
     "electron-updater": "^1.11.1",
     "extract-text-webpack-plugin": "^2.0.0",
     "font-awesome": "^4.7.0",
