@@ -5,15 +5,20 @@ import {
   dialog
 } from 'electron';
 
+import Immutable from 'immutable';
+
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
-import { createStore, applyMiddleware } from 'redux';
 
 import {
   SETTINGS_LOAD_ERROR, ERROR_ALERT
 } from './constants/dialogs';
-import configureStore from './store/configureStore';
+
 import MenuBuilder from './main/MenuBuilder';
+
+// Initialize store to share it between windows
+import configureStore from './store';
+const store = configureStore(Immutable.fromJS({}), 'main');
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -38,8 +43,14 @@ app.on('window-all-closed', () => {
 });
 
 ipc.on(SETTINGS_LOAD_ERROR, (event, arg) => {
-  dialog.showErrorBox('Error', `Cannot load settings! (Error: ${arg})`);
-  app.quit();
+  dialog.showErrorBox('Error', `Cannot load settings! (Error: ${arg[0]})`);
+
+  // Quit only on production evn otherwise show errors
+  if (process.env.NODE_ENV === 'production') {
+    app.quit();
+  } else {
+    console.log(arg[1]);
+  }
 });
 
 ipc.on(ERROR_ALERT, (event, arg) => {

@@ -6,12 +6,13 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import Immutable from 'immutable';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { ipcRenderer as ipc } from 'electron';
+import { createHashHistory } from 'history';
 
 // Containers + store
 import { SETTINGS_LOAD_ERROR } from './constants/dialogs';
 import SettingsStorage from './utils/SettingsStorage';
 import Root from './containers/Root';
-import configureStore from './store/configureStore';
+import configureStore from './store';
 
 // Global styles
 import './app.global.css';
@@ -21,16 +22,10 @@ injectTapEventPlugin();
 
 // Init app
 const initApp = (val) => {
+  console.log("TEST");
   const initialState = Immutable.fromJS(val);
-  const store = configureStore(initialState);
-
-  const history = syncHistoryWithStore(hashHistory, store, {
-    selectLocationState(state) {
-      return state
-        .get('routing')
-        .toJS();
-    }
-  });
+  const history = createHashHistory();
+  const store = configureStore(initialState, 'renderer', history);
 
   render(
     <AppContainer>
@@ -59,4 +54,4 @@ const settings = SettingsStorage.get('settings', {});
 
 settings
   .then(initApp)
-  .catch((e) => ipc.send(SETTINGS_LOAD_ERROR, e.message));
+  .catch((e) => { ipc.send(SETTINGS_LOAD_ERROR, e.stack, e.message ) });

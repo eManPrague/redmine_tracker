@@ -35,6 +35,11 @@ class TopBar extends Component {
 
   render() {
     const user = this.props.user;
+
+    if (!user) {
+      return null;
+    }
+
     const userName = `${user.get('firstname')} ${user.get('lastname')}`;
 
     return (

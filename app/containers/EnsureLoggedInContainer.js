@@ -2,22 +2,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import { Route, Switch, Redirect } from 'react-router';
 
 // Actions
 import { userLogIn } from '../actions/user';
 
 // Components
 import TopBar from '../components/TopBar';
+import HomePage from './HomePage';
 
 class EnsureLoggedInContainer extends Component {
   props: {
     isLoggedIn: boolean,
-    onNavigateTo: () => void,
-    loadUser: () => void,
+    onNavigateTo: (dest: string) => any,
+    loadUser: (server: string, token: string) => void,
     user: any,
-    server: string,
-    token: string,
+    server: ?string,
+    token: ?string,
     children: React$Element<*>
+  }
+
+  canUserLogIn(): boolean {
+    const {
+      server,
+      token,
+    } = this.props;
+
+    return (server && server.length > 0 && token && token.length > 0) == true;
   }
 
   componentDidMount() {
@@ -30,30 +41,46 @@ class EnsureLoggedInContainer extends Component {
       loadUser
     } = this.props;
 
-    if (!isLoggedIn) {
+    //if (!isLoggedIn) {
+ //     console.log(`User is not logged in! Redirect...`);
       // set the current url/path for future redirection (we use a Redux action) then
       // redirect (we use a React Router method)
-      onNavigateTo('/login');
-    } else if (!user && server.length > 0 && token.length > 0) {
+      // onNavigateTo('/login');
+   if (!user && this.canUserLogIn()) {
       // ensure user is valid when reopen application
       loadUser(server, token);
     }
   }
 
   render() {
-    // User is logged out or we want to wait until auto login success
-    if (!this.props.isLoggedIn || !this.props.user) {
+    const {
+      isLoggedIn,
+      server,
+      token,
+    } = this.props;
+
+    if (isLoggedIn) {
+      return (
+        <div>
+          <TopBar user={this.props.user} />
+          <div>
+            <Switch>
+              <Route path='/' component={HomePage} />
+            </Switch>
+          </div>
+        </div>
+      );
+    }
+
+    // User is logged now
+    if (!isLoggedIn && this.canUserLogIn()) {
       return null;
     }
 
+    // Redirect to login ...
     return (
-      <div>
-        <TopBar user={this.props.user} />
-        <div>
-          {this.props.children}
-        </div>
-      </div>
-    );
+      <Redirect to="/login" />
+    )
   }
 }
 
@@ -72,7 +99,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   onNavigateTo: (dest: string) => {
     dispatch(push(dest));
   },
-  loadUser: (server: string, token: string) => {
+  loadUser: (server: string, token: string): void => {
     dispatch(userLogIn(server, token));
   },
 });

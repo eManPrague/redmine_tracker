@@ -1,23 +1,29 @@
 /**
- * Build config for electron 'Renderer Process' file
+ * Build config for electron renderer process
  */
 
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import merge from 'webpack-merge';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import BabiliPlugin from 'babili-webpack-plugin';
 import baseConfig from './webpack.config.base';
+import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
 
-export default merge(baseConfig, {
-  devtool: 'cheap-module-source-map',
+CheckNodeEnv('production');
 
-  entry: ['babel-polyfill', './app/index'],
+export default merge.smart(baseConfig, {
+  devtool: 'source-map',
+
+  target: 'electron-renderer',
+
+  entry: './app/index',
 
   output: {
     path: path.join(__dirname, 'app/dist'),
-    publicPath: '../dist/'
+    publicPath: '../dist/',
+    filename: 'renderer.prod.js'
   },
 
   module: {
@@ -30,7 +36,6 @@ export default merge(baseConfig, {
           fallback: 'style-loader',
         })
       },
-
       // Pipe other styles through css modules and append to style.css
       {
         test: /^((?!\.global).)*\.css$/,
@@ -45,6 +50,39 @@ export default merge(baseConfig, {
           }
         }),
       },
+      // Add SASS support  - compile all .global.scss files and pipe it to style.css
+      {
+        test: /\.global\.scss$/,
+        use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'sass-loader'
+            }
+          ],
+          fallback: 'style-loader',
+        })
+      },
+      // Add SASS support  - compile all other .scss files and pipe it to style.css
+      {
+        test: /^((?!\.global).)*\.scss$/,
+        use: ExtractTextPlugin.extract({
+          use: [{
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]__[hash:base64:5]',
+            }
+          },
+          {
+            loader: 'sass-loader'
+          }]
+        }),
+      },
+      // WOFF Font
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         use: {
@@ -55,6 +93,7 @@ export default merge(baseConfig, {
           }
         },
       },
+      // WOFF2 Font
       {
         test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
         use: {
@@ -65,6 +104,7 @@ export default merge(baseConfig, {
           }
         }
       },
+      // TTF Font
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
         use: {
@@ -75,10 +115,12 @@ export default merge(baseConfig, {
           }
         }
       },
+      // EOT Font
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         use: 'file-loader',
       },
+      // SVG Font
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         use: {
@@ -89,6 +131,7 @@ export default merge(baseConfig, {
           }
         }
       },
+      // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
         use: 'url-loader',
@@ -107,7 +150,7 @@ export default merge(baseConfig, {
      * development checks
      */
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     }),
 
     /**
@@ -117,16 +160,9 @@ export default merge(baseConfig, {
 
     new ExtractTextPlugin('style.css'),
 
-    /**
-     * Dynamically generate index.html page
-     */
-    new HtmlWebpackPlugin({
-      filename: '../app.html',
-      template: 'app/app.html',
-      inject: false
-    })
+    new BundleAnalyzerPlugin({
+      analyzerMode: process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
+      openAnalyzer: process.env.OPEN_ANALYZER === 'true'
+    }),
   ],
-
-  // https://github.com/chentsulin/webpack-target-electron-renderer#how-this-module-works
-  target: 'electron-renderer'
 });
