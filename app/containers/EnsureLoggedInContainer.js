@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Route, Switch, Redirect } from 'react-router';
+import { Route } from 'react-router';
 
 // Actions
 import { userLogIn } from '../actions/user';
@@ -41,46 +41,30 @@ class EnsureLoggedInContainer extends Component {
       loadUser
     } = this.props;
 
-    //if (!isLoggedIn) {
- //     console.log(`User is not logged in! Redirect...`);
+    if (!isLoggedIn) {
       // set the current url/path for future redirection (we use a Redux action) then
       // redirect (we use a React Router method)
-      // onNavigateTo('/login');
-   if (!user && this.canUserLogIn()) {
+      onNavigateTo('/login');
+    } else if (!user && server.length > 0 && token.length > 0) {
       // ensure user is valid when reopen application
       loadUser(server, token);
     }
   }
 
   render() {
-    const {
-      isLoggedIn,
-      server,
-      token,
-    } = this.props;
-
-    if (isLoggedIn) {
-      return (
-        <div>
-          <TopBar user={this.props.user} />
-          <div>
-            <Switch>
-              <Route path='/' component={HomePage} />
-            </Switch>
-          </div>
-        </div>
-      );
-    }
-
-    // User is logged now
-    if (!isLoggedIn && this.canUserLogIn()) {
+    // User is logged out or we want to wait until auto login success
+    if (!this.props.isLoggedIn || !this.props.user) {
       return null;
     }
 
-    // Redirect to login ...
     return (
-      <Redirect to="/login" />
-    )
+      <div>
+        <TopBar user={this.props.user} />
+        <div>
+          <Route exact path="/" component={HomePage} />
+        </div>
+      </div>
+    );
   }
 }
 

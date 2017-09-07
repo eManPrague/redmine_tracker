@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router';
+import { Route, Switch } from 'react-router';
 
 // Import containers
 import App from './containers/App';

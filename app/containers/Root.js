@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Router, BrowserRouter } from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
 
 import Routes from '../routes';
 
@@ -13,9 +13,9 @@ type RootType = {
 export default function Root({ store, history }: RootType) {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <Routes />
-      </BrowserRouter>
+      </ConnectedRouter>
     </Provider>
   );
 }

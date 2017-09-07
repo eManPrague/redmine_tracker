@@ -5,6 +5,8 @@ import {
   dialog
 } from 'electron';
 
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+
 import Immutable from 'immutable';
 
 import log from 'electron-log';
@@ -83,6 +85,13 @@ const createMainWindow = async () => {
     show: false,
     width: 400,
     height: 500
+  });
+
+  // Install extensions
+  [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((val) => {
+    installExtension(val)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);

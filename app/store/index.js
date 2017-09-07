@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { persistState } from 'redux-devtools';
+import { routerMiddleware } from 'react-router-redux';
+import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
@@ -32,6 +33,9 @@ export default function configureStore(initialState, scope = 'main') {
   middleware.push(logger);
 
   if (scope === 'renderer') {
+    // const browserMiddleware = routerMiddleware(browserHistory);
+    // middleware.push(browserMiddleware);
+
     middleware = [
       forwardToMain,
       ...middleware,
@@ -59,6 +63,9 @@ export default function configureStore(initialState, scope = 'main') {
       // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
       actionCreators,
     })
+
+    const compose(window.devToolsExtension ? window.devToolsExtension() : (f) => (f),
+
     : compose;
     /* eslint-enable no-underscore-dangle */
     enhancer = composeEnhancers(...enhancers);

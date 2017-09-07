@@ -227,19 +227,19 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  loadProjects: () => {
+  loadProjects: (): void => {
     dispatch(fetchProjects());
   },
-  loadIssues: (projectIdentifier: string) => {
+  loadIssues: (projectIdentifier: string): void => {
     dispatch(fetchIssues(projectIdentifier));
   },
-  loadActivities: (projectIdentifier: string) => {
+  loadActivities: (projectIdentifier: string): void => {
     dispatch(fetchActivities(projectIdentifier));
   },
-  updateCurrentEntry: (data: any) => {
+  updateCurrentEntry: (data: any): void => {
     dispatch(updateEntry(data));
   },
-  stopCurrentEntry: (endTime: number, autoSync: boolean) => {
+  stopCurrentEntry: (endTime: number, autoSync: boolean): void=> {
     dispatch(closeEntry(endTime, autoSync));
   }
 });
