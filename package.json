@@ -146,7 +146,7 @@
     "css-loader": "^0.26.1",
     "devtron": "^1.4.0",
     "electron": "^1.6.10",
-    "electron-builder": "^19.8.0",
+    "electron-builder": "^19.27.7",
     "electron-devtools-installer": "^2.2.0",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
