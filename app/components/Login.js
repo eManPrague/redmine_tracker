@@ -70,7 +70,7 @@ class Login extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   userLogIn: (server, token) => {
     dispatch(userLogIn(server, token));
   }

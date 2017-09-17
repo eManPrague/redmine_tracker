@@ -226,7 +226,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   loadProjects: (): void => {
     dispatch(fetchProjects());
   },

@@ -1,4 +1,4 @@
-//@flow
+// @flow
 import path from 'path';
 import {
   Tray,
@@ -22,9 +22,6 @@ export default class TrayBuilder {
 
     const contextMenu = Menu.buildFromTemplate([{
       label: 'Remove',
-      click: function () {
-        event.sender.send('tray-removed')
-      }
     }]);
 
     this.icon.setToolTip('Electron Demo in the tray.');

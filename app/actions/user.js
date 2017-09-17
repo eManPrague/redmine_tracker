@@ -27,7 +27,7 @@ export const removeUser = () => ({
   type: USER_LOG_OUT
 });
 
-export const userLogOut = () => async (dispatch: Dispatch) => {
+export const userLogOut = () => async (dispatch: any) => {
   dispatch(showLoading('user', 'Logout user...'));
 
   try {
@@ -41,7 +41,7 @@ export const userLogOut = () => async (dispatch: Dispatch) => {
   dispatch(hideLoading('user'));
 };
 
-export const userLogIn = (server: string, token: string) => async (dispatch: Dispatch) => {
+export const userLogIn = (server: string, token: string) => async (dispatch: any) => {
   // Create info object for redux store
   const info = {
     server,

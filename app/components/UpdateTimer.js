@@ -30,7 +30,7 @@ export default class UpdateTimer extends Component {
   }
 
   // Set interval result
-  interval: any;
+  interval: number;
 
   tick = () => {
     this.setState({

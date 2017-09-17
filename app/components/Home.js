@@ -23,7 +23,7 @@ class Home extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   logoutUser: () => {
     dispatch(removeUser());
   }

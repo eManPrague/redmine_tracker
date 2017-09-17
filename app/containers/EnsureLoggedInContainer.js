@@ -17,8 +17,8 @@ class EnsureLoggedInContainer extends Component {
     onNavigateTo: (dest: string) => any,
     loadUser: (server: string, token: string) => void,
     user: any,
-    server: ?string,
-    token: ?string
+    server: string,
+    token: string
   }
 
   componentDidMount() {
@@ -69,7 +69,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
+const mapDispatchToProps = (dispatch: any) => ({
   onNavigateTo: (dest: string) => {
     dispatch(push(dest));
   },

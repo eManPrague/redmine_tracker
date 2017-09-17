@@ -1,6 +1,4 @@
 // @flow
-import Immutable from 'immutable';
-
 import {
   SET_ACTIVITIES
 } from '../constants/actions';
@@ -31,7 +29,7 @@ export const clearActivities = () => ({
   }
 });
 
-export const fetchActivities = (projectIdentifier: string) => async (dispatch: Dispatch) => {
+export const fetchActivities = (projectIdentifier: string) => async (dispatch: any) => {
   dispatch(showLoading('activities', 'Fetching activities...'));
 
   try {

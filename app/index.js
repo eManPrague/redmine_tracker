@@ -51,4 +51,4 @@ const settings = SettingsStorage.get('settings', {});
 
 settings
   .then(initApp)
-  .catch((e) => { ipc.send(SETTINGS_LOAD_ERROR, e.stack, e.message ) });
+  .catch((e) => { ipc.send(SETTINGS_LOAD_ERROR, e.stack, e.message); });

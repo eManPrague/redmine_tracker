@@ -98,12 +98,12 @@ class RedmineClient {
    * @return {Object<string, string>} project map
    */
   async getProjects(): Array<{ value: string, label: string }> {
-    const responses = await this.loadFullResource('/projects.json', 'name:asc');
-
     // Flat array, iterate over and create response.
     const response: Array<{ value: string, label: string }> = [];
 
-    responses.map((val) => val.json.get('projects')).forEach((list) => {
+    let resources = await this.loadFullResource('/projects.json', 'name:asc');
+    resources = resources.map((val) => val.json.get('projects'));
+    resources.forEach((list) => {
       list.forEach((prj) => {
         response.push({
           value: prj.get('identifier'), label: prj.get('name')
@@ -111,7 +111,10 @@ class RedmineClient {
       });
     });
 
+    // Return response
+    /* eslint-disable flowtype-errors/show-errors */
     return response;
+    /* eslint-enable flowtype-errors/show-errors */
   }
 
   /**
