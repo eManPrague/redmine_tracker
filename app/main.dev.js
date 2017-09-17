@@ -5,7 +5,7 @@ import {
   dialog
 } from 'electron';
 
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF } from 'electron-devtools-installer';
 
 import Immutable from 'immutable';
 
@@ -20,6 +20,7 @@ import MenuBuilder from './main/MenuBuilder';
 
 // Initialize store to share it between windows
 import configureStore from './store';
+
 const store = configureStore(Immutable.fromJS({}), 'main');
 
 autoUpdater.logger = log;
@@ -65,7 +66,8 @@ const installExtensions = async () => {
 
     let extensions = [
       'REACT_DEVELOPER_TOOLS',
-      'REDUX_DEVTOOLS'
+      'REDUX_DEVTOOLS',
+      'REACT_PERF'
     ];
 
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS;

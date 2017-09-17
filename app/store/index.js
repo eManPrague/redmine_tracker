@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { browserHistory } from 'react-router';
+import { createHashHistory } from 'history';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
@@ -17,7 +18,7 @@ import rootReducer from '../reducers';
 export default function configureStore(initialState, scope = 'main') {
   // Redux configuration
   let middleware = [];
-  let enhancers = [];
+  const enhancers = [];
 
   // Thunk
   middleware.push(thunk);
@@ -33,8 +34,9 @@ export default function configureStore(initialState, scope = 'main') {
   middleware.push(logger);
 
   if (scope === 'renderer') {
-    // const browserMiddleware = routerMiddleware(browserHistory);
-    // middleware.push(browserMiddleware);
+    const history = createHashHistory();
+    const browserMiddleware = routerMiddleware(history);
+    middleware.push(browserMiddleware);
 
     middleware = [
       forwardToMain,
@@ -58,16 +60,9 @@ export default function configureStore(initialState, scope = 'main') {
   if (scope === 'renderer') {
     // If Redux DevTools Extension is installed use it, otherwise use Redux compose
     /* eslint-disable no-underscore-dangle */
-    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
-      actionCreators,
-    })
-
-    const compose(window.devToolsExtension ? window.devToolsExtension() : (f) => (f),
-
-    : compose;
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     /* eslint-enable no-underscore-dangle */
+
     enhancer = composeEnhancers(...enhancers);
   } else {
     enhancer = compose(...enhancers);

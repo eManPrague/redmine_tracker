@@ -18,8 +18,7 @@ class EnsureLoggedInContainer extends Component {
     loadUser: (server: string, token: string) => void,
     user: any,
     server: ?string,
-    token: ?string,
-    children: React$Element<*>
+    token: ?string
   }
 
   canUserLogIn(): boolean {
