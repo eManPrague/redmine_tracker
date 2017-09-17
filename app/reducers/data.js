@@ -18,13 +18,14 @@ const initialState = Immutable.fromJS({
 });
 
 export default (state: Immutable.Map<string, mixed> = initialState, action: any) => {
+  const payload = action.payload;
   switch (action.type) {
     case SET_PROJECTS:
-      return state.set('projects', action.projects);
+      return state.set('projects', Immutable.fromJS(payload.projects));
     case SET_ISSUES:
-      return state.setIn(['issues', action.projectIdentifier], action.issues);
+      return state.setIn(['issues', payload.projectIdentifier], Immutable.fromJS(payload.issues));
     case SET_ACTIVITIES:
-      return state.setIn(['activities', action.projectIdentifier], action.activities);
+      return state.setIn(['activities', payload.projectIdentifier], Immutable.fromJS(payload.activities));
     case RESET_ALL:
       return initialState;
     default:

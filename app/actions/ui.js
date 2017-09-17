@@ -6,11 +6,15 @@ import {
 
 export const showLoading = (code: string, message: string) => ({
   type: SHOW_UI_LOADING,
-  message,
-  code
+  payload: {
+    message,
+    code
+  }
 });
 
 export const hideLoading = (code: string) => ({
   type: HIDE_UI_LOADING,
-  code
+  payload: {
+    code
+  }
 });

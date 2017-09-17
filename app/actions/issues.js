@@ -16,16 +16,20 @@ import {
   electronAlert
 } from '../utils/ElectronHelper';
 
-export const setIssues = (projectIdentifier: string, issues: Immutable.Map<number, string>) => ({
+export const setIssues = (projectIdentifier: string, issues: { [string]: string }) => ({
   type: SET_ISSUES,
-  projectIdentifier,
-  issues
+  payload: {
+    projectIdentifier,
+    issues
+  }
 });
 
 export const clearIssues = (projectIdentifier: string) => ({
   type: SET_ISSUES,
-  projectIdentifier,
-  issues: {}
+  payload: {
+    projectIdentifier,
+    issues: {}
+  }
 });
 
 export const fetchIssues = (projectIdentifier: string) => async (dispatch: Dispatch) => {

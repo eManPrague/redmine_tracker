@@ -120,7 +120,7 @@ class TrackDialog extends Component {
   render() {
     const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
     const issues: Array<{value: number, label: string}> = [];
-    const activities: Array<{value: string, label: string}> = [];
+    const activities: Array<{value: number, label: string}> = [];
 
     const {
       project,
@@ -142,14 +142,14 @@ class TrackDialog extends Component {
     if (this.props.issues.has(project)) {
       // Transform issues into usable object for select
       this.props.issues.get(project).forEach((label, value) => {
-        issues.push({ label, value });
+        issues.push({ label, value: parseInt(value, 10) });
       });
     }
 
     if (this.props.activities.has(project)) {
       // Transform issues into usable object for select
       this.props.activities.get(project).forEach((label, value) => {
-        activities.push({ label, value });
+        activities.push({ label, value: parseInt(value, 10) });
       });
     }
 
@@ -239,7 +239,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   updateCurrentEntry: (data: any): void => {
     dispatch(updateEntry(data));
   },
-  stopCurrentEntry: (endTime: number, autoSync: boolean): void=> {
+  stopCurrentEntry: (endTime: number, autoSync: boolean): void => {
     dispatch(closeEntry(endTime, autoSync));
   }
 });

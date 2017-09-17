@@ -18,11 +18,18 @@ class TrackHistory extends Component {
   render() {
     const itemCount = this.props.entries.size;
 
+    const entries = this.props.entries.map((value) => {
+      return (<tr><td>{value.get('item')}</td></tr>);
+    });
+
     return (
       <div>
         <div className={styles.small_caption}>
           {this.props.title} ({itemCount})
         </div>
+        <table>
+          {entries}
+        </table>
       </div>
     );
   }

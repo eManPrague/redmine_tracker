@@ -1,8 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { hashHistory } from 'react-router';
 import { AppContainer } from 'react-hot-loader';
-import { syncHistoryWithStore } from 'react-router-redux';
 import Immutable from 'immutable';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { ipcRenderer as ipc } from 'electron';
@@ -22,7 +20,6 @@ injectTapEventPlugin();
 
 // Init app
 const initApp = (val) => {
-  console.log("TEST");
   const initialState = Immutable.fromJS(val);
   const history = createHashHistory();
   const store = configureStore(initialState, 'renderer', history);

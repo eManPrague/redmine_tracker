@@ -1,21 +1,18 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-import { browserHistory } from 'react-router';
-import { createHashHistory } from 'history';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
 import {
   forwardToMain,
   forwardToRenderer,
-  triggerAlias,
   replayActionMain,
   replayActionRenderer,
 } from 'electron-redux';
 
 import rootReducer from '../reducers';
 
-export default function configureStore(initialState, scope = 'main') {
+export default function configureStore(initialState, scope = 'main', history = null) {
   // Redux configuration
   let middleware = [];
   const enhancers = [];
@@ -34,7 +31,6 @@ export default function configureStore(initialState, scope = 'main') {
   middleware.push(logger);
 
   if (scope === 'renderer') {
-    const history = createHashHistory();
     const browserMiddleware = routerMiddleware(history);
     middleware.push(browserMiddleware);
 
@@ -46,7 +42,6 @@ export default function configureStore(initialState, scope = 'main') {
 
   if (scope === 'main') {
     middleware = [
-      triggerAlias,
       ...middleware,
       forwardToRenderer,
     ];
@@ -84,4 +79,4 @@ export default function configureStore(initialState, scope = 'main') {
   }
 
   return store;
-};
+}

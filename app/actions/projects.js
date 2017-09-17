@@ -16,14 +16,18 @@ import {
   electronAlert
 } from '../utils/ElectronHelper';
 
-export const setProjects = (projects: Immutable.List<Immutable.Map<string, string>>) => ({
+export const setProjects = (projects: Array<{value: string, label: string }>) => ({
   type: SET_PROJECTS,
-  projects
+  payload: {
+    projects
+  }
 });
 
 export const clearProjects = () => ({
   type: SET_PROJECTS,
-  projects: []
+  payload: {
+    projects: []
+  }
 });
 
 export const fetchProjects = () => async (dispatch: Dispatch) => {

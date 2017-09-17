@@ -8,11 +8,13 @@ import type { EntryType } from '../types/EntryType';
 
 export const updateEntry = (data: EntryType) => ({
   type: UPDATE_ENTRY,
-  ...data
+  payload: data
 });
 
 export const closeEntry = (endTime: number, autoSync: boolean) => ({
   type: STOP_ENTRY,
-  autoSync,
-  endTime
+  payload: {
+    autoSync,
+    endTime
+  }
 });

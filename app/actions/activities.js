@@ -16,16 +16,19 @@ import {
   electronAlert
 } from '../utils/ElectronHelper';
 
-export const setActivities = (projectIdentifier: string,
-  activities: Immutable.Map<number, string>) => ({
-    type: SET_ACTIVITIES,
+export const setActivities = (projectIdentifier: string, activities: { [string]: string }) => ({
+  type: SET_ACTIVITIES,
+  payload: {
     projectIdentifier,
     activities
-  });
+  }
+});
 
 export const clearActivities = () => ({
   type: SET_ACTIVITIES,
-  activities: []
+  payload: {
+    activities: []
+  }
 });
 
 export const fetchActivities = (projectIdentifier: string) => async (dispatch: Dispatch) => {

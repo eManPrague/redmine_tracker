@@ -17,17 +17,27 @@ import {
 } from './constants/dialogs';
 
 import MenuBuilder from './main/MenuBuilder';
+import TrayBuilder from './main/Tray';
 
 // Initialize store to share it between windows
 import configureStore from './store';
 
 const store = configureStore(Immutable.fromJS({}), 'main');
 
+// Check if something changes
+const handleChange = () => {
+  console.log('Store was changed');
+};
+
+store.subscribe(handleChange);
+
+// Define auto updater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
 let mainWindow = null;
+let trayBuilder = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line
@@ -42,7 +52,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+
+    if (trayBuilder) {
+      trayBuilder.close();
+    }
+  }
 });
 
 ipc.on(SETTINGS_LOAD_ERROR, (event, arg) => {
@@ -65,9 +81,9 @@ const installExtensions = async () => {
     const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
 
     let extensions = [
-      'REACT_DEVELOPER_TOOLS',
-      'REDUX_DEVTOOLS',
-      'REACT_PERF'
+      REACT_DEVELOPER_TOOLS,
+      REDUX_DEVTOOLS,
+      REACT_PERF
     ];
 
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -109,6 +125,9 @@ const createMainWindow = async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  trayBuilder = new TrayBuilder(store);
+  trayBuilder.buildIcon();
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();

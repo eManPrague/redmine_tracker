@@ -20,7 +20,7 @@ import redmineClient from '../utils/RedmineClient';
 
 export const setUser = (info: { token: string, server: string, user: any }) => ({
   type: USER_LOG_IN,
-  info
+  payload: info
 });
 
 export const removeUser = () => ({

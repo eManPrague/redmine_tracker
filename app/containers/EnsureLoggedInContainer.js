@@ -21,15 +21,6 @@ class EnsureLoggedInContainer extends Component {
     token: ?string
   }
 
-  canUserLogIn(): boolean {
-    const {
-      server,
-      token,
-    } = this.props;
-
-    return (server && server.length > 0 && token && token.length > 0) == true;
-  }
-
   componentDidMount() {
     const {
       onNavigateTo,

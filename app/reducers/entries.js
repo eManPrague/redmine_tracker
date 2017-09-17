@@ -26,11 +26,11 @@ export default (state: Immutable.Map<string, mixed> = initialState, action: any)
     case UPDATE_ENTRY:
       return state.set(
         'current',
-        state.get('current').merge(action)
+        state.get('current').merge(action.payload)
       );
 
     case STOP_ENTRY:
-      return state.update('history', arr => arr.push(state.get('current').merge(action)))
+      return state.update('history', arr => arr.push(state.get('current').merge(action.payload)))
         .set('current', emptyCurrent);
 
     default:

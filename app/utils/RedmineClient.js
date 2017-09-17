@@ -50,20 +50,21 @@ class RedmineClient {
   async getUser() {
     const response = await this.request('GET', '/users/current.json', {});
     this.constructor.assertResponse(response, [200], 'Invalid credentials!');
-    return response.json.get('user');
+    return response.json.get('user').toJS();
   }
 
   /**
    * Fetch all activities.
    * @param {string} projectIdentifier project identifier
-   * @returns {Immutable.Map<number, string>} activity map
+   * @returns {Object{ [string]: string }} activity map
    */
-  async getActivities(projectIdentifier: string): Immutable.Map<number, string> {
+  async getActivities(projectIdentifier: string): { [string]: string } {
     const data = await this.request('GET', `/projects/${projectIdentifier}.json?include=time_entry_activities`);
     this.constructor.assertResponse(data);
-    let response = new Immutable.Map();
+    const response = {};
+
     data.json.get('project').get('time_entry_activities').forEach((item) => {
-      response = response.set(item.get('id'), item.get('name'));
+      response[item.get('id')] = item.get('name');
     });
 
     return response;
@@ -73,22 +74,19 @@ class RedmineClient {
    * Return all issues for project identifier.
    *
    * @param {string} projectIdentifier Project id
-   * @returns {Immutable.Map<number, string>} issues
+   * @returns {Object{ [string]: string }} issues
    *
    */
-  async getIssues(projectIdentifier: string): Immutable.Map<number, string> {
+  async getIssues(projectIdentifier: string): { [string]: string } {
     const responses = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
 
     // Flat array and create full response
-    let response: Immutable.Map<number, string> = new Immutable.Map();
+    const response = {};
+
     responses.map((val) => val.json.get('issues')).forEach((list) => {
       list.forEach((issue) => {
-        const id = parseInt(issue.get('id'), 10);
-
-        response = response.set(
-          id,
-          `#${id} - ${issue.get('subject')}`
-        );
+        const id = issue.get('id');
+        response[id] = `#${id} - ${issue.get('subject')}`;
       });
     });
 
@@ -97,13 +95,14 @@ class RedmineClient {
 
   /**
    * Return all projects for user.
-   * @return {Immutable.List<Immutable.Map<string, string>>} project map
+   * @return {Object<string, string>} project map
    */
-  async getProjects(): Immutable.List<Immutable.Map<string, string>> {
+  async getProjects(): Array<{ value: string, label: string }> {
     const responses = await this.loadFullResource('/projects.json', 'name:asc');
 
     // Flat array, iterate over and create response.
-    const response = [];
+    const response: Array<{ value: string, label: string }> = [];
+
     responses.map((val) => val.json.get('projects')).forEach((list) => {
       list.forEach((prj) => {
         response.push({
@@ -112,7 +111,7 @@ class RedmineClient {
       });
     });
 
-    return Immutable.fromJS(response);
+    return response;
   }
 
   /**
