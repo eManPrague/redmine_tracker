@@ -1,7 +1,7 @@
 {
   "name": "redmine-tracker",
   "productName": "Redmine Tracker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Redmine time tracker.",
   "main": "main.js",
   "scripts": {
@@ -192,7 +192,6 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "electron-debug": "^1.4.0",
-    "electron-devtools-installer": "^2.2.0",
     "electron-json-storage": "^3.0.2",
     "electron-log": "^2.0.2",
     "electron-redux": "^1.3.0",
