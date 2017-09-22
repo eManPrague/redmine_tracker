@@ -31,7 +31,7 @@
     "test-e2e": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node --trace-warnings ./test/runTests.js e2e",
     "test-watch": "npm test -- --watch"
   },
-  "browserslist": "electron 1.6",
+  "browserslist": "electron 1.7.6",
   "build": {
     "productName": "RedmineTracker",
     "appId": "com.eman.redmine_tracker",
@@ -146,7 +146,7 @@
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.26.1",
     "devtron": "^1.4.0",
-    "electron": "^1.6.10",
+    "electron": "^1.7.6",
     "electron-builder": "^19.27.7",
     "electron-devtools-installer": "^2.2.0",
     "enzyme": "^2.9.1",
