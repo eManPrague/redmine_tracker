@@ -4,10 +4,11 @@ import {
   Tray,
   Menu
 } from 'electron';
-import { Store } from 'redux';
+
+import * as Redux from 'redux';
 
 export default class TrayBuilder {
-  store: Store;
+  store: typeof Redux.Store;
 
   icon: Tray;
 
@@ -16,8 +17,7 @@ export default class TrayBuilder {
   }
 
   buildIcon() {
-    const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
-    const iconPath = path.join(__dirname, iconName);
+    const iconPath = path.join(__dirname, '../assets/images/tray.png');
     this.icon = new Tray(iconPath);
 
     const contextMenu = Menu.buildFromTemplate([{

@@ -87,10 +87,6 @@ const installExtensions = async () => {
     ];
 
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-
-    // TODO: Use async interation statement.
-    //       Waiting on https://github.com/tc39/proposal-async-iteration
-    //       Promises will fail silently, which isn't what we want in development
     extensions = extensions.map(name => installer.default(installer[name], forceDownload));
     return Promise.all(extensions).catch(console.log);
   }
@@ -108,8 +104,8 @@ const createMainWindow = async () => {
   // Install extensions
   [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((val) => {
     installExtension(val)
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err));
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log('An error occurred: ', err));
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -126,8 +122,10 @@ const createMainWindow = async () => {
     mainWindow = null;
   });
 
-  trayBuilder = new TrayBuilder(store);
-  trayBuilder.buildIcon();
+  if (trayBuilder == null) {
+    trayBuilder = new TrayBuilder(store);
+    trayBuilder.buildIcon();
+  }
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();

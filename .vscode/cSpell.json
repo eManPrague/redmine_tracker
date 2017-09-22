@@ -9,8 +9,13 @@
         "DEVTOOLS",
         "Redmine",
         "Unmount",
+        "compat",
         "firstname",
-        "lastname"
+        "flowtype",
+        "lastname",
+        "lifecycle",
+        "parens",
+        "submenu"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.

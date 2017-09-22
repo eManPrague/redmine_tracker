@@ -9,6 +9,8 @@ import {
   electronAlert
 } from '../utils/ElectronHelper';
 
+import type { Info } from '../types/UserType';
+
 import SettingsStorage from '../utils/SettingsStorage';
 
 import {
@@ -18,7 +20,7 @@ import {
 
 import redmineClient from '../utils/RedmineClient';
 
-export const setUser = (info: { token: string, server: string, user: any }) => ({
+export const setUser = (info: Info) => ({
   type: USER_LOG_IN,
   payload: info
 });
@@ -42,13 +44,6 @@ export const userLogOut = () => async (dispatch: any) => {
 };
 
 export const userLogIn = (server: string, token: string) => async (dispatch: any) => {
-  // Create info object for redux store
-  const info = {
-    server,
-    token,
-    user: null
-  };
-
   // Test on empty fields
   if (server.length === 0 || token.length === 0) {
     return electronAlert('Please fill required fields');
@@ -62,7 +57,11 @@ export const userLogIn = (server: string, token: string) => async (dispatch: any
 
   // Try to get user information
   try {
-    info.user = await redmineClient.getUser();
+    const info = {
+      server,
+      token,
+      user: await redmineClient.getUser()
+    };
 
     // Set user
     dispatch(setUser(info));

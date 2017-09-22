@@ -18,8 +18,9 @@ export default class SettingsStorage {
         }
 
         return defaults;
-      }).then(val => resolve(val))
-      .catch(error => reject(error));
+      })
+        .then(val => resolve(val))
+        .catch(error => reject(error));
     });
   }
 

@@ -6,11 +6,11 @@ type Props = {
   startTime: moment
 };
 
-export default class UpdateTimer extends Component {
-  state: {
-    ms: number
-  };
+type State = {
+  ms: number
+};
 
+export default class UpdateTimer extends Component<Props, State> {
   props: Props;
 
   constructor(props: Props) {

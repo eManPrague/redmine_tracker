@@ -12,7 +12,7 @@
 }
 
 .reload_button {
-  background-image: url('assets/images/refresh-arrow.svg');
+  background-image: url('assets/images/refresh.png');
 }
 
 .reload_button:disabled {
@@ -26,15 +26,22 @@
 
 .action_buttons button {
   background-repeat: no-repeat;
-  background-size: 16px;
+  background-size: 22px;
   background-color: initial;
   border: 0;
   padding-top: 15px;
   cursor: pointer;
+  margin-right: 5px;
 }
 
 .login_info {
   flex: 1; 
   padding-left: 15px;
   font-weight: bold;
+  background-image: url('assets/images/user.png');
+  padding-left: 30px;
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  margin-left: 10px;
+  background-size: 22px;
 }

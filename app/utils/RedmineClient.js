@@ -2,6 +2,8 @@
 import request from 'request';
 import Immutable from 'immutable';
 
+import type { User } from '../types/UserType';
+
 /**
  * Redmine Client is singleton class.
  */
@@ -47,10 +49,18 @@ class RedmineClient {
    *
    * @return {Promise} User data
    */
-  async getUser() {
+  async getUser(): Promise<User> {
     const response = await this.request('GET', '/users/current.json', {});
     this.constructor.assertResponse(response, [200], 'Invalid credentials!');
-    return response.json.get('user').toJS();
+    const data = response.json.get('user');
+
+    return Promise.resolve({
+      id: parseInt(data.get('id'), 10),
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname'),
+      mail: data.get('mail'),
+      api_key: data.get('api_key')
+    });
   }
 
   /**
@@ -97,7 +107,7 @@ class RedmineClient {
    * Return all projects for user.
    * @return {Object<string, string>} project map
    */
-  async getProjects(): Array<{ value: string, label: string }> {
+  async getProjects(): Promise<Array<{ value: string, label: string }>> {
     // Flat array, iterate over and create response.
     const response: Array<{ value: string, label: string }> = [];
 
@@ -112,9 +122,7 @@ class RedmineClient {
     });
 
     // Return response
-    /* eslint-disable flowtype-errors/show-errors */
-    return response;
-    /* eslint-enable flowtype-errors/show-errors */
+    return Promise.resolve(response);
   }
 
   /**
@@ -170,7 +178,7 @@ class RedmineClient {
    * @param {Object} params options
    * @return {Promise} Promise with response.
    */
-  request(method: string, path: string, params: any) {
+  request(method: string, path: string, params: any): Promise<{json: any, status: number}> {
     // Generate options
     const options = {
       baseUrl: this.server,

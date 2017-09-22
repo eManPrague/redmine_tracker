@@ -7,6 +7,7 @@ import moment from 'moment';
 
 // Local components
 import UpdateTimer from './UpdateTimer';
+import Checkbox from '../inputs/Checkbox';
 
 // Actions
 import { fetchProjects } from '../actions/projects';
@@ -34,9 +35,8 @@ type Props = {
   currentEntry: Immutable.Map<string, mixed>
 };
 
-class TrackDialog extends Component {
+class TrackDialog extends Component<Props> {
   props: Props;
-
   componentDidMount() {
     const {
       projects,
@@ -94,6 +94,10 @@ class TrackDialog extends Component {
     this.props.updateCurrentEntry({
       activity: activity ? activity.value : 0
     });
+  }
+
+  assignedToChange = (value: boolean) => {
+    console.log(`Change ${value ? 'true' : 'false'}`);
   }
 
   descriptionChange = (evt: any) => {
@@ -197,6 +201,8 @@ class TrackDialog extends Component {
         <div className="input_field">
           <textarea name="description" placeholder="Description" value={description} onChange={this.descriptionChange} />
         </div>
+
+        <Checkbox label="Filter assigned to me" value id="assigned_to_id" onChange={this.assignedToChange} />
 
         <div className={styles.tracking}>
           <div className={styles.tracking_time}>

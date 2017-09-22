@@ -11,15 +11,17 @@ import { userLogIn } from '../actions/user';
 import TopBar from '../components/TopBar';
 import HomePage from './HomePage';
 
-class EnsureLoggedInContainer extends Component {
-  props: {
-    isLoggedIn: boolean,
-    onNavigateTo: (dest: string) => any,
-    loadUser: (server: string, token: string) => void,
-    user: any,
-    server: string,
-    token: string
-  }
+type Props = {
+  isLoggedIn: boolean,
+  onNavigateTo: (dest: string) => any,
+  loadUser: (server: string, token: string) => void,
+  user: any,
+  server: string,
+  token: string
+};
+
+class EnsureLoggedInContainer extends Component<Props> {
+  static props: Props;
 
   componentDidMount() {
     const {

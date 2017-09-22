@@ -99,7 +99,6 @@ export default class MenuBuilder {
       label: 'View',
       submenu: [
         { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
-        { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } },
         { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } }
       ]
     };
@@ -109,6 +108,7 @@ export default class MenuBuilder {
         { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
       ]
     };
+
     const subMenuHelp = {
       label: 'Help',
       submenu: [
@@ -148,6 +148,14 @@ export default class MenuBuilder {
           this.mainWindow.close();
         }
       }]
+    }, {
+      label: '&Edit',
+      submenu: [
+        { label: 'Cut', accelerator: 'Ctrl+X', selector: 'cut:' },
+        { label: 'Copy', accelerator: 'Ctrl+C', selector: 'copy:' },
+        { label: 'Paste', accelerator: 'Ctrl+V', selector: 'paste:' },
+        { label: 'Select All', accelerator: 'Ctrl+A', selector: 'selectAll:' }
+      ]
     }, {
       label: '&View',
       submenu: (process.env.NODE_ENV === 'development') ? [{

@@ -4,9 +4,7 @@ import {
   STOP_ENTRY
 } from '../constants/actions';
 
-import type { EntryType } from '../types/EntryType';
-
-export const updateEntry = (data: EntryType) => ({
+export const updateEntry = (data: any) => ({
   type: UPDATE_ENTRY,
   payload: data
 });

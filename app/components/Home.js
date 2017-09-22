@@ -10,7 +10,7 @@ import TrackHistory from './TrackHistory';
 // Styles
 import styles from './Home.css';
 
-class Home extends Component {
+class Home extends Component<{}> {
   render() {
     return (
       <div>

@@ -8,18 +8,20 @@ import { userLogIn } from '../actions/user';
 // Styles
 import styles from './Login.css';
 
+type Props = {
+  userLogIn: (server: string, token: string) => void
+};
+
+type State = {
+  server: string,
+  token: string
+};
+
 // Login component
-class Login extends Component {
-  state: {
-    server: string,
-    token: string
-  };
+class Login extends Component<Props, State> {
+  props: Props;
 
-  props: {
-    userLogIn: () => void
-  };
-
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {

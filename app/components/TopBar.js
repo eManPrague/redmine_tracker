@@ -10,13 +10,15 @@ import resetData from '../actions/data';
 // Styles
 import styles from './TopBar.css';
 
-class TopBar extends Component {
-  props: {
-    logoutUser: () => void,
-    refreshData: () => void,
-    currentEntry: Immutable.Map<string, mixed>,
-    user: any
-  };
+type Props = {
+  logoutUser: () => void,
+  refreshData: () => void,
+  currentEntry: Immutable.Map<string, mixed>,
+  user: any
+};
+
+class TopBar extends Component<Props> {
+  props: Props;
 
   handleLogout = () => {
     this.props.logoutUser();

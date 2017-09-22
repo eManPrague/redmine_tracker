@@ -9,11 +9,13 @@ import type { EntryType } from '../types/EntryType';
 // Styles
 import styles from './TrackHistory.css';
 
-class TrackHistory extends Component {
-  props: {
-    entries: Immutable.List<EntryType>,
-    title: string
-  };
+type Props = {
+  entries: Immutable.List<EntryType>,
+  title: string
+};
+
+class TrackHistory extends Component<Props> {
+  props: Props;
 
   render() {
     const itemCount = this.props.entries.size;

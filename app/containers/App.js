@@ -1,16 +1,17 @@
 // @flow
-import React, { Component } from 'react';
-import type { Children } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 
 import styles from './App.css';
 
-class App extends Component {
-  props: {
-    children: Children,
-    loading: boolean,
-    loadingMessage: string
-  };
+type Props = {
+  children: typeof React.Node,
+  loading: boolean,
+  loadingMessage: string
+};
+
+class App extends React.Component<Props> {
+  props: Props;
 
   render() {
     let loading = null;
@@ -25,12 +26,14 @@ class App extends Component {
       );
     }
 
+    /* eslint-disable flowtype-errors/show-errors */
     return (
       <div className={styles.container}>
         {loading}
         {this.props.children}
       </div>
     );
+    /* eslint-enable flowtype-errors/show-errors */
   }
 }
 
