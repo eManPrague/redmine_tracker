@@ -19,6 +19,9 @@ import {
   updateEntry
 } from '../actions/entries';
 
+// Types
+import type { Issue } from '../types/UserType';
+
 // Styles
 import styles from './TrackDialog.css';
 
@@ -26,17 +29,36 @@ import styles from './TrackDialog.css';
 type Props = {
   projects: Immutable.List<Immutable.Map<string, string>>,
   loadProjects: () => void,
-  issues: Immutable.Map<string, Immutable.Map<number, string>>,
+  issues: Immutable.Map<string, Immutable.List<Issue>>,
   loadIssues: (projectIdentifier: string) => void,
   activities: Immutable.Map<string, Immutable.Map<number, string>>,
   loadActivities: (project: string) => void,
   updateCurrentEntry: (data: any) => void,
-  stopCurrentEntry: (endTime: number, autoSync: boolean) => void,
-  currentEntry: Immutable.Map<string, mixed>
+  stopCurrentEntry: (data: any, endTime: number, autoSync: boolean) => void,
+  currentEntry: Immutable.Map<string, mixed>,
+  userId: number
 };
 
-class TrackDialog extends Component<Props> {
+// State
+type State = {
+  filterMine: boolean
+};
+
+class TrackDialog extends Component<Props, State> {
+  // Actually don't know why to use that, but Flow complains
+  // to `expect boolean for filterMine, but void given`
+  // default state / override constructor is not enough.
+  // The same thing is in UpdateTimer for ms property.
+  static defaultProps = {
+    filterMine: true
+  };
+
+  state = {
+    filterMine: true
+  };
+
   props: Props;
+
   componentDidMount() {
     const {
       projects,
@@ -97,10 +119,12 @@ class TrackDialog extends Component<Props> {
   }
 
   assignedToChange = (value: boolean) => {
-    console.log(`Change ${value ? 'true' : 'false'}`);
+    this.setState({
+      filterMine: value
+    });
   }
 
-  descriptionChange = (evt: any) => {
+  descriptionChange = (evt: SyntheticInputEvent<>) => {
     this.props.updateCurrentEntry({
       description: evt.target.value
     });
@@ -113,7 +137,7 @@ class TrackDialog extends Component<Props> {
 
     // If state startTime is null
     if (this.trackingInProgress()) {
-      this.props.stopCurrentEntry(currentTime, false);
+      this.props.stopCurrentEntry(this.props.currentEntry, currentTime, true);
     } else {
       this.props.updateCurrentEntry({
         startTime: currentTime
@@ -125,6 +149,9 @@ class TrackDialog extends Component<Props> {
     const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
     const issues: Array<{value: number, label: string}> = [];
     const activities: Array<{value: number, label: string}> = [];
+
+    const filterMine = this.state.filterMine;
+    const userId = this.props.userId;
 
     const {
       project,
@@ -145,8 +172,10 @@ class TrackDialog extends Component<Props> {
 
     if (this.props.issues.has(project)) {
       // Transform issues into usable object for select
-      this.props.issues.get(project).forEach((label, value) => {
-        issues.push({ label, value: parseInt(value, 10) });
+      this.props.issues.get(project).forEach(item => {
+        if ((filterMine === false) || (item.get('userId') === userId)) {
+          issues.push({ label: item.get('subject'), value: item.get('id') });
+        }
       });
     }
 
@@ -199,10 +228,10 @@ class TrackDialog extends Component<Props> {
         />
 
         <div className="input_field">
-          <textarea name="description" placeholder="Description" value={description} onChange={this.descriptionChange} />
+          <textarea name="description" placeholder="Description" value={description} maxLength="255" onChange={this.descriptionChange} />
         </div>
 
-        <Checkbox label="Filter assigned to me" value id="assigned_to_id" onChange={this.assignedToChange} />
+        <Checkbox label="Filter assigned to me" value={this.state.filterMine} id="assigned_to_id" onChange={this.assignedToChange} />
 
         <div className={styles.tracking}>
           <div className={styles.tracking_time}>
@@ -223,12 +252,21 @@ class TrackDialog extends Component<Props> {
 const mapStateToProps = (state) => {
   const data = state.get('data');
   const entries = state.get('entries');
+  let userId = 0;
+  let user = state.get('user');
+
+  /* eslint-disable no-cond-assign */
+  if (user && (user = user.get('user'))) {
+    userId = user.get('id');
+  }
+  /* eslint-enable no-cond-assign */
 
   return {
     projects: data.get('projects'),
     issues: data.get('issues'),
     activities: data.get('activities'),
-    currentEntry: entries.get('current')
+    currentEntry: entries.get('current'),
+    userId
   };
 };
 
@@ -245,8 +283,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   updateCurrentEntry: (data: any): void => {
     dispatch(updateEntry(data));
   },
-  stopCurrentEntry: (endTime: number, autoSync: boolean): void => {
-    dispatch(closeEntry(endTime, autoSync));
+  stopCurrentEntry: (data: any, endTime: number, autoSync: boolean): void => {
+    dispatch(closeEntry(data, endTime, autoSync));
   }
 });
 

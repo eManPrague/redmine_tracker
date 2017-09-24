@@ -24,13 +24,6 @@ import configureStore from './store';
 
 const store = configureStore(Immutable.fromJS({}), 'main');
 
-// Check if something changes
-const handleChange = () => {
-  console.log('Store was changed');
-};
-
-store.subscribe(handleChange);
-
 // Define auto updater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
@@ -78,8 +71,6 @@ ipc.on(ERROR_ALERT, (event, arg) => {
 
 const installExtensions = async () => {
   if (process.env.NODE_ENV === 'development') {
-    const installer = require('electron-devtools-installer'); // eslint-disable-line global-require
-
     let extensions = [
       REACT_DEVELOPER_TOOLS,
       REDUX_DEVTOOLS,
@@ -87,7 +78,7 @@ const installExtensions = async () => {
     ];
 
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    extensions = extensions.map(name => installer.default(installer[name], forceDownload));
+    extensions = extensions.map(name => installExtension(name, forceDownload));
     return Promise.all(extensions).catch(console.log);
   }
 };
@@ -107,6 +98,8 @@ const createMainWindow = async () => {
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log('An error occurred: ', err));
   });
+
+  mainWindow.setResizable(false);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 

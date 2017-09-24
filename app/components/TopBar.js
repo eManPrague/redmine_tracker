@@ -14,7 +14,7 @@ type Props = {
   logoutUser: () => void,
   refreshData: () => void,
   currentEntry: Immutable.Map<string, mixed>,
-  user: any
+  user: Immutable.Map<string, mixed>
 };
 
 class TopBar extends Component<Props> {
@@ -30,9 +30,7 @@ class TopBar extends Component<Props> {
 
   currentNotCounting = (): boolean => {
     const entry = this.props.currentEntry;
-    return (entry.get('project').length === 0 &&
-      entry.get('issue') === 0 &&
-      entry.get('description').length === 0);
+    return entry.get('startTime') === 0;
   }
 
   render() {

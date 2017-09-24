@@ -19,16 +19,33 @@ class TrackHistory extends Component<Props> {
 
   render() {
     const itemCount = this.props.entries.size;
+    let index = 0;
+    const entries = this.props.entries.map((value) => {
+      index += 1;
 
-    const entries = this.props.entries.map((value) => (<tr><td>{value.get('item')}</td></tr>));
+      return (
+        <tr key={index}>
+          <td>{value.get('project')}</td>
+          <td>{value.get('description')}</td>
+        </tr>
+      );
+    });
 
     return (
       <div>
         <div className={styles.small_caption}>
           {this.props.title} ({itemCount})
         </div>
-        <table>
-          {entries}
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries}
+          </tbody>
         </table>
       </div>
     );

@@ -11,15 +11,16 @@ type State = {
 };
 
 export default class UpdateTimer extends Component<Props, State> {
+  // Read explanation in TrackDialog class.
+  static defaultProps = {
+    ms: 0
+  };
+
+  state = {
+    ms: 0
+  };
+
   props: Props;
-
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      ms: 0
-    };
-  }
 
   componentDidMount() {
     this.interval = setInterval(this.tick, 1000);

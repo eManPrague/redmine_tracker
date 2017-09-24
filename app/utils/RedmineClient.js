@@ -2,7 +2,8 @@
 import request from 'request';
 import Immutable from 'immutable';
 
-import type { User } from '../types/UserType';
+// Types
+import type { User, Issue, Entry } from '../types/UserType';
 
 /**
  * Redmine Client is singleton class.
@@ -87,20 +88,30 @@ class RedmineClient {
    * @returns {Object{ [string]: string }} issues
    *
    */
-  async getIssues(projectIdentifier: string): { [string]: string } {
+  async getIssues(projectIdentifier: string): Promise<Array<Issue>> {
     const responses = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
 
     // Flat array and create full response
-    const response = {};
+    const response: Array<Issue> = [];
 
     responses.map((val) => val.json.get('issues')).forEach((list) => {
       list.forEach((issue) => {
         const id = issue.get('id');
-        response[id] = `#${id} - ${issue.get('subject')}`;
+        let userId = 0;
+
+        if (issue.has('assigned_to')) {
+          userId = parseInt(issue.get('assigned_to').get('id'), 10);
+        }
+
+        response.push({
+          id: parseInt(id, 10),
+          subject: `#${id} - ${issue.get('subject')}`,
+          userId
+        });
       });
     });
 
-    return response;
+    return Promise.resolve(response);
   }
 
   /**
@@ -123,6 +134,27 @@ class RedmineClient {
 
     // Return response
     return Promise.resolve(response);
+  }
+
+  /**
+   * Create entry on RM endpoint.
+   * @param {Entry} entry 
+   * @returns {Promise<number>} Entry id
+   * @memberof RedmineClient
+   */
+  async createEntry(entry: Entry): Promise<number> {
+    // Convert to time entry field
+    const timeEntry = {
+      time_from: entry.startTime,
+      time_to: entry.endTime,
+      comments: entry.description,
+      activity_id: entry.activity
+    };
+
+    const response = await this.request('POST', `/issues/${entry.issueId}/time_entries?format=json`, { time_entry: timeEntry });
+    this.constructor.assertResponse(response, [201], 'Invalid data!');
+
+    return Promise.resolve(response.get('id'));
   }
 
   /**
@@ -197,6 +229,8 @@ class RedmineClient {
 
     // Generate server
     console.log(`[Redmine] [${method}] ${this.server}${path}`);
+
+    console.log(`Params: ${JSON.stringify(params)}`);
 
     return new Promise((resolve, reject) => {
       request(options, (err, res, body) => {

@@ -10,11 +10,13 @@ import {
 
 import redmineClient from '../utils/RedmineClient';
 
+import type { Issue } from '../types/UserType';
+
 import {
   electronAlert
 } from '../utils/ElectronHelper';
 
-export const setIssues = (projectIdentifier: string, issues: { [string]: string }) => ({
+export const setIssues = (projectIdentifier: string, issues: Array<Issue>) => ({
   type: SET_ISSUES,
   payload: {
     projectIdentifier,
@@ -26,7 +28,7 @@ export const clearIssues = (projectIdentifier: string) => ({
   type: SET_ISSUES,
   payload: {
     projectIdentifier,
-    issues: {}
+    issues: []
   }
 });
 
