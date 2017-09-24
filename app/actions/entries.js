@@ -20,29 +20,37 @@ export const updateEntry = (data: any) => ({
   payload: data
 });
 
-export const stopEntry = (endTime: number, synced: boolean) => ({
+export const stopEntry = (endTime: number, id: number) => ({
   type: STOP_ENTRY,
   payload: {
-    endTime, synced
+    endTime,
+    id
   }
 });
 
 export const closeEntry = (entry: any, endTime: number, sync: boolean) => async (dispatch: any) => {
   dispatch(showLoading('entries', 'Sync entry...'));
 
-  try {
-    // Autosync always true for now
-    redmineClient.createEntry({
-      issueId: entry.get('issue'),
-      activity: entry.get('activity'),
-      description: entry.get('description'),
-      startTime: entry.get('startTime'),
-      endTime
-    });
+  let id: number = 0;
 
-  } catch (e) {
-    electronAlert(e.message);
+  if (sync) {
+    try {
+      id = await redmineClient.createEntry({
+        issueId: entry.get('issue'),
+        activity: entry.get('activity'),
+        description: entry.get('description'),
+        startTime: entry.get('startTime'),
+        endTime
+      });
+    } catch (e) {
+      electronAlert(e.message);
+    }
   }
+
+  dispatch(stopEntry(
+    endTime,
+    id
+  ));
 
   dispatch(hideLoading('entries'));
 };

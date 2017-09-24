@@ -1,6 +1,7 @@
 // @flow
 import request from 'request';
 import Immutable from 'immutable';
+import moment from 'moment';
 
 // Types
 import type { User, Issue, Entry } from '../types/UserType';
@@ -140,21 +141,26 @@ class RedmineClient {
    * Create entry on RM endpoint.
    * @param {Entry} entry 
    * @returns {Promise<number>} Entry id
-   * @memberof RedmineClient
    */
   async createEntry(entry: Entry): Promise<number> {
+    // Convert entry to hours
+    const hours = ((entry.endTime - entry.startTime) / 60) / 60;
+
     // Convert to time entry field
     const timeEntry = {
-      time_from: entry.startTime,
-      time_to: entry.endTime,
+      // time_from: entry.startTime,
+      // time_to: entry.endTime,
+      hours,
+      spent_on: moment.unix(entry.endTime).format('YYYY-MM-DD'),
       comments: entry.description,
       activity_id: entry.activity
     };
 
     const response = await this.request('POST', `/issues/${entry.issueId}/time_entries?format=json`, { time_entry: timeEntry });
     this.constructor.assertResponse(response, [201], 'Invalid data!');
+    const data = response.json.get('time_entry');
 
-    return Promise.resolve(response.get('id'));
+    return Promise.resolve(parseInt(data.get('id'), 10));
   }
 
   /**
@@ -183,11 +189,10 @@ class RedmineClient {
     this.constructor.assertResponse(initialResponse);
 
     // Get total count
-    const totalCount = 20; // initialResponse.json.get('total_count');
+    const totalCount = initialResponse.json.get('total_count');
     const limit = 40;
 
-    // Create promise with limit + offset accoring
-    // to total count.
+    // Create promise with limit + offset according to total.
     const promises: Array<Promise<*>> = [];
     let offset = 0;
 
@@ -216,7 +221,8 @@ class RedmineClient {
       baseUrl: this.server,
       uri: path,
       headers: {
-        'X-Redmine-API-Key': this.token
+        'X-Redmine-API-Key': this.token,
+        'Content-Type': 'application/json'
       },
       method
     };
@@ -225,12 +231,13 @@ class RedmineClient {
     if (params && method === 'GET') {
       // $FlowFixMe
       options.qs = params;
+    } else if (params && method === 'POST') {
+      // $FlowFixMe
+      options.body = JSON.stringify(params);
     }
 
     // Generate server
     console.log(`[Redmine] [${method}] ${this.server}${path}`);
-
-    console.log(`Params: ${JSON.stringify(params)}`);
 
     return new Promise((resolve, reject) => {
       request(options, (err, res, body) => {
@@ -250,6 +257,10 @@ class RedmineClient {
           if (!error) {
             error = e;
           }
+        }
+
+        if (parsedBody != null && Object.prototype.hasOwnProperty.call(parsedBody, 'errors')) {
+          error = parsedBody.errors;
         }
 
         if (error) {

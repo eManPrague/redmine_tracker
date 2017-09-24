@@ -19,16 +19,17 @@ type State = {
 
 // Login component
 class Login extends Component<Props, State> {
+  static defaultProps = {
+    server: '',
+    token: ''
+  };
+
+  state = {
+    server: '',
+    token: ''
+  };
+
   props: Props;
-
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      server: '',
-      token: ''
-    };
-  }
 
   loginBtn = () => {
     this.props.userLogIn(
