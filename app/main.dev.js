@@ -5,7 +5,10 @@ import {
   dialog
 } from 'electron';
 
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS, REACT_PERF } from 'electron-devtools-installer';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS
+} from 'electron-devtools-installer';
 
 import Immutable from 'immutable';
 
@@ -24,9 +27,12 @@ import configureStore from './store';
 
 const store = configureStore(Immutable.fromJS({}), 'main');
 
+// Set level
+log.transports.console.level = 'debug';
+
 // Define auto updater
 autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
+autoUpdater.logger.transports.file.level = 'debug';
 log.info('App starting...');
 
 let mainWindow = null;
@@ -37,7 +43,10 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (process.env.NODE_ENV === 'development') {
+// Determine to DEBUG prod
+const debugMode = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD;
+
+if (debugMode) {
   require('electron-debug')(); // eslint-disable-line global-require
   const path = require('path'); // eslint-disable-line
   const p = path.join(__dirname, '..', 'app', 'node_modules'); // eslint-disable-line
@@ -70,37 +79,33 @@ ipc.on(ERROR_ALERT, (event, arg) => {
 });
 
 const installExtensions = async () => {
-  if (process.env.NODE_ENV === 'development') {
-    let extensions = [
-      REACT_DEVELOPER_TOOLS,
-      REDUX_DEVTOOLS,
-      REACT_PERF
-    ];
+  let extensions = [
+    REACT_DEVELOPER_TOOLS,
+    REDUX_DEVTOOLS
+  ];
 
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    extensions = extensions.map(name => installExtension(name, forceDownload));
-    return Promise.all(extensions).catch(console.log);
-  }
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  extensions = extensions.map(name => installExtension(name, forceDownload));
+  return Promise.all(extensions);
 };
 
 const createMainWindow = async () => {
-  await installExtensions();
+  if (debugMode) {
+    try {
+      await installExtensions();
+    } catch (ex) {
+      console.log(`Error when installing extensions: ${ex}`);
+    }
+  }
 
   mainWindow = new BrowserWindow({
     show: false,
+    title: 'Redmine Tracker',
     width: 400,
     height: 500
   });
 
-  // Install extensions
-  [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS].forEach((val) => {
-    installExtension(val)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
-  });
-
   mainWindow.setResizable(false);
-
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
@@ -126,7 +131,7 @@ const createMainWindow = async () => {
 
 app.on('ready', createMainWindow);
 
-// On darwin platfrom - click on bar icon
+// On darwin platform - click on bar icon
 // wil reopen / focus main window.
 app.on('activate', async () => {
   if (!mainWindow) {

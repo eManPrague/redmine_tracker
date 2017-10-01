@@ -10,9 +10,9 @@ export default class MenuBuilder {
   }
 
   buildMenu() {
-    if (process.env.NODE_ENV === 'development') {
-      this.setupDevelopmentEnvironment();
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    this.setupDevelopmentEnvironment();
+    // }
 
     let template;
 
@@ -49,7 +49,7 @@ export default class MenuBuilder {
         { label: 'About Redmine Tracker', selector: 'orderFrontStandardAboutPanel:' },
         { label: 'Check for updates', click: () => { checkForUpdates(this); } },
         { type: 'separator' },
-        { label: 'Hide ElectronReact', accelerator: 'Command+H', selector: 'hide:' },
+        { label: 'Hide Redmine Tracker', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
         { label: 'Show All', selector: 'unhideAllApplications:' },
         { type: 'separator' },
@@ -105,7 +105,8 @@ export default class MenuBuilder {
     const subMenuViewProd = {
       label: 'View',
       submenu: [
-        { label: 'Toggle Full Screen', accelerator: 'Ctrl+Command+F', click: () => { this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()); } }
+        { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
+        { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } },
       ]
     };
 

@@ -41,7 +41,8 @@ type Props = {
 
 // State
 type State = {
-  filterMine: boolean
+  filterMine: boolean,
+  syncNow: boolean
 };
 
 class TrackDialog extends Component<Props, State> {
@@ -50,11 +51,13 @@ class TrackDialog extends Component<Props, State> {
   // default state / override constructor is not enough.
   // The same thing is in UpdateTimer for ms property.
   static defaultProps = {
-    filterMine: true
+    filterMine: true,
+    syncNow: true
   };
 
   state = {
-    filterMine: true
+    filterMine: true,
+    syncNow: true
   };
 
   props: Props;
@@ -122,6 +125,13 @@ class TrackDialog extends Component<Props, State> {
     this.setState({
       filterMine: value
     });
+  }
+
+  syncNowChange = (value: boolean) => {
+    this.setState({
+      syncNow: value
+    });
+    this.activityChange.bind(this);
   }
 
   descriptionChange = (evt: SyntheticInputEvent<>) => {
@@ -228,10 +238,12 @@ class TrackDialog extends Component<Props, State> {
         />
 
         <div className="input_field">
-          <textarea name="description" placeholder="Description" value={description} maxLength="255" onChange={this.descriptionChange} />
+          <textarea name="description" placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} />
         </div>
 
         <Checkbox label="Filter assigned to me" value={this.state.filterMine} id="assigned_to_id" onChange={this.assignedToChange} />
+
+        <Checkbox label="Sync immediately" value={this.state.syncNow} id="sync_now" onChange={this.syncNowChange} />
 
         <div className={styles.tracking}>
           <div className={styles.tracking_time}>

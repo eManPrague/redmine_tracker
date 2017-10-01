@@ -11,8 +11,6 @@ import {
 
 import type { Info } from '../types/UserType';
 
-import SettingsStorage from '../utils/SettingsStorage';
-
 import {
   USER_LOG_IN,
   USER_LOG_OUT
@@ -34,7 +32,6 @@ export const userLogOut = () => async (dispatch: any) => {
 
   try {
     dispatch(removeUser());
-    await SettingsStorage.set('settings', {});
     dispatch(routerActions.push('/login'));
   } catch (e) {
     electronAlert(e.message);
@@ -65,15 +62,6 @@ export const userLogIn = (server: string, token: string) => async (dispatch: any
 
     // Set user
     dispatch(setUser(info));
-
-    // Set user data to settings storage
-    await SettingsStorage.set('settings', {
-      user: {
-        server,
-        token,
-        isLoggedIn: true
-      }
-    });
 
     // Redirect
     dispatch(routerActions.push('/'));

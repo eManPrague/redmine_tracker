@@ -7,7 +7,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import merge from 'webpack-merge';
-import BabiliPlugin from 'babili-webpack-plugin';
+// import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
 
@@ -15,9 +15,7 @@ CheckNodeEnv('production');
 
 export default merge.smart(baseConfig, {
   devtool: 'source-map',
-
   target: 'electron-renderer',
-
   entry: './app/index',
 
   output: {
@@ -32,6 +30,7 @@ export default merge.smart(baseConfig, {
       {
         test: /\.global\.css$/,
         use: ExtractTextPlugin.extract({
+          publicPath: './',
           use: 'css-loader',
           fallback: 'style-loader',
         })
@@ -143,20 +142,20 @@ export default merge.smart(baseConfig, {
     /**
      * Create global constants which can be configured at compile time.
      *
-     * Useful for allowing different behaviour between development builds and
+     * Useful for allowing different behavior between development builds and
      * release builds
      *
      * NODE_ENV should be production so that modules do not perform certain
      * development checks
      */
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+    new webpack.EnvironmentPlugin({
+      'process.env.NODE_ENV': 'production'
     }),
 
-    /**
-     * Babli is an ES6+ aware minifier based on the Babel toolchain (beta)
-     */
-    new BabiliPlugin(),
+    // new UglifyJSPlugin({
+    //  parallel: true,
+    //  sourceMap: true
+    // }),
 
     new ExtractTextPlugin('style.css'),
 

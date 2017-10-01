@@ -8,6 +8,7 @@
     "words": [
         "DEVTOOLS",
         "Redmine",
+        "Resizable",
         "Unmount",
         "compat",
         "firstname",
@@ -15,7 +16,8 @@
         "lastname",
         "lifecycle",
         "parens",
-        "submenu"
+        "submenu",
+        "toolchain"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.
