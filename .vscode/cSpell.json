@@ -17,7 +17,8 @@
         "lifecycle",
         "parens",
         "submenu",
-        "toolchain"
+        "toolchain",
+        "uglifyjs"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.

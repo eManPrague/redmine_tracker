@@ -10,9 +10,9 @@ export default class MenuBuilder {
   }
 
   buildMenu() {
-    // if (process.env.NODE_ENV === 'development') {
-    this.setupDevelopmentEnvironment();
-    // }
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD) {
+      this.setupDevelopmentEnvironment();
+    }
 
     let template;
 
@@ -48,6 +48,7 @@ export default class MenuBuilder {
       submenu: [
         { label: 'About Redmine Tracker', selector: 'orderFrontStandardAboutPanel:' },
         { label: 'Check for updates', click: () => { checkForUpdates(this); } },
+        { label: 'Entries history', click: () => { console.log('History'); } },
         { type: 'separator' },
         { label: 'Hide Redmine Tracker', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
@@ -102,13 +103,6 @@ export default class MenuBuilder {
         { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } }
       ]
     };
-    const subMenuViewProd = {
-      label: 'View',
-      submenu: [
-        { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
-        { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } },
-      ]
-    };
 
     const subMenuHelp = {
       label: 'Help',
@@ -120,14 +114,18 @@ export default class MenuBuilder {
       ]
     };
 
-    const subMenuView = process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
-
-    return [
+    const menu = [
       subMenuAbout,
-      subMenuEdit,
-      subMenuView,
-      subMenuHelp
+      subMenuEdit
     ];
+
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD) {
+      menu.push(subMenuViewDev);
+    }
+
+    menu.push(subMenuHelp);
+
+    return menu;
   }
 
   buildDefaultTemplate() {
@@ -141,6 +139,12 @@ export default class MenuBuilder {
         accelerator: 'Ctrl+U',
         click: () => {
           checkForUpdates(this);
+        }
+      }, {
+        label: 'History',
+        accelerator: 'Ctrl+H',
+        click: () => {
+          console.log('history')
         }
       }, {
         label: '&Close',

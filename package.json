@@ -10,7 +10,7 @@
     "build-main": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.main.prod.js --colors",
     "build-renderer": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors",
     "dev": "cross-env START_HOT=1 npm run start-renderer-dev",
-    "flow": "flow",
+    "electron-rebuild": "electron-rebuild --parallel --force --types prod,dev,optional --module-dir app",
     "release": "build",
     "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
     "lint": "eslint --cache --format=node_modules/eslint-formatter-pretty .",
@@ -46,13 +46,13 @@
       "contents": [
         {
           "x": 410,
-          "y": 150,
+          "y": 200,
           "type": "link",
           "path": "/Applications"
         },
         {
           "x": 130,
-          "y": 150,
+          "y": 200,
           "type": "file"
         }
       ]
@@ -93,18 +93,15 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chentsulin/electron-react-boilerplate/issues"
+    "url": "https://github.com/Strnadj/redmine_tracker/issues"
   },
   "keywords": [
     "electron",
-    "boilerplate",
-    "react",
-    "react-router",
-    "flux",
-    "webpack",
-    "react-hot"
+    "redmine",
+    "issue",
+    "tracker"
   ],
-  "homepage": "https://github.com/chentsulin/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/Strnadj/redmine_tracker",
   "jest": {
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
@@ -148,6 +145,7 @@
     "electron": "1.7.6",
     "electron-builder": "^19.27.7",
     "electron-devtools-installer": "^2.2.0",
+    "electron-rebuild": "^1.6.0",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
     "eslint": "^4.7.1",
@@ -201,27 +199,27 @@
     "electron-updater": "^2.8.9",
     "extract-text-webpack-plugin": "3.0.0-rc.1",
     "font-awesome": "^4.7.0",
-    "history": "^4.6.3",
+    "history": "^4.7.2",
     "immutable": "^3.8.1",
     "moment": "^2.18.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-hot-loader": "3.0.0-beta.6",
-    "react-redux": "^5.0.5",
+    "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.6",
-    "react-select": "^1.0.0-rc.3",
-    "react-tap-event-plugin": "^2.0.1",
-    "redux": "^3.7.1",
+    "react-select": "^1.0.0-rc.10",
+    "react-tap-event-plugin": "^3.0.2",
+    "redux": "^3.7.2",
     "redux-immutable": "^4.0.0",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "request": "^2.81.0",
-    "source-map-support": "^0.4.15"
+    "source-map-support": "^0.4.18"
   },
   "devEngines": {
-    "node": ">=6.x",
-    "npm": ">=3.x"
+    "node": ">= 8.3.0",
+    "npm": ">= 5.4.2"
   }
 }

@@ -1,18 +1,17 @@
 // @flow
+import { ipcRenderer as ipc } from 'electron';
+
 import {
   SET_PROJECTS
 } from '../constants/actions';
 
 import {
-  showLoading,
-  hideLoading
+  showLoading
 } from './ui';
 
-import redmineClient from '../utils/RedmineClient';
-
 import {
-  electronAlert
-} from '../utils/ElectronHelper';
+  FETCH_PROJECTS
+} from '../constants/ipc';
 
 export const setProjects = (projects: Array<{value: string, label: string }>) => ({
   type: SET_PROJECTS,
@@ -30,14 +29,5 @@ export const clearProjects = () => ({
 
 export const fetchProjects = () => async (dispatch: any) => {
   dispatch(showLoading('projects', 'Fetching projects...'));
-
-  try {
-    dispatch(setProjects(
-      await redmineClient.getProjects()
-    ));
-  } catch (e) {
-    electronAlert(e.message);
-  }
-
-  dispatch(hideLoading('projects'));
+  ipc.send(FETCH_PROJECTS);
 };

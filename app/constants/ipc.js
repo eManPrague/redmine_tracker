@@ -1,0 +1,21 @@
+/** User IPC actions */
+export const FETCH_USER = 'FETCH_USER';
+export const FETCH_USER_RESPONSE = 'FETCH_USER_RESPONSE';
+
+/** Project IPC actions */
+export const FETCH_PROJECTS = 'FETCH_PROJECTS';
+export const FETCH_PROJECTS_RESPONSE = 'FETCH_PROJECTS_RESPONSE';
+
+/** Issues IPC actions */
+export const FETCH_ISSUES = 'FETCH_ISSUES';
+export const FETCH_ISSUES_RESPONSE = 'FETCH_ISSUES_RESPONSE';
+
+/** Project activity */
+export const FETCH_PROJECT_ACTIVITIES = 'FETCH_PROJECT_ACTIVITIES';
+export const FETCH_PROJECT_ACTIVITIES_RESPONSE = 'FETCH_PROJECT_ACTIVITIES_RESPONSE';
+
+/** Current entry IPC actions */
+export const SYNC_CURRENT_ENTRY = 'SYNC_CURRENT_ENTRY';
+export const SYNC_CURRENT_ENTRY_RESPONSE = 'SYNC_CURRENT_ENTRY_RESPONSE';
+
+/** Entry IPC actions */

@@ -1,20 +1,19 @@
 // @flow
+import { ipcRenderer as ipc } from 'electron';
+
 import {
   SET_ISSUES
 } from '../constants/actions';
 
 import {
-  showLoading,
-  hideLoading
+  showLoading
 } from './ui';
 
-import redmineClient from '../utils/RedmineClient';
+import {
+  FETCH_ISSUES
+} from '../constants/ipc';
 
 import type { Issue } from '../types/UserType';
-
-import {
-  electronAlert
-} from '../utils/ElectronHelper';
 
 export const setIssues = (projectIdentifier: string, issues: Array<Issue>) => ({
   type: SET_ISSUES,
@@ -34,15 +33,5 @@ export const clearIssues = (projectIdentifier: string) => ({
 
 export const fetchIssues = (projectIdentifier: string) => async (dispatch: any) => {
   dispatch(showLoading('issues', 'Fetching issues...'));
-
-  try {
-    dispatch(setIssues(
-      projectIdentifier,
-      await redmineClient.getIssues(projectIdentifier)
-    ));
-  } catch (e) {
-    electronAlert(e.message);
-  }
-
-  dispatch(hideLoading('issues'));
+  ipc.send(FETCH_ISSUES, { projectIdentifier });
 };

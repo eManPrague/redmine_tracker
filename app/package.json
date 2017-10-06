@@ -9,7 +9,10 @@
     "email": "jan.strnadek@gmail.com",
     "url": "https://github.com/Strnadj"
   },
+  "scripts": {
+    "electron-rebuild": "../node_modules/.bin/electron-rebuild --parallel --force --types prod,dev,optional --module-dir .",
+    "postinstall": "npm run electron-rebuild"
+  },
   "license": "MIT",
-  "dependencies": {
-  }
+  "dependencies": {}
 }

@@ -5,11 +5,12 @@ import Immutable from 'immutable';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { ipcRenderer as ipc } from 'electron';
 import log from 'electron-log';
-import { createHashHistory, createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
+import { getInitialStateRenderer } from 'electron-redux';
+
+import IpcApiRenderer from './utils/IpcApiRenderer';
 
 // Containers + store
-// import { SETTINGS_LOAD_ERROR } from './constants/dialogs';
-// import SettingsStorage from './utils/SettingsStorage';
 import Root from './containers/Root';
 import configureStore from './store';
 
@@ -23,27 +24,19 @@ injectTapEventPlugin();
 log.info('Start frontend...');
 
 // Bind error catcher
-window.onerror = (error, url, line) => {
+window.onerror = (error) => {
   ipc.send('errorInWindow', error);
-  log.error(`Error line: ${line}`);
   log.error(error);
 };
 
 // Init app
-const initialState = Immutable.fromJS({});
-
-let history = null;
-
-if (process.env.NODE_ENV !== 'production') {
-  history = createHashHistory();
-} else {
-  history = createBrowserHistory();
-}
-
+const initialState = Immutable.fromJS(getInitialStateRenderer());
+const history = createHashHistory();
 const store = configureStore(initialState, 'renderer', history);
 
-console.log(store);
-console.log(history);
+// Initialize renderer process 
+const ipcApi = new IpcApiRenderer(store, log);
+ipcApi.bind();
 
 render(
   <AppContainer>

@@ -19,13 +19,17 @@ import {
   SETTINGS_LOAD_ERROR, ERROR_ALERT
 } from './constants/dialogs';
 
+import IpcApiMain from './utils/IpcApiMain';
+
+import { defaultRouting, defaultUi } from './utils/DefaultStates';
+
+import SettingsStorage from './utils/SettingsStorage';
+
 import MenuBuilder from './main/MenuBuilder';
 import TrayBuilder from './main/Tray';
 
 // Initialize store to share it between windows
 import configureStore from './store';
-
-const store = configureStore(Immutable.fromJS({}), 'main');
 
 // Set level
 log.transports.console.level = 'debug';
@@ -37,6 +41,8 @@ log.info('App starting...');
 
 let mainWindow = null;
 let trayBuilder = null;
+let store = null;
+let ipcApiMain = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line
@@ -89,6 +95,24 @@ const installExtensions = async () => {
   return Promise.all(extensions);
 };
 
+// First state
+let oldState = null;
+
+const persistState = async () => {
+  // Never persist `routing` and `ui` keys!
+  const newState = store
+    .getState()
+    .set('router', defaultRouting)
+    .set('ui', defaultUi)
+    .setIn(['user', 'user'], null);
+
+  if (!oldState || newState.equals(oldState) === false) {
+    await SettingsStorage.set('state', newState.toJS());
+    log.info('Settings successfully stored');
+    oldState = newState;
+  }
+};
+
 const createMainWindow = async () => {
   if (debugMode) {
     try {
@@ -98,11 +122,26 @@ const createMainWindow = async () => {
     }
   }
 
+  // Get default state
+  if (!store) {
+    oldState = await SettingsStorage.get('state', {});
+    store = configureStore(Immutable.fromJS(oldState), 'main');
+
+    // Persist state on change
+    store.subscribe(persistState);
+  }
+
+  // Create ipc main
+  if (!ipcApiMain) {
+    ipcApiMain = new IpcApiMain(store, log);
+    ipcApiMain.bind();
+  }
+
   mainWindow = new BrowserWindow({
     show: false,
     title: 'Redmine Tracker',
     width: 400,
-    height: 500
+    height: 450
   });
 
   mainWindow.setResizable(false);

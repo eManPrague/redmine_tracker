@@ -23,6 +23,8 @@ export default (state: Immutable.Map<mixed, mixed> = initialState, action: any) 
 
     case USER_LOG_OUT:
       return state.merge({
+        token: null,
+        user: null,
         isLoggedIn: false
       });
 

@@ -9,6 +9,9 @@ export const showLoading = (code: string, message: string) => ({
   payload: {
     message,
     code
+  },
+  meta: {
+    scope: 'local'
   }
 });
 
@@ -16,5 +19,8 @@ export const hideLoading = (code: string) => ({
   type: HIDE_UI_LOADING,
   payload: {
     code
+  },
+  meta: {
+    scope: 'local'
   }
 });

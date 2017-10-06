@@ -7,7 +7,7 @@ import {
   forwardToMain,
   forwardToRenderer,
   replayActionMain,
-  replayActionRenderer,
+  replayActionRenderer
 } from 'electron-redux';
 
 import rootReducer from '../reducers';

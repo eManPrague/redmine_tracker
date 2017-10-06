@@ -28,3 +28,10 @@
   background-size: 50%;
   background-position: 50% 50%;
 }
+
+.versionInfo {
+  float: left;
+  line-height: 40px;
+  font-size: 14px;
+  color: darkgray;
+}

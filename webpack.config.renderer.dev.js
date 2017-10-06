@@ -16,6 +16,7 @@ import { spawn, execSync } from 'child_process';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
+import sliceKeys from './internals/scripts/Utils';
 
 CheckNodeEnv('development');
 
@@ -223,7 +224,8 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      CONFIG: sliceKeys(require('./package.json'), ['version', 'author', 'homepage', 'bugs'])
     }),
 
     new webpack.LoaderOptionsPlugin({

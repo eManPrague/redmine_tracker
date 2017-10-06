@@ -1,0 +1,28 @@
+.itemError {
+  width: 100%;
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  padding: 15px;
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-align: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.itemInfo {
+  text-align: right;
+  font-size: 12px;
+  margin-top: 20px;
+  color: gray;
+  line-height: 40px;
+}
+
+.openIssue {
+  font-size: 12px !important;
+  cursor: pointer;
+  color: darkblue;
+  text-decoration: underline;
+}

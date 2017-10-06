@@ -22,3 +22,4 @@ export const RESET_ALL = 'RESET_ALL';
 export const START_ENTRY = 'START_ENTRY';
 export const UPDATE_ENTRY = 'UPDATE_ENTRY';
 export const STOP_ENTRY = 'STOP_ENTRY';
+export const RESET_CURRENT_ENTRY = 'RESET_CURRENT_ENTRY';

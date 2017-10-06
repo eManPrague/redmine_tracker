@@ -16,7 +16,8 @@ import { fetchActivities } from '../actions/activities';
 
 import {
   closeEntry,
-  updateEntry
+  updateEntry,
+  resetCurrentEntry
 } from '../actions/entries';
 
 // Types
@@ -35,6 +36,7 @@ type Props = {
   loadActivities: (project: string) => void,
   updateCurrentEntry: (data: any) => void,
   stopCurrentEntry: (data: any, endTime: number, autoSync: boolean) => void,
+  resetCurrentEntry: () => void,
   currentEntry: Immutable.Map<string, mixed>,
   userId: number
 };
@@ -61,6 +63,8 @@ class TrackDialog extends Component<Props, State> {
   };
 
   props: Props;
+
+  description: ?HTMLTextAreaElement;
 
   componentDidMount() {
     const {
@@ -131,7 +135,6 @@ class TrackDialog extends Component<Props, State> {
     this.setState({
       syncNow: value
     });
-    this.activityChange.bind(this);
   }
 
   descriptionChange = (evt: SyntheticInputEvent<>) => {
@@ -147,12 +150,31 @@ class TrackDialog extends Component<Props, State> {
 
     // If state startTime is null
     if (this.trackingInProgress()) {
-      this.props.stopCurrentEntry(this.props.currentEntry, currentTime, true);
+      this.props.stopCurrentEntry(this.props.currentEntry, currentTime, this.state.syncNow);
+      this.resetDescription();
     } else {
       this.props.updateCurrentEntry({
         startTime: currentTime
       });
     }
+  }
+
+  /**
+   * Reset current entry.
+   */
+  resetCurrentEntry = () => {
+    this.props.resetCurrentEntry();
+    this.resetDescription();
+  }
+
+  resetDescription(): void {
+    if (this.description) {
+      this.description.value = '';
+    }
+  }
+
+  setDescription = (ref: ?HTMLTextAreaElement) => {
+    this.description = ref;
   }
 
   render() {
@@ -238,7 +260,7 @@ class TrackDialog extends Component<Props, State> {
         />
 
         <div className="input_field">
-          <textarea name="description" placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} />
+          <textarea name="description" ref={this.setDescription} placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} />
         </div>
 
         <Checkbox label="Filter assigned to me" value={this.state.filterMine} id="assigned_to_id" onChange={this.assignedToChange} />
@@ -252,7 +274,7 @@ class TrackDialog extends Component<Props, State> {
           <button className={buttonClass} disabled={!btnEnabled} onClick={this.handleTracking}>
             {buttonText}
           </button>
-          <button className={'default'} disabled={btnEnabled}>
+          <button className={'default'} onClick={this.resetCurrentEntry}>
             Cancel
           </button>
         </div>
@@ -297,6 +319,10 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
   stopCurrentEntry: (data: any, endTime: number, autoSync: boolean): void => {
     dispatch(closeEntry(data, endTime, autoSync));
+  },
+
+  resetCurrentEntry: (): void => {
+    dispatch(resetCurrentEntry());
   }
 });
 

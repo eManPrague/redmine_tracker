@@ -3,7 +3,8 @@ import Immutable from 'immutable';
 
 import {
   UPDATE_ENTRY,
-  STOP_ENTRY
+  STOP_ENTRY,
+  RESET_CURRENT_ENTRY
 } from '../constants/actions';
 
 const emptyCurrent = Immutable.fromJS({
@@ -32,6 +33,9 @@ export default (state: Immutable.Map<string, mixed> = initialState, action: any)
     case STOP_ENTRY:
       return state.update('history', arr => arr.push(state.get('current').merge(action.payload)))
         .set('current', emptyCurrent);
+
+    case RESET_CURRENT_ENTRY:
+      return state.set('current', emptyCurrent);
 
     default:
       return state;

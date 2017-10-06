@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 // Actions + components
 import { removeUser } from '../actions/user';
 import TrackDialog from './TrackDialog';
-import TrackHistory from './TrackHistory';
+import TrackInfo from './TrackInfo';
 
 // Styles
 import styles from './Home.css';
@@ -16,7 +16,7 @@ class Home extends Component<{}> {
       <div>
         <div className={styles.container} data-tid="container">
           <TrackDialog />
-          <TrackHistory title="Last entries" items={[]} />
+          <TrackInfo />
         </div>
       </div>
     );

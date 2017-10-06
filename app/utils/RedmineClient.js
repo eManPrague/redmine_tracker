@@ -270,7 +270,6 @@ class RedmineClient {
         } else {
           // Response
           console.log('[Redmine] Response OK');
-          console.log(parsedBody);
 
           // Parse body & create immutable
           parsedBody = Immutable.fromJS(parsedBody);

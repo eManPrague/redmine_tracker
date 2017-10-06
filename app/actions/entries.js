@@ -1,26 +1,26 @@
 // @flow
+import { ipcRenderer as ipc } from 'electron';
+
 import {
   UPDATE_ENTRY,
-  STOP_ENTRY
+  STOP_ENTRY,
+  RESET_CURRENT_ENTRY
 } from '../constants/actions';
 
 import {
-  showLoading,
-  hideLoading
-} from './ui';
+  SYNC_CURRENT_ENTRY
+} from '../constants/ipc';
 
 import {
-  electronAlert
-} from '../utils/ElectronHelper';
-
-import redmineClient from '../utils/RedmineClient';
+  showLoading
+} from './ui';
 
 export const updateEntry = (data: any) => ({
   type: UPDATE_ENTRY,
   payload: data
 });
 
-export const stopEntry = (endTime: number, id: number) => ({
+export const stopEntry = (endTime: number, id?: number) => ({
   type: STOP_ENTRY,
   payload: {
     endTime,
@@ -28,29 +28,19 @@ export const stopEntry = (endTime: number, id: number) => ({
   }
 });
 
+export const resetCurrentEntry = () => ({
+  type: RESET_CURRENT_ENTRY,
+});
+
+/* eslint-disable max-len */
 export const closeEntry = (entry: any, endTime: number, sync: boolean) => async (dispatch: any) => {
-  dispatch(showLoading('entries', 'Sync entry...'));
-
-  let id: number = 0;
-
   if (sync) {
-    try {
-      id = await redmineClient.createEntry({
-        issueId: entry.get('issue'),
-        activity: entry.get('activity'),
-        description: entry.get('description'),
-        startTime: entry.get('startTime'),
-        endTime
-      });
-    } catch (e) {
-      electronAlert(e.message);
-    }
+    // Show sync prompt
+    dispatch(showLoading('entries', 'Sync entry...'));
+    ipc.send(SYNC_CURRENT_ENTRY, { entry: entry.toJS(), endTime });
+  } else {
+    // Move entry to entries
+    dispatch(stopEntry(endTime));
   }
-
-  dispatch(stopEntry(
-    endTime,
-    id
-  ));
-
-  dispatch(hideLoading('entries'));
 };
+/* eslint-enable max-len */

@@ -1,16 +1,11 @@
-import Immutable from 'immutable';
-
 import {
   SHOW_UI_LOADING,
   HIDE_UI_LOADING
 } from '../constants/actions';
 
-const initialState = Immutable.fromJS({
-  loading: [],
-  message: ''
-});
+import { defaultUi } from '../utils/DefaultStates';
 
-export default (state = initialState, action) => {
+export default (state = defaultUi, action) => {
   const payload = action.payload;
 
   switch (action.type) {
