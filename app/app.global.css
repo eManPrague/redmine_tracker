@@ -12,6 +12,13 @@ html, body, #root {
 }
 
 /**
+ * Otherwise some weird unicode font will be used.
+ */
+textarea, body * {
+	font-family: 'BlinkMacSystemFont', 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, sans-serif;
+}
+
+/**
  * Inputs
  */
 .input_field label,
@@ -54,7 +61,6 @@ button {
 }
 
 button:disabled {
-  font-family: inherit;
   font-size: 100%;
   padding: .5em 1em;
   color: #444;
@@ -68,9 +74,9 @@ button:disabled {
 }
 
 button {
-  font-family: inherit;
   font-size: 100%;
-  padding: .5em 1em;
+  padding: 0 1em;
+  line-height: 20px;
   color: #444;
   color: rgba(0, 0, 0, .8);
   border: 1px solid #999;
@@ -94,6 +100,10 @@ button.primary {
   background-color: #0078e7;
   color: #fff;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+button.primary:hover {
+  background-color: #1b91ff;
 }
 
 button.error {

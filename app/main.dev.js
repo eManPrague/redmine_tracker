@@ -144,7 +144,11 @@ const createMainWindow = async () => {
     show: false,
     title: 'Redmine Tracker',
     width: 400,
-    height: 450
+    height: 440,
+    useContentSize: true,
+    resizable: false,
+    maximizable: false,
+    fullscreenable: false
   });
 
   mainWindow.setResizable(false);

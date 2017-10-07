@@ -36,7 +36,7 @@ class TrackInfo extends Component<Props> {
 
     let itemError = null;
 
-    if (itemCount === 0) {
+    if (itemCount > 0) {
       /* eslint-disable react/no-unescaped-entities */ 
       itemError = (
         <div className={styles.itemError}>
