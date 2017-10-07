@@ -8,7 +8,7 @@
 .checkbox label {
   width: 20px;
   height: 20px;
-  cursor: pointer;
+  cursor: default;
   position: absolute;
   top: 0;
   left: 0;
@@ -41,5 +41,5 @@
 }    
 
 .checkboxLabel {
-  cursor: pointer;
+  cursor: default;
 }

@@ -64,14 +64,25 @@
       "main.prod.js.map",
       "package.json"
     ],
+    "extraResources": [
+      {
+        "from": "app/assets/",
+        "to": "assets/"
+      }
+    ],
     "win": {
-      "target": "nsis"
+      "target": [
+        "squirrel",
+        "zip"
+      ]
     },
     "linux": {
       "target": [
         "deb",
-        "AppImage"
-      ]
+        "AppImage",
+        "rpm"
+      ],
+      "category": "Office"
     },
     "directories": {
       "buildResources": "resources",

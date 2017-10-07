@@ -21,8 +21,10 @@ export default class TrayBuilder {
     this.store = store;
     this.active = false;
 
-    this.normalIcon = nativeImage.createFromPath(path.join(__dirname, '../assets/images/tray.png'));
-    this.activeIcon = nativeImage.createFromPath(path.join(__dirname, '../assets/images/tray_active.png'));
+    // Relative app path
+    const appPath = path.join(__dirname, '../assets/images/');
+    this.normalIcon = nativeImage.createFromPath(path.join(appPath, 'tray.png'));
+    this.activeIcon = nativeImage.createFromPath(path.join(appPath, 'tray_active.png'));
   }
 
   buildIcon() {
@@ -32,7 +34,8 @@ export default class TrayBuilder {
       label: 'Remove',
     }]);
 
-    this.icon.setToolTip('Electron Demo in the tray.');
+    // Set basic stuff
+    this.icon.setToolTip('RedmineTracker!');
     this.icon.setContextMenu(contextMenu);
 
     // Start watching

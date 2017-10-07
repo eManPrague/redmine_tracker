@@ -52,11 +52,14 @@ if (process.env.NODE_ENV === 'production') {
 // Determine to DEBUG prod
 const debugMode = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD;
 
-if (debugMode) {
+if (debugMode === true) {
+  log.info('Starting APP in DEBUG MODE!');
   require('electron-debug')(); // eslint-disable-line global-require
   const path = require('path'); // eslint-disable-line
   const p = path.join(__dirname, '..', 'app', 'node_modules'); // eslint-disable-line
   require('module').globalPaths.push(p); // eslint-disable-line
+} else {
+  log.info('Starting APP in PRODUCTION MODE');
 }
 
 app.on('window-all-closed', () => {
@@ -114,7 +117,7 @@ const persistState = async () => {
 };
 
 const createMainWindow = async () => {
-  if (debugMode) {
+  if (debugMode === true) {
     try {
       await installExtensions();
     } catch (ex) {
@@ -164,7 +167,7 @@ const createMainWindow = async () => {
     trayBuilder.buildIcon();
   }
 
-  const menuBuilder = new MenuBuilder(mainWindow);
+  const menuBuilder = new MenuBuilder(mainWindow, debugMode);
   menuBuilder.buildMenu();
 };
 

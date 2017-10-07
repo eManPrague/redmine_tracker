@@ -13,7 +13,7 @@ import {
   FETCH_ISSUES
 } from '../constants/ipc';
 
-import type { Issue } from '../types/UserType';
+import type { Issue } from '../types/RedmineTypes';
 
 export const setIssues = (projectIdentifier: string, issues: Array<Issue>) => ({
   type: SET_ISSUES,

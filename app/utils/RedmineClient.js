@@ -4,7 +4,8 @@ import Immutable from 'immutable';
 import moment from 'moment';
 
 // Types
-import type { User, Issue, Entry } from '../types/UserType';
+import type { User } from '../types/UserType';
+import type { Issue, Entry } from '../types/RedmineTypes';
 
 /**
  * Redmine Client is singleton class.

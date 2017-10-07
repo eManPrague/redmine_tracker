@@ -21,7 +21,7 @@ import {
 } from '../actions/entries';
 
 // Types
-import type { Issue } from '../types/UserType';
+import type { Issue } from '../types/RedmineTypes';
 
 // Styles
 import styles from './TrackDialog.css';
@@ -64,8 +64,6 @@ class TrackDialog extends Component<Props, State> {
 
   props: Props;
 
-  description: ?HTMLTextAreaElement;
-
   componentDidMount() {
     const {
       projects,
@@ -97,6 +95,8 @@ class TrackDialog extends Component<Props, State> {
       }
     }
   }
+
+  description: ?HTMLTextAreaElement;
 
   projectChange = (project: ?{ value: string, label: string }) => {
     if (project) {
@@ -159,9 +159,6 @@ class TrackDialog extends Component<Props, State> {
     }
   }
 
-  /**
-   * Reset current entry.
-   */
   resetCurrentEntry = () => {
     this.props.resetCurrentEntry();
     this.resetDescription();
@@ -176,6 +173,22 @@ class TrackDialog extends Component<Props, State> {
   setDescription = (ref: ?HTMLTextAreaElement) => {
     this.description = ref;
   }
+
+  handleEnter = (event) => {
+    // FIXME: Refactor with btnEnabled in render!
+    const {
+      project,
+      issue,
+      activity,
+      description,
+      startTime
+    } = this.props.currentEntry.toJS();
+
+    if (event.key === 'Enter' && project.length > 0 && issue > 0 && activity > 0 && description.length > 0 && !startTime) {
+      this.handleTracking();
+    }
+  }
+
 
   render() {
     const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
@@ -260,7 +273,7 @@ class TrackDialog extends Component<Props, State> {
         />
 
         <div className="input_field">
-          <textarea name="description" ref={this.setDescription} placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} />
+          <textarea name="description" ref={this.setDescription} placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} onKeyPress={this.handleEnter} />
         </div>
 
         <Checkbox label="Filter assigned to me" value={this.state.filterMine} id="assigned_to_id" onChange={this.assignedToChange} />

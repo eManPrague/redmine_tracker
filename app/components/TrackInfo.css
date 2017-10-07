@@ -9,7 +9,7 @@
   border-radius: 4px;
   text-align: center;
   box-sizing: border-box;
-  cursor: pointer;
+  cursor: initial;
 }
 
 .itemInfo {
@@ -22,7 +22,7 @@
 
 .openIssue {
   font-size: 12px !important;
-  cursor: pointer;
+  cursor: pointer; /* This is URL link */
   color: darkblue;
   text-decoration: underline;
 }

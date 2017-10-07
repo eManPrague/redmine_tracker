@@ -82,7 +82,7 @@ button {
   white-space: nowrap;
   vertical-align: middle;
   text-align: center;
-  cursor: pointer;
+  cursor: initial;
   -webkit-user-drag: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -216,7 +216,7 @@ table th, table td {
 }
 .has-value.Select--single > .Select-control .Select-value a.Select-value-label,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label {
-  cursor: pointer;
+  cursor: initial;
   text-decoration: none;
 }
 .has-value.Select--single > .Select-control .Select-value a.Select-value-label:hover,
@@ -260,7 +260,7 @@ table th, table td {
   outline: none;
 }
 .Select-loading-zone {
-  cursor: pointer;
+  cursor: initial;
   display: table-cell;
   position: relative;
   text-align: center;
@@ -286,7 +286,7 @@ table th, table td {
   -o-animation: Select-animation-fadeIn 200ms;
   animation: Select-animation-fadeIn 200ms;
   color: #999;
-  cursor: pointer;
+  cursor: initial;
   display: table-cell;
   position: relative;
   text-align: center;
@@ -305,7 +305,7 @@ table th, table td {
   width: 17px;
 }
 .Select-arrow-zone {
-  cursor: pointer;
+  cursor: initial;
   display: table-cell;
   position: relative;
   text-align: center;
@@ -378,7 +378,7 @@ table th, table td {
   box-sizing: border-box;
   background-color: #fff;
   color: #666666;
-  cursor: pointer;
+  cursor: initial;
   display: block;
   padding: 8px 10px;
 }
@@ -445,14 +445,14 @@ table th, table td {
 }
 .Select--multi a.Select-value-label {
   color: #007eff;
-  cursor: pointer;
+  cursor: initial;
   text-decoration: none;
 }
 .Select--multi a.Select-value-label:hover {
   text-decoration: underline;
 }
 .Select--multi .Select-value-icon {
-  cursor: pointer;
+  cursor: initial;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
   border-right: 1px solid #c2e0ff;

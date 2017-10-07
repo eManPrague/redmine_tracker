@@ -5,12 +5,15 @@ import checkForUpdates from '../updater';
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
-  constructor(mainWindow: BrowserWindow) {
+  debugMode: boolean;
+
+  constructor(mainWindow: BrowserWindow, debugMode: boolean) {
     this.mainWindow = mainWindow;
+    this.debugMode = debugMode;
   }
 
   buildMenu() {
-    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD) {
+    if (this.debugMode === true) {
       this.setupDevelopmentEnvironment();
     }
 
@@ -57,6 +60,7 @@ export default class MenuBuilder {
         { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit(); } }
       ]
     };
+
     const subMenuEdit = {
       label: 'Edit',
       submenu: [
@@ -119,7 +123,7 @@ export default class MenuBuilder {
       subMenuEdit
     ];
 
-    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD) {
+    if (this.debugMode) {
       menu.push(subMenuViewDev);
     }
 
@@ -144,7 +148,7 @@ export default class MenuBuilder {
         label: 'History',
         accelerator: 'Ctrl+H',
         click: () => {
-          console.log('history')
+          console.log('history');
         }
       }, {
         label: '&Close',
