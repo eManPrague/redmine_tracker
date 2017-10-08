@@ -11,10 +11,11 @@ export type Project = {
 };
 
 export type Entry = {
-  issueId: number,
+  project: string,
+  issue: number,
   activity: number,
   description: string,
   startTime: number,
   endTime: number,
-  externalId?: number
+  id?: number
 };

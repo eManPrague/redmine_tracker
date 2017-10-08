@@ -1,6 +1,9 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "cSpell.words": [
+    "fsevents",
+    "fullscreenable",
+    "maximizable",
     "uglifyjs"
   ]
 }

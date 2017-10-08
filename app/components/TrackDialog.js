@@ -16,7 +16,7 @@ import { fetchActivities } from '../actions/activities';
 
 import {
   closeEntry,
-  updateEntry,
+  updateCurrentEntry,
   resetCurrentEntry
 } from '../actions/entries';
 
@@ -328,7 +328,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch(fetchActivities(projectIdentifier));
   },
   updateCurrentEntry: (data: any): void => {
-    dispatch(updateEntry(data));
+    dispatch(updateCurrentEntry(data));
   },
   stopCurrentEntry: (data: any, endTime: number, autoSync: boolean): void => {
     dispatch(closeEntry(data, endTime, autoSync));

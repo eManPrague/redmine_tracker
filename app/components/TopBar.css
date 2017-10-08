@@ -1,5 +1,8 @@
 .header {
-  background-color: rgb(250, 250, 250);
+  background-color: #e8e6e8;
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#e8e6e8),color-stop(100%,#d1cfd1));
+  background-image: -webkit-linear-gradient(top,#e8e6e8 0,#d1cfd1 100%);
+  background-image: linear-gradient(to bottom,#e8e6e8 0,#d1cfd1 100%);
   width: 100%;
   line-height: 50px;
   border-bottom: 1px solid #eee;
@@ -32,6 +35,7 @@
   padding: 12px 15px;
   cursor: initial;
   margin-right: 5px;
+  box-shadow: initial;
 }
 
 .login_info {

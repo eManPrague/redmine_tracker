@@ -7,7 +7,7 @@ import { setUser } from '../actions/user';
 import { setProjects } from '../actions/projects';
 import { setIssues } from '../actions/issues';
 import { setActivities } from '../actions/activities';
-import { stopEntry } from '../actions/entries';
+import { stopEntry, updateEntry } from '../actions/entries';
 
 export default class IpcApiMain {
   store: null;
@@ -109,6 +109,35 @@ export default class IpcApiMain {
     IpcApiMain.sendToAll(actions.FETCH_PROJECT_ACTIVITIES_RESPONSE, info);
   }
 
+  syncEntry = async (event, data) => {
+    let info = {};
+
+    // Fetch information from data
+    const index = data.index;
+    const entry = this.store
+      .getState()
+      .get('entries')
+      .get('history')
+      .get(index)
+      .toJS();
+
+    let id = null;
+
+    try {
+      id = await redmineClient.createEntry(entry);
+      info.id = id;
+      this
+        .store
+        .dispatch(updateEntry(index, { id }));
+    } catch (e) {
+      info = {
+        error: e
+      };
+    }
+
+    IpcApiMain.sendToAll(actions.SYNC_ENTRY_RESPONSE, info);
+  }
+
   syncCurrentEntry = async (event, data) => {
     let info = {};
 
@@ -120,11 +149,8 @@ export default class IpcApiMain {
 
     try {
       id = await redmineClient.createEntry({
-        issueId: entry.issue,
-        activity: entry.activity,
-        description: entry.description,
-        startTime: entry.startTime,
-        endTime
+        endTime,
+        ...entry
       });
 
       info.id = id;
@@ -156,5 +182,8 @@ export default class IpcApiMain {
 
     // Current entry sync
     this.ipc.on(actions.SYNC_CURRENT_ENTRY, this.syncCurrentEntry);
+
+    // Sync old entry
+    this.ipc.on(actions.SYNC_ENTRY, this.syncEntry);
   }
 }

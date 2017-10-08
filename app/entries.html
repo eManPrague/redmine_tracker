@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Redmine Tracker</title>
+    <title>Redmine Tracker - History</title>
     <script>
       (function() {
         if (!process.env.HOT) {
@@ -29,8 +29,8 @@
         const port = process.env.PORT || 1212;
         scripts.push(
           (process.env.HOT)
-            ? 'http://localhost:' + port + '/dist/renderer.app.dev.js'
-            : './dist/renderer.app.prod.js'
+            ? 'http://localhost:' + port + '/dist/renderer.entries.dev.js'
+            : './dist/renderer.entries.prod.js'
         );
         document.write(
           scripts

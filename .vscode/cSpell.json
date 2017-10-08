@@ -6,19 +6,22 @@
     "language": "en",
     // words - list of words to be always considered correct
     "words": [
-        "DEVTOOLS",
-        "Redmine",
-        "Resizable",
-        "Unmount",
         "compat",
+        "DEVTOOLS",
         "firstname",
         "flowtype",
+        "fsevents",
+        "fullscreenable",
         "lastname",
         "lifecycle",
+        "maximizable",
         "parens",
+        "Redmine",
+        "Resizable",
         "submenu",
         "toolchain",
-        "uglifyjs"
+        "uglifyjs",
+        "Unmount"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.

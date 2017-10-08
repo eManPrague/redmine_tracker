@@ -7,7 +7,7 @@ import App from './containers/App';
 import EnsureLoggedInContainer from './containers/EnsureLoggedInContainer';
 import LoginPage from './containers/LoginPage';
 
-export default class Routes extends Component<null> {
+export default class Routes extends Component<{}> {
   render() {
     return (
       <App>

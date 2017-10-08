@@ -5,10 +5,16 @@ import checkForUpdates from '../updater';
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
+  entriesWindow: BrowserWindow;
+
+  openEntriesWindow: () => BrowserWindow;
+
+
   debugMode: boolean;
 
-  constructor(mainWindow: BrowserWindow, debugMode: boolean) {
+  constructor(mainWindow: BrowserWindow, openEntriesWindow: any, debugMode: boolean) {
     this.mainWindow = mainWindow;
+    this.openEntriesWindow = openEntriesWindow;
     this.debugMode = debugMode;
   }
 
@@ -45,13 +51,27 @@ export default class MenuBuilder {
     });
   }
 
+  openEntries = () => {
+    this.entriesWindow = this.openEntriesWindow();
+    this.entriesWindow.on('close', () => {
+      this.entriesWindow = null;
+    });
+  }
+
+  refreshWindows = () => {
+    this.mainWindow.webContents.reload();
+    if (this.entriesWindow) {
+      this.entriesWindow.webContents.reload();
+    }
+  }
+
   buildDarwinTemplate() {
     const subMenuAbout = {
       label: 'Tracker',
       submenu: [
         { label: 'About Redmine Tracker', selector: 'orderFrontStandardAboutPanel:' },
         { label: 'Check for updates', click: () => { checkForUpdates(this); } },
-        { label: 'Entries history', click: () => { console.log('History'); } },
+        { label: 'History', click: () => { this.openEntries(); } },
         { type: 'separator' },
         { label: 'Hide Redmine Tracker', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
@@ -103,7 +123,7 @@ export default class MenuBuilder {
     const subMenuViewDev = {
       label: 'View',
       submenu: [
-        { label: 'Reload', accelerator: 'Command+R', click: () => { this.mainWindow.webContents.reload(); } },
+        { label: 'Reload', accelerator: 'Command+R', click: () => { this.refreshWindows(); } },
         { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } }
       ]
     };
@@ -148,7 +168,7 @@ export default class MenuBuilder {
         label: 'History',
         accelerator: 'Ctrl+H',
         click: () => {
-          console.log('history');
+          this.openEntries();
         }
       }, {
         label: '&Close',
@@ -171,13 +191,7 @@ export default class MenuBuilder {
         label: '&Reload',
         accelerator: 'Ctrl+R',
         click: () => {
-          this.mainWindow.webContents.reload();
-        }
-      }, {
-        label: 'Toggle &Full Screen',
-        accelerator: 'F11',
-        click: () => {
-          this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+          this.refreshWindows();
         }
       }, {
         label: 'Toggle &Developer Tools',

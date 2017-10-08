@@ -79,7 +79,7 @@ class Login extends Component<Props, State> {
               <div className={styles.versionInfo}>
                 {Login.versionInfo()}
               </div>
-              <button onClick={this.loginBtn} className="primary">
+              <button onClick={this.loginBtn} className="primary wide">
                 Login
               </button>
             </div>

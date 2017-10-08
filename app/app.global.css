@@ -4,7 +4,7 @@ html, body, #root {
   height: 100%;
   width: 100%;
 	font-family: 'BlinkMacSystemFont', 'Lucida Grande', 'Segoe UI', Ubuntu, Cantarell, sans-serif;
-  background: -webkit-linear-gradient(top, #ffffff 0%,#efefff 99%);
+  background-color: #f5f5f4;
 }
 
 :root {
@@ -31,6 +31,20 @@ textarea, body * {
 
 .input_field textarea {
   resize: none;
+}
+
+/** Inputs */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  min-height: 25px;
+  padding: 5px 10px;
+  line-height: 1.6;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: 0;
 }
 
 .input_field label {
@@ -62,7 +76,6 @@ button {
 
 button:disabled {
   font-size: 100%;
-  padding: .5em 1em;
   color: #444;
   color: rgba(0,0,0,.8);
   border: 1px solid #999;
@@ -76,7 +89,7 @@ button:disabled {
 button {
   font-size: 100%;
   padding: 0 1em;
-  line-height: 20px;
+  line-height: 30px;
   color: #444;
   color: rgba(0, 0, 0, .8);
   border: 1px solid #999;
@@ -94,12 +107,19 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0,0,0,.06);
 }
 
 button.primary {
-  background-color: #0078e7;
+  border-color: #388df8 #388df8 #0866dc;
+  background-color: #6eb4f7;
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#6eb4f7),color-stop(100%,#1a82fb));
+  background-image: -webkit-linear-gradient(top,#6eb4f7 0,#1a82fb 100%);
+  background-image: linear-gradient(to bottom,#6eb4f7 0,#1a82fb 100%);
   color: #fff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 1px rgba(0,0,0,.1);
 }
 
 button.primary:hover {

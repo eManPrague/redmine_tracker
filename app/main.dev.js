@@ -16,7 +16,7 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 
 import {
-  SETTINGS_LOAD_ERROR, ERROR_ALERT
+  OPEN_ENTRY_WINDOW, ERROR_ALERT
 } from './constants/dialogs';
 
 import IpcApiMain from './utils/IpcApiMain';
@@ -40,6 +40,7 @@ autoUpdater.logger.transports.file.level = 'debug';
 log.info('App starting...');
 
 let mainWindow = null;
+let entriesWindow = null;
 let trayBuilder = null;
 let store = null;
 let ipcApiMain = null;
@@ -72,15 +73,8 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipc.on(SETTINGS_LOAD_ERROR, (event, arg) => {
-  dialog.showErrorBox('Error', `Cannot load settings! (Error: ${arg[0]})`);
-
-  // Quit only on production evn otherwise show errors
-  if (process.env.NODE_ENV === 'production') {
-    app.quit();
-  } else {
-    console.log(arg[1]);
-  }
+ipc.on(OPEN_ENTRY_WINDOW, () => {
+  openEntriesWindow();
 });
 
 ipc.on(ERROR_ALERT, (event, arg) => {
@@ -114,6 +108,44 @@ const persistState = async () => {
     log.info('Settings successfully stored');
     oldState = newState;
   }
+};
+
+const openEntriesWindow = () => {
+  if (entriesWindow === null) {
+    entriesWindow = new BrowserWindow({
+      show: false,
+      title: 'Redmine Tracker - History',
+      width: 850,
+      height: 450,
+      maximizable: false,
+      fullscreenable: false,
+      center: true,
+      resizable: false
+    });
+
+    entriesWindow.loadURL(`file://${__dirname}/entries.html`);
+
+    entriesWindow.webContents.on('did-finish-load', () => {
+      if (!entriesWindow) {
+        throw new Error('"entriesWindow" is not defined');
+      }
+      entriesWindow.show();
+      entriesWindow.focus();
+
+      if (debugMode === true) {
+        entriesWindow.openDevTools();
+      }
+    });
+
+    entriesWindow.on('closed', () => {
+      entriesWindow = null;
+    });
+  } else {
+    entriesWindow.show();
+    entriesWindow.focus();
+  }
+
+  return entriesWindow;
 };
 
 const createMainWindow = async () => {
@@ -151,7 +183,7 @@ const createMainWindow = async () => {
     fullscreenable: false
   });
 
-  mainWindow.setResizable(false);
+
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
@@ -171,7 +203,7 @@ const createMainWindow = async () => {
     trayBuilder.buildIcon();
   }
 
-  const menuBuilder = new MenuBuilder(mainWindow, debugMode);
+  const menuBuilder = new MenuBuilder(mainWindow, openEntriesWindow, debugMode);
   menuBuilder.buildMenu();
 };
 

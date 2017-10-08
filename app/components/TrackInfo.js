@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
-import { shell } from 'electron';
+import { shell, ipcRenderer as ipc } from 'electron';
+
+// Local imports
+import { OPEN_ENTRY_WINDOW } from '../constants/dialogs';
 
 // Types
 import type { Entry } from '../types/RedmineTypes';
@@ -25,6 +28,10 @@ class TrackInfo extends Component<Props> {
     /* eslint-enable no-undef */ 
   };
 
+  openHistory = () => {
+    ipc.send(OPEN_ENTRY_WINDOW);
+  }
+
   render() {
     let itemCount = 0;
 
@@ -39,8 +46,8 @@ class TrackInfo extends Component<Props> {
     if (itemCount > 0) {
       /* eslint-disable react/no-unescaped-entities */ 
       itemError = (
-        <div className={styles.itemError}>
-          You don't have <strong>{itemCount}</strong> synchronized entries!
+        <div className={styles.itemError} onClick={this.openHistory} role="presentation">
+          You have <strong>{itemCount}</strong> not synchronized entries!
         </div>
       );
       /* eslint-enable react/no-unescaped-entities */ 

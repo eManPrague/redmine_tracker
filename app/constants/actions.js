@@ -20,6 +20,8 @@ export const RESET_ALL = 'RESET_ALL';
 
 /** Entry actions */
 export const START_ENTRY = 'START_ENTRY';
-export const UPDATE_ENTRY = 'UPDATE_ENTRY';
-export const STOP_ENTRY = 'STOP_ENTRY';
+export const UPDATE_CURRENT_ENTRY = 'UPDATE_CURRENT_ENTRY';
 export const RESET_CURRENT_ENTRY = 'RESET_CURRENT_ENTRY';
+export const STOP_ENTRY = 'STOP_ENTRY';
+export const DELETE_ENTRY = 'DELETE_ENTRY';
+export const UPDATE_ENTRY = 'UPDATE_ENTRY';

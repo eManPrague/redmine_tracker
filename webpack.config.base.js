@@ -22,9 +22,14 @@ export default {
     }]
   },
 
+  entry: {
+    app: ['index.js'],
+    entries: ['entries.js']
+  },
+
   output: {
     path: path.join(__dirname, 'app'),
-    filename: 'renderer.dev.js',
+    filename: 'renderer.[name].dev.js',
     // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2'
   },

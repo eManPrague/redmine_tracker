@@ -1,0 +1,8 @@
+.notSyncedRow td, .notSyncedRow {
+  background-color: #f2dede;
+}
+
+.clicked td, .clicked {
+  background-color: #116cd6;
+  color: white;
+}

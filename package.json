@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
-    "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
+    "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors --display-error-details",
     "build-main": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.main.prod.js --colors",
     "build-renderer": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors",
     "dev": "cross-env START_HOT=1 npm run start-renderer-dev",
@@ -79,8 +79,7 @@
     "linux": {
       "target": [
         "deb",
-        "AppImage",
-        "rpm"
+        "AppImage"
       ],
       "category": "Office"
     },
@@ -213,6 +212,7 @@
     "immutable": "^3.8.1",
     "moment": "^2.18.1",
     "react": "^16.0.0",
+    "react-contextmenu": "^2.8.0",
     "react-dom": "^16.0.0",
     "react-hot-loader": "3.0.0-beta.6",
     "react-redux": "^5.0.6",
@@ -226,7 +226,9 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
     "request": "^2.81.0",
-    "source-map-support": "^0.4.18"
+    "shortid": "^2.2.8",
+    "source-map-support": "^0.4.18",
+    "valid-url": "^1.0.9"
   },
   "devEngines": {
     "node": ">= 8.3.0",

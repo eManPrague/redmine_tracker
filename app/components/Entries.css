@@ -1,0 +1,110 @@
+
+.bodyContainer {
+  height: 100%;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+.header {
+  background-color: #e8e6e8;
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#e8e6e8),color-stop(100%,#d1cfd1));
+  background-image: -webkit-linear-gradient(top,#e8e6e8 0,#d1cfd1 100%);
+  background-image: linear-gradient(to bottom,#e8e6e8 0,#d1cfd1 100%);
+  width: 100%;
+  line-height: 50px;
+  border-bottom: 1px solid #eee;
+}
+
+.entries_title {
+  flex: 1; 
+  padding-left: 15px;
+  font-weight: bold;
+  background-image: url('assets/images/history.png');
+  padding-left: 30px;
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  margin-left: 10px;
+  background-size: 22px;
+}
+
+.no_data {
+  width: 100%;
+  margin: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.entryTable {
+  border-spacing: 0;
+  width: 100%;
+  border: 0;
+  border-collapse: separate;
+  font-size: 12px;
+  text-align: left;
+  box-sizing: border-box;
+  position: fixed;
+}
+
+.entryTable thead {
+  background-color: #f5f5f4;
+}
+
+.entryTable td, .entryTable th {
+  padding: 2px 15px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.entryTable th {
+  font-weight: 400;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.entryTable tr th:nth-child(1), .entryTableItems tr td:nth-child(1),
+
+.entryTable tr th:nth-child(2), .entryTableItems tr td:nth-child(2),
+.entryTable tr th:nth-child(3), .entryTableItems tr td:nth-child(3) {
+  width: 120px;
+}
+
+.entryTable tr th:nth-child(4), .entryTableItems tr td:nth-child(4) {
+  width: 60px;
+}
+.entryTable tr th:nth-child(4), .entryTableItems tr td:nth-child(4) {
+  width: 90px;
+}
+
+.entryTableItems {
+  width: 100%;
+  border: 0px;
+}
+
+.entryTableItems tbody {
+  background-color: #fff;
+}
+
+.entryTableItems tbody td {
+  font-size: 14px;
+  padding: 4px 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-left: 0px;
+}
+
+.entryTableItems tbody tr:nth-child(even) {
+  background-color: #f5f5f4;
+}
+
+.tableContainer {
+  width: 100%;
+  flex: 1;
+  margin-top: 20px;
+}
+
+.entriesContainer {
+  overflow: scroll;
+}

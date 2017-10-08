@@ -1,6 +1,7 @@
 // @flow
 import { ipcRenderer as ipc } from 'electron';
 import { routerActions } from 'react-router-redux';
+import { isUri } from 'valid-url';
 
 import {
   showLoading,
@@ -57,9 +58,19 @@ export const userLogIn = (server: string, token: string) => async (dispatch: any
     return electronAlert('Please fill required fields');
   }
 
+  let url = server;
+  if (!server.startsWith('http')) {
+    url = `http://${server}`;
+  }
+
+  // Test if server is valid url!
+  if (!isUri(url)) {
+    return electronAlert('Server URL is invalid!');
+  }
+
   // Show loading
   dispatch(showLoading('user', 'Loading user...'));
 
   // Call fetch user in main process
-  ipc.send(FETCH_USER, { server, token });
+  ipc.send(FETCH_USER, { server: url, token });
 };
