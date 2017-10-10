@@ -1,4 +1,4 @@
-// flow-typed signature: 977b338590c8482f3b5b1098ee6dcdbf
+// flow-typed signature: 5865626a5dc133365df0812c0f01c218
 // flow-typed version: <<STUB>>/electron-updater_v^2.8.9/flow_v0.54.1
 
 /**
@@ -27,10 +27,6 @@ declare module 'electron-updater/out/AppUpdater' {
 }
 
 declare module 'electron-updater/out/BintrayProvider' {
-  declare module.exports: any;
-}
-
-declare module 'electron-updater/out/differentialPackage' {
   declare module.exports: any;
 }
 
@@ -66,10 +62,6 @@ declare module 'electron-updater/out/PrivateGitHubProvider' {
   declare module.exports: any;
 }
 
-declare module 'electron-updater/out/Provider' {
-  declare module.exports: any;
-}
-
 declare module 'electron-updater/out/windowsExecutableCodeSignatureVerifier' {
   declare module.exports: any;
 }
@@ -80,9 +72,6 @@ declare module 'electron-updater/out/AppUpdater.js' {
 }
 declare module 'electron-updater/out/BintrayProvider.js' {
   declare module.exports: $Exports<'electron-updater/out/BintrayProvider'>;
-}
-declare module 'electron-updater/out/differentialPackage.js' {
-  declare module.exports: $Exports<'electron-updater/out/differentialPackage'>;
 }
 declare module 'electron-updater/out/DownloadedUpdateHelper.js' {
   declare module.exports: $Exports<'electron-updater/out/DownloadedUpdateHelper'>;
@@ -107,9 +96,6 @@ declare module 'electron-updater/out/NsisUpdater.js' {
 }
 declare module 'electron-updater/out/PrivateGitHubProvider.js' {
   declare module.exports: $Exports<'electron-updater/out/PrivateGitHubProvider'>;
-}
-declare module 'electron-updater/out/Provider.js' {
-  declare module.exports: $Exports<'electron-updater/out/Provider'>;
 }
 declare module 'electron-updater/out/windowsExecutableCodeSignatureVerifier.js' {
   declare module.exports: $Exports<'electron-updater/out/windowsExecutableCodeSignatureVerifier'>;

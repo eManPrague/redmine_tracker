@@ -163,7 +163,9 @@ export default merge.smart(baseConfig, {
       sourceMap: true
     }),
 
-    new ExtractTextPlugin('style.css'),
+    new ExtractTextPlugin({
+      filename: '[name].css'
+    }),
 
     new BundleAnalyzerPlugin({
       analyzerMode: process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',

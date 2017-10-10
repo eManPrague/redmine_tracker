@@ -1,4 +1,4 @@
-// flow-typed signature: b30ac3527cb7dc2ec748b4ec71dbd597
+// flow-typed signature: 4c31c9e4e11e909da08fd43d6c3dbb24
 // flow-typed version: <<STUB>>/electron-builder_v^19.27.7/flow_v0.54.1
 
 /**
@@ -130,10 +130,6 @@ declare module 'electron-builder/out/packagerApi' {
   declare module.exports: any;
 }
 
-declare module 'electron-builder/out/parallels' {
-  declare module.exports: any;
-}
-
 declare module 'electron-builder/out/platformPackager' {
   declare module.exports: any;
 }
@@ -143,10 +139,6 @@ declare module 'electron-builder/out/presets/rectCra' {
 }
 
 declare module 'electron-builder/out/publish/PublishManager' {
-  declare module.exports: any;
-}
-
-declare module 'electron-builder/out/publish/updateUnfoBuilder' {
   declare module.exports: any;
 }
 
@@ -163,6 +155,10 @@ declare module 'electron-builder/out/targets/archive' {
 }
 
 declare module 'electron-builder/out/targets/ArchiveTarget' {
+  declare module.exports: any;
+}
+
+declare module 'electron-builder/out/targets/blockMap' {
   declare module.exports: any;
 }
 
@@ -194,6 +190,10 @@ declare module 'electron-builder/out/targets/nsis/nsisOptions' {
   declare module.exports: any;
 }
 
+declare module 'electron-builder/out/targets/nsis/nsisPackage' {
+  declare module.exports: any;
+}
+
 declare module 'electron-builder/out/targets/nsis/nsisScriptGenerator' {
   declare module.exports: any;
 }
@@ -203,6 +203,10 @@ declare module 'electron-builder/out/targets/nsis/nsisUtil' {
 }
 
 declare module 'electron-builder/out/targets/nsis/WebInstallerTarget' {
+  declare module.exports: any;
+}
+
+declare module 'electron-builder/out/targets/nsis/zip' {
   declare module.exports: any;
 }
 
@@ -368,9 +372,6 @@ declare module 'electron-builder/out/packager/mac.js' {
 declare module 'electron-builder/out/packagerApi.js' {
   declare module.exports: $Exports<'electron-builder/out/packagerApi'>;
 }
-declare module 'electron-builder/out/parallels.js' {
-  declare module.exports: $Exports<'electron-builder/out/parallels'>;
-}
 declare module 'electron-builder/out/platformPackager.js' {
   declare module.exports: $Exports<'electron-builder/out/platformPackager'>;
 }
@@ -379,9 +380,6 @@ declare module 'electron-builder/out/presets/rectCra.js' {
 }
 declare module 'electron-builder/out/publish/PublishManager.js' {
   declare module.exports: $Exports<'electron-builder/out/publish/PublishManager'>;
-}
-declare module 'electron-builder/out/publish/updateUnfoBuilder.js' {
-  declare module.exports: $Exports<'electron-builder/out/publish/updateUnfoBuilder'>;
 }
 declare module 'electron-builder/out/targets/appImage.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/appImage'>;
@@ -394,6 +392,9 @@ declare module 'electron-builder/out/targets/archive.js' {
 }
 declare module 'electron-builder/out/targets/ArchiveTarget.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/ArchiveTarget'>;
+}
+declare module 'electron-builder/out/targets/blockMap.js' {
+  declare module.exports: $Exports<'electron-builder/out/targets/blockMap'>;
 }
 declare module 'electron-builder/out/targets/dmg.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/dmg'>;
@@ -416,6 +417,9 @@ declare module 'electron-builder/out/targets/nsis/nsisLicense.js' {
 declare module 'electron-builder/out/targets/nsis/nsisOptions.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/nsis/nsisOptions'>;
 }
+declare module 'electron-builder/out/targets/nsis/nsisPackage.js' {
+  declare module.exports: $Exports<'electron-builder/out/targets/nsis/nsisPackage'>;
+}
 declare module 'electron-builder/out/targets/nsis/nsisScriptGenerator.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/nsis/nsisScriptGenerator'>;
 }
@@ -424,6 +428,9 @@ declare module 'electron-builder/out/targets/nsis/nsisUtil.js' {
 }
 declare module 'electron-builder/out/targets/nsis/WebInstallerTarget.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/nsis/WebInstallerTarget'>;
+}
+declare module 'electron-builder/out/targets/nsis/zip.js' {
+  declare module.exports: $Exports<'electron-builder/out/targets/nsis/zip'>;
 }
 declare module 'electron-builder/out/targets/pkg.js' {
   declare module.exports: $Exports<'electron-builder/out/targets/pkg'>;

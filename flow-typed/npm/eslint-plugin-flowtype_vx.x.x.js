@@ -1,4 +1,4 @@
-// flow-typed signature: 415ffbda4c6814bfb95688656567ce36
+// flow-typed signature: b337881bcd475ba74e4f385f5284d792
 // flow-typed version: <<STUB>>/eslint-plugin-flowtype_v^2.35.1/flow_v0.54.1
 
 /**
@@ -55,10 +55,6 @@ declare module 'eslint-plugin-flowtype/dist/rules/noPrimitiveConstructorTypes' {
 }
 
 declare module 'eslint-plugin-flowtype/dist/rules/noTypesMissingFileAnnotation' {
-  declare module.exports: any;
-}
-
-declare module 'eslint-plugin-flowtype/dist/rules/noUnusedExpressions' {
   declare module.exports: any;
 }
 
@@ -225,9 +221,6 @@ declare module 'eslint-plugin-flowtype/dist/rules/noPrimitiveConstructorTypes.js
 }
 declare module 'eslint-plugin-flowtype/dist/rules/noTypesMissingFileAnnotation.js' {
   declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/noTypesMissingFileAnnotation'>;
-}
-declare module 'eslint-plugin-flowtype/dist/rules/noUnusedExpressions.js' {
-  declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/noUnusedExpressions'>;
 }
 declare module 'eslint-plugin-flowtype/dist/rules/noWeakTypes.js' {
   declare module.exports: $Exports<'eslint-plugin-flowtype/dist/rules/noWeakTypes'>;
