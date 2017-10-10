@@ -12,8 +12,11 @@ export type Project = {
 
 export type Entry = {
   project: string,
+  projectName: string,
   issue: number,
+  issueName: string,
   activity: number,
+  activityName: string,
   description: string,
   startTime: number,
   endTime: number,

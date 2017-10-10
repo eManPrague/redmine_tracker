@@ -99,30 +99,62 @@ class TrackDialog extends Component<Props, State> {
   description: ?HTMLTextAreaElement;
 
   projectChange = (project: ?{ value: string, label: string }) => {
+    let data;
+
     if (project) {
-      this.props.updateCurrentEntry({
-        project: project.value
-      });
+      data = {
+        project: project.value,
+        projectName: project.label
+      };
     } else {
       // Project was removed
-      this.props.updateCurrentEntry({
+      data = {
         project: '',
+        projectName: '',
         issue: 0,
         activity: 0
-      });
+      };
     }
+
+    this.props.updateCurrentEntry(
+      data
+    );
   }
 
   issueChange = (issue: ?{ value: number, label: string }) => {
-    this.props.updateCurrentEntry({
-      issue: issue ? issue.value : 0
-    });
+    let data = {};
+
+    if (issue) {
+      data = {
+        issue: issue.value,
+        issueName: issue.label
+      };
+    } else {
+      data = {
+        issue: 0,
+        issueName: ''
+      };
+    }
+
+    this.props.updateCurrentEntry(data);
   };
 
   activityChange = (activity: ?{ value: number, label: string }) => {
-    this.props.updateCurrentEntry({
-      activity: activity ? activity.value : 0
-    });
+    let data = {};
+
+    if (activity) {
+      data = {
+        activity: activity.value,
+        activityName: activity.label
+      };
+    } else {
+      data = {
+        activity: 0,
+        activityName: ''
+      };
+    }
+
+    this.props.updateCurrentEntry(data);
   }
 
   assignedToChange = (value: boolean) => {

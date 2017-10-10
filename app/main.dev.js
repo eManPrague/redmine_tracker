@@ -117,10 +117,10 @@ const openEntriesWindow = () => {
       title: 'Redmine Tracker - History',
       width: 850,
       height: 450,
-      maximizable: false,
+      maximizable: true,
       fullscreenable: false,
       center: true,
-      resizable: false
+      resizable: true
     });
 
     entriesWindow.loadURL(`file://${__dirname}/entries.html`);

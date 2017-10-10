@@ -18,10 +18,7 @@ type Props = {
   entry: Entry,
   index: number,
   syncEntry: (index: number) => void,
-  deleteEntry: (index: number) => void,
-  projects: Immutable.List<Immutable.Map<string, string>>,
-  activities: Immutable.Map<string, Immutable.Map<number, string>>,
-  loadActivities: (project: string) => void
+  deleteEntry: (index: number) => void
 };
 
 type State = {
@@ -65,16 +62,6 @@ class EntryRow extends Component<Props, State> {
     this.mounted = true;
   }
 
-  componentWillReceiveProps(newProps: Props) {
-    const current = newProps.entry.project;
-
-    if (newProps.projects.size > 0) {
-      if (!newProps.activities.has(current)) {
-        this.props.loadActivities(current);
-      }
-    }
-  }
-
   componentWillUnmount() {
     // Make sure to remove the DOM listener when the component is unmounted.
     if (this.row) {
@@ -85,10 +72,6 @@ class EntryRow extends Component<Props, State> {
   }
 
   row: ?HTMLTableRowElement;
-
-  projectString: ?string;
-  issueString: ?string;
-  activityString: ?string;
 
   /**
    * Test if component is mounted!
@@ -157,11 +140,7 @@ class EntryRow extends Component<Props, State> {
    * @returns 
    */
   render() {
-    const {
-      entry,
-      projects,
-      activities
-    } = this.props;
+    const entry = this.props.entry;
 
     let rowStyle = null;
 
@@ -173,14 +152,6 @@ class EntryRow extends Component<Props, State> {
       rowStyle = styles.clicked;
     }
 
-    if (projects && entry && !this.projectString) {
-      this.projectString = projects.find((prj) => prj.get('value') === entry.project).get('label');
-    }
-
-    if (activities && entry && !this.activityString) {
-      this.activityString = activities.getIn([entry.project, entry.activity]);
-    }
-
     return (
       <tr ref={this.setRow} className={rowStyle}>
         <td>
@@ -190,15 +161,15 @@ class EntryRow extends Component<Props, State> {
           {EntryRow.formatTime(entry.endTime)}
         </td>
         <td>
-          {this.projectString}
+          {entry.projectName}
         </td>
-        <td>
+        <td title={entry.issueName}>
           #{entry.issue}
         </td>
-        <td>
-          {this.activityString}
+        <td title={entry.activityName}>
+          {entry.activityName}
         </td>
-        <td>
+        <td title={entry.description}>
           {entry.description}
         </td>
       </tr>
@@ -206,10 +177,4 @@ class EntryRow extends Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  loadActivities: (projectIdentifier: string): void => {
-    dispatch(fetchActivities(projectIdentifier));
-  }
-});
-
-export default connect(null, mapDispatchToProps)(EntryRow);
+export default EntryRow;

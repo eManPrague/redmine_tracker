@@ -11,8 +11,11 @@ import {
 
 const emptyCurrent = Immutable.fromJS({
   project: '',
+  projectName: '',
   issue: 0,
+  issueName: '',
   activity: 0,
+  activityName: '',
   description: '',
   startTime: 0,
   stopTime: 0,
