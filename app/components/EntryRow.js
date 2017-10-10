@@ -2,11 +2,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { remote } from 'electron';
-import { connect } from 'react-redux';
-import Immutable from 'immutable';
-
-// Actions
-import { fetchActivities } from '../actions/activities';
 
 // Types
 import type { Entry } from '../types/RedmineTypes';
