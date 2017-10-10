@@ -60,6 +60,7 @@
       "dist/",
       "node_modules/",
       "app.html",
+      "entries.html",
       "main.prod.js",
       "main.prod.js.map",
       "package.json"
