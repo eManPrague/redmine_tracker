@@ -1,8 +1,9 @@
 {
   "name": "redmine-tracker",
-  "productName": "Redmine Tracker",
+  "productName": "RedmineTracker",
   "version": "0.0.8",
   "description": "Redmine time tracker.",
+  "author": "Jan Strnadek <jan.strnadek@eman.c>",
   "main": "main.js",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
@@ -33,7 +34,7 @@
   "browserslist": "electron 1.7",
   "build": {
     "productName": "RedmineTracker",
-    "appId": "com.eman.redmine_tracker",
+    "appId": "cz.eman.redmine_tracker",
     "publish": [
       {
         "provider": "github",
@@ -73,7 +74,6 @@
     ],
     "win": {
       "target": [
-        "squirrel",
         "zip"
       ]
     },
@@ -202,7 +202,6 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "electron-builder-squirrel-windows": "^19.36.0",
     "electron-debug": "^1.4.0",
     "electron-json-storage": "^3.0.2",
     "electron-log": "^2.0.2",
@@ -214,7 +213,6 @@
     "immutable": "^3.8.1",
     "moment": "^2.18.1",
     "react": "^16.0.0",
-    "react-contextmenu": "^2.8.0",
     "react-dom": "^16.0.0",
     "react-hot-loader": "3.0.0-beta.6",
     "react-redux": "^5.0.6",

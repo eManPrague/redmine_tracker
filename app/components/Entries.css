@@ -72,7 +72,6 @@
 }
 
 .entryTable tr th:nth-child(1), .entryTableItems tr td:nth-child(1),
-
 .entryTable tr th:nth-child(2), .entryTableItems tr td:nth-child(2),
 .entryTable tr th:nth-child(3), .entryTableItems tr td:nth-child(3) {
   width: 150px;

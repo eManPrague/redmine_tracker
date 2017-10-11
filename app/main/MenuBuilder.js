@@ -3,13 +3,16 @@ import { app, Menu, shell, BrowserWindow } from 'electron';
 import checkForUpdates from '../updater';
 
 export default class MenuBuilder {
+  // Default tracking window
   mainWindow: BrowserWindow;
 
+  // History entries window
   entriesWindow: BrowserWindow;
 
+  // Function to open history window
   openEntriesWindow: () => BrowserWindow;
 
-
+  // App is running in debug mode
   debugMode: boolean;
 
   constructor(mainWindow: BrowserWindow, openEntriesWindow: any, debugMode: boolean) {
@@ -18,6 +21,23 @@ export default class MenuBuilder {
     this.debugMode = debugMode;
   }
 
+  /**
+   * 
+   * Return if platform is windows or mac (usefull for updater, which does not work on linux).
+   * 
+   * @returns {boolean} 
+   * @memberof MenuBuilder
+   */
+  static windowsOrMac(): boolean {
+    return process.platform === 'darwin' || process.platform === 'win32';
+  }
+
+  /**
+   *  Build application menu.
+   *
+   * @returns 
+   * @memberof MenuBuilder
+   */
   buildMenu() {
     if (this.debugMode === true) {
       this.setupDevelopmentEnvironment();

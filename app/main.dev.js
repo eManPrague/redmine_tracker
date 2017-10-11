@@ -183,7 +183,6 @@ const createMainWindow = async () => {
     fullscreenable: false
   });
 
-
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
@@ -208,6 +207,33 @@ const createMainWindow = async () => {
 };
 
 app.on('ready', createMainWindow);
+
+/**
+ * App is ready, but update is required, have to quit it immediately.
+ */
+autoUpdater.on('updateRequired', () => {
+  app.quit();
+});
+
+/**
+ * Update is available... send message to views.
+ */
+autoUpdater.on('updateAvailable', (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
+  const index = dialog.showMessageBox(mainWindow, {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Redmine Tracker"',
+    message: 'The new version has been downloaded. Please restart the application to apply the updates.',
+    detail: `${releaseName}\n\n${releaseNotes}`
+  });
+
+  if (index === 1) {
+    return;
+  }
+
+  // Restart app then update will be applied
+  quitAndUpdate();
+});
 
 // On darwin platform - click on bar icon
 // wil reopen / focus main window.
