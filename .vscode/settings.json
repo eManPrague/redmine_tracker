@@ -4,6 +4,7 @@
     "fsevents",
     "fullscreenable",
     "maximizable",
+    "nsis",
     "uglifyjs"
   ]
 }

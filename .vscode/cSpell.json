@@ -15,6 +15,7 @@
         "lastname",
         "lifecycle",
         "maximizable",
+        "nsis",
         "parens",
         "Redmine",
         "Resizable",

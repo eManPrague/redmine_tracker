@@ -1,7 +1,7 @@
 {
   "name": "redmine-tracker",
   "productName": "RedmineTracker",
-  "version": "0.0.8",
+  "version": "0.0.7",
   "description": "Redmine time tracker.",
   "author": "Jan Strnadek <jan.strnadek@eman.c>",
   "main": "main.js",
@@ -74,7 +74,8 @@
     ],
     "win": {
       "target": [
-        "zip"
+        "zip",
+        "nsis"
       ]
     },
     "linux": {

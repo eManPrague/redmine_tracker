@@ -21,10 +21,19 @@ export default class TrayBuilder {
     this.store = store;
     this.active = false;
 
+    // Icon name
+    let normalName = 'tray.png';
+    let activeName = 'tray_active.png';
+
+    if (process.platform === 'win32') {
+      normalName = 'tray_win.png';
+      activeName = 'tray_active_win.png';
+    }
+
     // Relative app path
     const appPath = path.join(__dirname, '../assets/images/');
-    this.normalIcon = nativeImage.createFromPath(path.join(appPath, 'tray.png'));
-    this.activeIcon = nativeImage.createFromPath(path.join(appPath, 'tray_active.png'));
+    this.normalIcon = nativeImage.createFromPath(path.join(appPath, normalName));
+    this.activeIcon = nativeImage.createFromPath(path.join(appPath, activeName));
   }
 
   buildIcon() {
