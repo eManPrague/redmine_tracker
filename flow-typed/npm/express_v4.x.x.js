@@ -1,5 +1,5 @@
-// flow-typed signature: c1ddcd5c82838e882e8b284da4650861
-// flow-typed version: 18a6cf4d2b/express_v4.x.x/flow_>=v0.32.x
+// flow-typed signature: 6fb87ca3f8088f2370cdac28fdf13f5d
+// flow-typed version: 15fc37123b/express_v4.x.x/flow_>=v0.32.x
 
 import type { Server } from 'http';
 import type { Socket } from 'net';
@@ -150,6 +150,15 @@ declare class express$Router extends express$Route {
   use(path: string|RegExp|string[], ...middleware: Array<express$Middleware>): this;
   use(path: string, router: express$Router): this;
   handle(req: http$IncomingMessage, res: http$ServerResponse, next: express$NextFunction): void;
+  param(
+    param: string,
+    callback: (
+      req: $Subtype<express$Request>,
+      res: express$Response,
+      next: express$NextFunction,
+      id: string
+    ) => mixed
+  ): void;
 
   // Can't use regular callable signature syntax due to https://github.com/facebook/flow/issues/3084
   $call: (req: http$IncomingMessage, res: http$ServerResponse, next?: ?express$NextFunction) => void;

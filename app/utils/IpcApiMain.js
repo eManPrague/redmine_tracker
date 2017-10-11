@@ -10,22 +10,42 @@ import { setActivities } from '../actions/activities';
 import { stopEntry, updateEntry } from '../actions/entries';
 
 export default class IpcApiMain {
+  // General redux store
   store: null;
+
+  // IPC electron
   ipc: null;
+
+  // Main file log
   log: null;
 
+  /**
+   * Constructor.
+   * 
+   * @param {ReduxStore} store 
+   * @param {ElectronLog} log 
+   */
   constructor(store, log) {
     this.store = store;
     this.ipc = ipc;
     this.log = log;
   }
 
+  /**
+   * Send data to all objects.
+   * 
+   * @param {String} action 
+   * @param {Any} object 
+   */
   static sendToAll(action, object) {
     webContents.getAllWebContents().forEach((content) => {
       content.send(action, object);
     });
   }
 
+  /**
+   * Fetching user.
+   */
   fetchUser = async (event, data) => {
     // Set credentials at first place
     redmineClient.setCredentials(data.server, data.token);

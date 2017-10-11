@@ -26,6 +26,9 @@ export default class IpcApiRenderer {
     this.log = log;
   }
 
+  /**
+   * Fetch user response.
+   */
   fetchUserResponse = async (event, data) => {
     if (data.error) {
       this.store.dispatch(removeUser());
@@ -37,36 +40,17 @@ export default class IpcApiRenderer {
     this.store.dispatch(hideLoading('user'));
   }
 
-  fetchProjectsResponse = async (event, data) => {
+  /**
+   * Fetching general response.
+   */
+  fetchGeneralResponse = (event, data, loading) => {
     if (data.error) {
       electronAlert(data.error);
     }
 
-    this.store.dispatch(hideLoading('projects'));
-  }
-
-  fetchIssuesResponse = async (event, data) => {
-    if (data.error) {
-      electronAlert(data.error);
+    if (loading) {
+      this.store.dispatch(hideLoading(loading));
     }
-
-    this.store.dispatch(hideLoading('issues'));
-  }
-
-  fetchActivitiesResponse = async (event, data) => {
-    if (data.error) {
-      electronAlert(data.error);
-    }
-
-    this.store.dispatch(hideLoading('activities'));
-  }
-
-  syncCurrentEntryResponse = async (event, data) => {
-    if (data.error) {
-      electronAlert(data.error);
-    }
-
-    this.store.dispatch(hideLoading('entries'));
   }
 
   bind() {
@@ -74,15 +58,15 @@ export default class IpcApiRenderer {
     this.ipc.on(actions.FETCH_USER_RESPONSE, this.fetchUserResponse);
 
     // Projects
-    this.ipc.on(actions.FETCH_PROJECTS_RESPONSE, this.fetchProjectsResponse);
+    this.ipc.on(actions.FETCH_PROJECTS_RESPONSE, (event, data) => this.fetchGeneralResponse(event, data, 'projects'));
 
     // Issues
-    this.ipc.on(actions.FETCH_ISSUES_RESPONSE, this.fetchIssuesResponse);
+    this.ipc.on(actions.FETCH_ISSUES_RESPONSE, (event, data) => this.fetchGeneralResponse(event, data, 'issues'));
 
     // Activities
-    this.ipc.on(actions.FETCH_PROJECT_ACTIVITIES_RESPONSE, this.fetchActivitiesResponse);
+    this.ipc.on(actions.FETCH_PROJECT_ACTIVITIES_RESPONSE, (event, data) => this.fetchGeneralResponse(event, data, 'activities'));
 
     // Current entry response
-    this.ipc.on(actions.SYNC_CURRENT_ENTRY_RESPONSE, this.syncCurrentEntryResponse);
+    this.ipc.on(actions.SYNC_CURRENT_ENTRY_RESPONSE, (event, data) => this.fetchGeneralResponse(event, data, 'entries'));
   }
 }

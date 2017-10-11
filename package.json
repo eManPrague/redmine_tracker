@@ -202,6 +202,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "electron-builder-squirrel-windows": "^19.36.0",
     "electron-debug": "^1.4.0",
     "electron-json-storage": "^3.0.2",
     "electron-log": "^2.0.2",
