@@ -70,11 +70,12 @@ class Entries extends Component<Props> {
           <table className={styles.entryTable}>
             <thead>
               <tr>
-                <th>Start time</th>
-                <th>End time</th>
-                <th>Project</th>
-                <th>Issue</th>
-                <th>Activity</th>
+                <th className="date">Start time</th>
+                <th className="date">End time</th>
+                <th className="hours">Hours</th>
+                <th className="project">Project</th>
+                <th className="issue">Issue</th>
+                <th className="activity">Activity</th>
                 <th>Description</th>
               </tr>
             </thead>

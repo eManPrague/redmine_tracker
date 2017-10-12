@@ -40,6 +40,27 @@ class EntryRow extends Component<Props, State> {
     return '';
   }
 
+  /**
+   * Format miliseconds diff to readable form.
+   * 
+   * @param {number} unix 
+   * @returns String Formatted diff
+   */
+  static formatDiff(unix: number): string {
+    let hours = Math.floor(unix / 3600);
+    let minutes = Math.floor((unix - (hours * 3600)) / 60);
+
+    if (hours < 10) {
+      hours = `0${hours}`;
+    }
+
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+
+    return `${hours}:${minutes}`;
+  }
+
   static defaultProps = {
     focused: false
   };
@@ -85,10 +106,21 @@ class EntryRow extends Component<Props, State> {
     });
 
     const menu = new Menu();
+
+    menu.append(new MenuItem({
+      label: 'Continue',
+      click: this.startAgain
+    }));
+
     if (!this.props.entry.id) {
       menu.append(new MenuItem({
         label: 'Synchronize entry',
         click: this.synchronizeEntry
+      }));
+
+      menu.append(new MenuItem({
+        label: 'Edit entry',
+        click: this.editEntry
       }));
     }
 
@@ -108,6 +140,17 @@ class EntryRow extends Component<Props, State> {
     }, 1500);
   }
   /* eslint-enable class-methods-use-this */
+
+  /**
+   * Start again with entry now.
+   */
+  startAgain = () => {
+
+  }
+
+  editEntry = () => {
+
+  }
 
   /**
    * Synchronize not synchronized entries.
@@ -149,19 +192,22 @@ class EntryRow extends Component<Props, State> {
 
     return (
       <tr ref={this.setRow} className={rowStyle}>
-        <td>
+        <td className="date">
           {EntryRow.formatTime(entry.startTime)}
         </td>
-        <td>
+        <td className="date">
           {EntryRow.formatTime(entry.endTime)}
         </td>
-        <td>
+        <td className="hours">
+          {EntryRow.formatDiff(entry.endTime - entry.startTime)}
+        </td>
+        <td className="project">
           {entry.projectName}
         </td>
-        <td title={entry.issueName}>
+        <td title={entry.issueName} className="issue">
           #{entry.issue}
         </td>
-        <td title={entry.activityName}>
+        <td title={entry.activityName} className="activity">
           {entry.activityName}
         </td>
         <td title={entry.description}>

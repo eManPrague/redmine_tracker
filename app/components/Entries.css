@@ -73,19 +73,19 @@
 
 .entryTable tr th:nth-child(1), .entryTableItems tr td:nth-child(1),
 .entryTable tr th:nth-child(2), .entryTableItems tr td:nth-child(2),
-.entryTable tr th:nth-child(3), .entryTableItems tr td:nth-child(3) {
+.entryTable tr th:nth-child(4), .entryTableItems tr td:nth-child(4) {
   width: 150px;
 }
 
-.entryTable tr th:nth-child(4), .entryTableItems tr td:nth-child(4) {
-  width: 60px;
-}
-
-.entryTable tr th:nth-child(4), .entryTableItems tr td:nth-child(4) {
-  width: 90px;
+.entryTable tr th:nth-child(3), .entryTableItems tr td:nth-child(3) {
+  width: 80px;
 }
 
 .entryTable tr th:nth-child(5), .entryTableItems tr td:nth-child(5) {
+  width: 90px;
+}
+
+.entryTable tr th:nth-child(6), .entryTableItems tr td:nth-child(6) {
   width: 150px;
 }
 

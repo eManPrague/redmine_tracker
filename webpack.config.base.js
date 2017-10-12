@@ -24,7 +24,8 @@ export default {
 
   entry: {
     app: ['index.js'],
-    entries: ['entries.js']
+    entries: ['entries.js'],
+    edit: ['edit.js']
   },
 
   output: {
