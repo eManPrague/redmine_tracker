@@ -143,6 +143,8 @@ export default class IpcApiMain {
 
     let id = null;
 
+    console.log(entry);
+
     try {
       id = await redmineClient.createEntry(entry);
       info.id = id;
@@ -169,8 +171,8 @@ export default class IpcApiMain {
 
     try {
       id = await redmineClient.createEntry({
-        endTime,
-        ...entry
+        ...entry,
+        endTime
       });
 
       info.id = id;

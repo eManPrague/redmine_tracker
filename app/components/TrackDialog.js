@@ -15,6 +15,10 @@ import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
 
 import {
+  electronAlert
+} from '../utils/ElectronHelper';
+
+import {
   closeEntry,
   updateCurrentEntry,
   resetCurrentEntry
@@ -180,10 +184,21 @@ class TrackDialog extends Component<Props, State> {
   handleTracking = () => {
     const currentTime = moment().unix();
 
+    const {
+      project,
+      issue,
+      activity,
+      description
+    } = this.props.currentEntry.toJS();
+
     // If state startTime is null
     if (this.trackingInProgress()) {
-      this.props.stopCurrentEntry(this.props.currentEntry, currentTime, this.state.syncNow);
-      this.resetDescription();
+      if (project.length > 0 && issue > 0 && activity > 0 && description.length > 0) {
+        this.props.stopCurrentEntry(this.props.currentEntry, currentTime, this.state.syncNow);
+        this.resetDescription();
+      } else {
+        electronAlert('Please fill all fields (project, activity, issue, description)!');
+      }
     } else {
       this.props.updateCurrentEntry({
         startTime: currentTime
@@ -191,6 +206,9 @@ class TrackDialog extends Component<Props, State> {
     }
   }
 
+  /**
+   * Cancel button.
+   */
   resetCurrentEntry = () => {
     this.props.resetCurrentEntry();
     this.resetDescription();
@@ -207,18 +225,12 @@ class TrackDialog extends Component<Props, State> {
   }
 
   handleEnter = (event) => {
-    // FIXME: Refactor with btnEnabled in render!
-    const {
-      project,
-      issue,
-      activity,
-      description,
-      startTime
-    } = this.props.currentEntry.toJS();
-
-    if (event.key === 'Enter' && project.length > 0 && issue > 0 && activity > 0 && description.length > 0 && !startTime) {
+    if (event.key === 'Enter') {
       this.handleTracking();
+      return false;
     }
+
+    return true;
   }
 
 
@@ -237,13 +249,6 @@ class TrackDialog extends Component<Props, State> {
       description,
       startTime
     } = this.props.currentEntry.toJS();
-
-    const btnEnabled = (
-      project.length > 0 &&
-      issue > 0 &&
-      activity > 0 &&
-      description.length > 0
-    );
 
     const tracking = startTime > 0;
 
@@ -316,7 +321,7 @@ class TrackDialog extends Component<Props, State> {
           <div className={styles.tracking_time}>
             {timeText}
           </div>
-          <button className={buttonClass} disabled={!btnEnabled} onClick={this.handleTracking}>
+          <button className={buttonClass} onClick={this.handleTracking}>
             {buttonText}
           </button>
           <button className={'default'} onClick={this.resetCurrentEntry}>

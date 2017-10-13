@@ -18,8 +18,7 @@ const emptyCurrent = Immutable.fromJS({
   activityName: '',
   description: '',
   startTime: 0,
-  stopTime: 0,
-  synced: false
+  endTime: 0
 });
 
 const initialState = Immutable.fromJS({

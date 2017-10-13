@@ -39,6 +39,11 @@ export const stopEntry = (endTime: number, id?: number) => ({
   }
 });
 
+export const continueEntry = (entry: any) => ({
+  type: UPDATE_CURRENT_ENTRY,
+  payload: entry
+});
+
 export const resetCurrentEntry = () => ({
   type: RESET_CURRENT_ENTRY,
 });

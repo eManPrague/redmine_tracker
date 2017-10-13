@@ -19,8 +19,10 @@ import { fetchProjects } from '../actions/projects';
 
 type Props = {
   entries: Immutable.List<Entry>,
+  currentEntry: any,
   syncEntry: (index: number) => void,
   deleteEntry: (index: number) => void,
+  continueEntry: (entry: any) => void,
   projects: Immutable.List<Immutable.Map<string, string>>,
   activities: Immutable.Map<string, Immutable.Map<number, string>>,
   loadProjects: () => void
@@ -38,8 +40,10 @@ class Entries extends Component<Props> {
   render() {
     const {
       entries,
+      currentEntry,
       syncEntry,
       deleteEntry,
+      continueEntry,
       projects,
       activities
     } = this.props;
@@ -59,8 +63,10 @@ class Entries extends Component<Props> {
           projects={projects}
           activities={activities}
           entry={entry.toJS()}
+          currentEntry={currentEntry.toJS()}
           syncEntry={syncEntry}
           deleteEntry={deleteEntry}
+          continueEntry={continueEntry}
           key={`entry_${shortid.generate()}`}
         />
       ));
@@ -106,11 +112,13 @@ class Entries extends Component<Props> {
 
 const mapStateToProps = (state) => {
   const data = state.get('data');
+  const entries = state.get('entries');
 
   return {
-    entries: state.get('entries').get('history'),
+    entries: entries.get('history'),
     projects: data.get('projects'),
-    activities: data.get('activities')
+    activities: data.get('activities'),
+    currentEntry: entries.get('current')
   };
 };
 
@@ -123,6 +131,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
   loadProjects: (): void => {
     dispatch(fetchProjects());
+  },
+  continueEntry: (entry: any): void => {
+    dispatch(entryActions.continueEntry(entry));
   }
 });
 

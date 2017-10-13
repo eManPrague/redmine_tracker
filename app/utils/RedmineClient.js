@@ -144,6 +144,8 @@ class RedmineClient {
    * @returns {Promise<number>} Entry id
    */
   async createEntry(entry: Entry): Promise<number> {
+    console.log(entry);
+    console.log("TEST");
     // Convert entry to hours
     const hours = ((entry.endTime - entry.startTime) / 60) / 60;
 
@@ -156,6 +158,8 @@ class RedmineClient {
       comments: entry.description,
       activity_id: entry.activity
     };
+
+    console.log(timeEntry);
 
     const response = await this.request('POST', `/issues/${entry.issue}/time_entries?format=json`, { time_entry: timeEntry });
     this.constructor.assertResponse(response, [201], 'Invalid data!');

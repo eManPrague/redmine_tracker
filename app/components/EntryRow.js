@@ -13,7 +13,9 @@ type Props = {
   entry: Entry,
   index: number,
   syncEntry: (index: number) => void,
-  deleteEntry: (index: number) => void
+  deleteEntry: (index: number) => void,
+  continueEntry: (entry: any) => void,
+  currentEntry: any
 };
 
 type State = {
@@ -107,10 +109,12 @@ class EntryRow extends Component<Props, State> {
 
     const menu = new Menu();
 
-    menu.append(new MenuItem({
-      label: 'Continue',
-      click: this.startAgain
-    }));
+    if (!(this.props.currentEntry.startTime && this.props.entry.startTime > 0)) {
+      menu.append(new MenuItem({
+        label: 'Continue',
+        click: this.startAgain
+      }));
+    }
 
     if (!this.props.entry.id) {
       menu.append(new MenuItem({
@@ -145,9 +149,28 @@ class EntryRow extends Component<Props, State> {
    * Start again with entry now.
    */
   startAgain = () => {
+    const {
+      entry,
+      continueEntry
+    } = this.props;
 
+    // Prepare entry
+    const newEntry = {
+      ...entry,
+      startTime: moment().unix(),
+    };
+
+    // Reset object persistent settings
+    delete newEntry.id;
+    newEntry.endTime = 0;
+
+    // Change currently in progress issue
+    continueEntry(newEntry);
   }
 
+  /**
+   * Open edit window.
+   */
   editEntry = () => {
 
   }
