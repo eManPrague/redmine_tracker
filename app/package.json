@@ -10,5 +10,7 @@
     "url": "https://github.com/Strnadj"
   },
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "keytar-prebuild": "^4.0.4"
+  }
 }
