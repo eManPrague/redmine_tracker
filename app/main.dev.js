@@ -11,7 +11,7 @@ import installExtension, {
 } from 'electron-devtools-installer';
 
 import Immutable from 'immutable';
-import * as keytar from 'keytar';
+import * as keytar from 'keytar-prebuild';
 
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';

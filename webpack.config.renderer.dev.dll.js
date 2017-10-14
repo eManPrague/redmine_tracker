@@ -54,6 +54,10 @@ export default {
           },
         ]
       },
+      {
+        test: /\.node$/,
+        use: 'node-loader'
+      },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.scss$/,
@@ -163,7 +167,7 @@ export default {
     renderer: (
       Object
         .keys(dependencies || {})
-        .filter(dependency => dependency !== 'font-awesome' && dependency !== 'keytar')
+        .filter(dependency => dependency !== 'font-awesome')
     )
   },
 
