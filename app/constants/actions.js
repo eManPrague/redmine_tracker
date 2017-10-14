@@ -5,6 +5,7 @@ export const USER_LOG_OUT = 'USER_LOG_OUT';
 /** UI actions */
 export const SHOW_UI_LOADING = 'SHOW_UI_LOADING';
 export const HIDE_UI_LOADING = 'HIDE_UI_LOADING';
+export const CHANGE_ICON = 'CHANGE_ICON';
 
 /** Projects actions */
 export const SET_PROJECTS = 'SET_PROJECTS';

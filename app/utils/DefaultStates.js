@@ -11,5 +11,6 @@ export const defaultRouting = Immutable.fromJS({
 
 export const defaultUi = Immutable.fromJS({
   loading: [],
-  message: ''
+  message: '',
+  icon: 'black'
 });

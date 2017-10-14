@@ -163,7 +163,7 @@ export default {
     renderer: (
       Object
         .keys(dependencies || {})
-        .filter(dependency => dependency !== 'font-awesome')
+        .filter(dependency => dependency !== 'font-awesome' && dependency !== 'keytar')
     )
   },
 

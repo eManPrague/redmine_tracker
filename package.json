@@ -1,9 +1,13 @@
 {
   "name": "redmine-tracker",
   "productName": "RedmineTracker",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Redmine time tracker.",
-  "author": "Jan Strnadek <jan.strnadek@eman.c>",
+  "author": {
+    "name": "Jan Strnadek",
+    "email": "jan.strnadek@gmail.com",
+    "url": "https://github.com/Strnadj"
+  },
   "main": "main.js",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
@@ -21,7 +25,7 @@
     "package-all": "npm run build && build -mwl",
     "package-linux": "npm run build && build --linux",
     "package-win": "npm run build && build --win --x64",
-    "postinstall": "concurrently \"npm run flow-typed\" \"npm run build-dll\" \"electron-builder install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
+    "postinstall": "concurrently \"yarn run flow-typed\" \"yarn run electron-rebuild\" \"npm run build-dll\" \"electron-builder install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production electron ./app/",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r babel-register ./app/main.dev",
@@ -97,11 +101,6 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:Strnadj/redmine_tracker.git"
-  },
-  "author": {
-    "name": "Jan Strnadek",
-    "email": "jan.strnadek@gmail.com",
-    "url": "https://github.com/Strnadj"
   },
   "license": "MIT",
   "bugs": {
@@ -213,6 +212,7 @@
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "immutable": "^3.8.1",
+    "keytar": "^4.0.4",
     "moment": "^2.18.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",

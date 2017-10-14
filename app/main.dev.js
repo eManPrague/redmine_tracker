@@ -11,6 +11,7 @@ import installExtension, {
 } from 'electron-devtools-installer';
 
 import Immutable from 'immutable';
+import * as keytar from 'keytar';
 
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
@@ -19,12 +20,16 @@ import {
   OPEN_ENTRY_WINDOW, ERROR_ALERT
 } from './constants/dialogs';
 
+import {
+  SERVICE_NAME, ACCOUNT_NAME
+} from './constants/storage';
+
+// Utils
 import IpcApiMain from './utils/IpcApiMain';
-
 import { defaultRouting, defaultUi } from './utils/DefaultStates';
-
 import SettingsStorage from './utils/SettingsStorage';
 
+// Main window
 import MenuBuilder from './main/MenuBuilder';
 import TrayBuilder from './main/Tray';
 
@@ -39,6 +44,7 @@ autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'debug';
 log.info('App starting...');
 
+// Window, store, history etc. references
 let mainWindow = null;
 let entriesWindow = null;
 let trayBuilder = null;
@@ -94,19 +100,32 @@ const installExtensions = async () => {
 
 // First state
 let oldState = null;
+let oldToken = null;
 
 const persistState = async () => {
+  // Get state
+  const state = store.getState();
+
   // Never persist `routing` and `ui` keys!
-  const newState = store
-    .getState()
+  const newState = state
     .set('router', defaultRouting)
     .set('ui', defaultUi)
+    .setIn(['user', 'token'], null) // Never store user data in insecure storage
     .setIn(['user', 'user'], null);
 
+  // Handle whole store
   if (!oldState || newState.equals(oldState) === false) {
     await SettingsStorage.set('state', newState.toJS());
     log.info('Settings successfully stored');
     oldState = newState;
+  }
+
+  // Handle user data
+  const userToken = state.getIn(['user', 'token']);
+  if (!oldToken || oldToken !== userToken) {
+    log.info('User token securely stored!');
+    keytar.setPassword(SERVICE_NAME, ACCOUNT_NAME, userToken);
+    oldToken = userToken;
   }
 };
 
@@ -159,8 +178,27 @@ const createMainWindow = async () => {
 
   // Get default state
   if (!store) {
+    // Get store from unsecure electron storage
     oldState = await SettingsStorage.get('state', {});
-    store = configureStore(Immutable.fromJS(oldState), 'main');
+
+    // Fetch password from secure keychain / libsecret-1-dev / Credential vault
+    try {
+      oldToken = await keytar.getPassword(SERVICE_NAME, ACCOUNT_NAME);
+    } catch (e) {
+      log.debug(`Error from keytar: ${e}`);
+      oldToken = null;
+    }
+
+    // Set old token to user.token position
+    if (oldToken && oldState.user) {
+      oldState.user.token = oldToken;
+    }
+
+    // Convert into immutable object used in Redux Store
+    oldState = Immutable.fromJS(oldState);
+
+    // Configure store
+    store = configureStore(oldState, 'main');
 
     // Persist state on change
     store.subscribe(persistState);
