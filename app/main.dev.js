@@ -17,7 +17,10 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 
 import {
-  OPEN_ENTRY_WINDOW, ERROR_ALERT
+  OPEN_ENTRY_WINDOW,
+  ERROR_ALERT,
+  EDIT_ENTRY,
+  CLOSE_EDIT_ENTRY
 } from './constants/dialogs';
 
 import {
@@ -47,6 +50,7 @@ log.info('App starting...');
 // Window, store, history etc. references
 let mainWindow = null;
 let entriesWindow = null;
+let editWindow = null;
 let trayBuilder = null;
 let store = null;
 let ipcApiMain = null;
@@ -76,6 +80,20 @@ app.on('window-all-closed', () => {
     if (trayBuilder) {
       trayBuilder.close();
     }
+  }
+});
+
+/**
+ * IPC window actions.
+ */
+ipc.on(EDIT_ENTRY, (event, arg) => {
+  openEditWindow(arg.id);
+});
+
+ipc.on(CLOSE_EDIT_ENTRY, () => {
+  if (editWindow !== null) {
+    editWindow.close();
+    editWindow = null;
   }
 });
 
@@ -129,6 +147,49 @@ const persistState = async () => {
   }
 };
 
+const openEditWindow = (id) => {
+  if (entriesWindow === null) {
+    return null;
+  }
+
+  if (editWindow !== null) {
+    editWindow.close();
+    editWindow = null;
+  }
+
+  editWindow = new BrowserWindow({
+    show: false,
+    title: 'Redmine Tracker - Edit',
+    width: 500,
+    height: 380,
+    maximizable: true,
+    fullscreenable: false,
+    center: true,
+    resizable: false,
+    parent: entriesWindow
+  });
+
+  editWindow.entryIndex = id;
+
+  editWindow.loadURL(`file://${__dirname}/edit.html`);
+
+  editWindow
+    .webContents
+    .on('did-finish-load', () => {
+      if (!editWindow) {
+        throw new Error('"editWindow" is not defined');
+      }
+      editWindow.show();
+      editWindow.focus();
+
+      if (debugMode === true) {
+        editWindow.openDevTools();
+      }
+    });
+
+  return editWindow;
+};
+
 const openEntriesWindow = () => {
   if (entriesWindow === null) {
     entriesWindow = new BrowserWindow({
@@ -178,7 +239,7 @@ const createMainWindow = async () => {
 
   // Get default state
   if (!store) {
-    // Get store from unsecure electron storage
+    // Get store from unsecured electron storage
     oldState = await SettingsStorage.get('state', {});
 
     // Fetch password from secure keychain / libsecret-1-dev / Credential vault

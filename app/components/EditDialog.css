@@ -1,0 +1,18 @@
+.editContainer {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.editContainer > div {
+  margin-bottom: 10px;
+}
+
+.actions {
+  width: 100%;
+  text-align: right;
+}
+
+.actions button {
+  margin-left: 10px;
+}

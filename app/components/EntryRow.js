@@ -1,7 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 import moment from 'moment';
-import { remote } from 'electron';
+import { remote, ipcRenderer as ipc } from 'electron';
+
+// Others
+import { EDIT_ENTRY } from '../constants/dialogs';
+import { formatDateTime, formatDiff } from '../utils/Formatters';
 
 // Types
 import type { Entry } from '../types/RedmineTypes';
@@ -26,43 +30,6 @@ type State = {
 const { Menu, MenuItem } = remote;
 
 class EntryRow extends Component<Props, State> {
-  /**
-   * 
-   * Format time to readable form.
-   * 
-   * @static
-   * @param {number} unix 
-   * @returns Formatted time
-   */
-  static formatTime(unix: number | void): string {
-    if (unix) {
-      return moment.unix(unix).format('D.MM.YYYY HH:mm');
-    }
-
-    return '';
-  }
-
-  /**
-   * Format miliseconds diff to readable form.
-   * 
-   * @param {number} unix 
-   * @returns String Formatted diff
-   */
-  static formatDiff(unix: number): string {
-    let hours = Math.floor(unix / 3600);
-    let minutes = Math.floor((unix - (hours * 3600)) / 60);
-
-    if (hours < 10) {
-      hours = `0${hours}`;
-    }
-
-    if (minutes < 10) {
-      minutes = `0${minutes}`;
-    }
-
-    return `${hours}:${minutes}`;
-  }
-
   static defaultProps = {
     focused: false
   };
@@ -172,7 +139,7 @@ class EntryRow extends Component<Props, State> {
    * Open edit window.
    */
   editEntry = () => {
-
+    ipc.send(EDIT_ENTRY, { id: this.props.index });
   }
 
   /**
@@ -216,13 +183,13 @@ class EntryRow extends Component<Props, State> {
     return (
       <tr ref={this.setRow} className={rowStyle}>
         <td className="date">
-          {EntryRow.formatTime(entry.startTime)}
+          {formatDateTime(entry.startTime)}
         </td>
         <td className="date">
-          {EntryRow.formatTime(entry.endTime)}
+          {formatDateTime(entry.endTime)}
         </td>
         <td className="hours">
-          {EntryRow.formatDiff(entry.endTime - entry.startTime)}
+          {formatDiff(entry.endTime - entry.startTime)}
         </td>
         <td className="project">
           {entry.projectName}

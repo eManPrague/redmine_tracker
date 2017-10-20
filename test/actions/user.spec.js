@@ -24,7 +24,7 @@ describe('actions', () => {
   it('should login user', () => {
     expect(actions.setUser(info)).toEqual({
       type: constants.USER_LOG_IN,
-      info
+      payload: info
     });
   });
 
