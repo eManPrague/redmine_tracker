@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import Select from 'react-select';
-import moment from 'moment';
+// import moment from 'moment';
 import { ipcRenderer as ipc } from 'electron';
 import MaskedInput from 'react-text-mask';
 
@@ -12,19 +12,13 @@ import { fetchProjects } from '../actions/projects';
 import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
 
-import {
-  electronAlert
-} from '../utils/ElectronHelper';
+// import {
+//  electronAlert
+// } from '../utils/ElectronHelper';
 
 import {
   CLOSE_EDIT_ENTRY
 } from '../constants/dialogs';
-
-import {
-  closeEntry,
-  updateCurrentEntry,
-  resetCurrentEntry
-} from '../actions/entries';
 
 import { formatDateTime } from '../utils/Formatters';
 
@@ -42,8 +36,8 @@ type Props = {
   loadIssues: (projectIdentifier: string) => void,
   activities: Immutable.Map<string, Immutable.Map<number, string>>,
   loadActivities: (project: string) => void,
-  updateEntry: (index: number, data: Entry) => void,
-  entryIndex: number,
+  // updateEntry: (index: number, data: Entry) => void,
+  // entryIndex: number,
   currentEntry: Entry
 };
 
@@ -158,12 +152,19 @@ class EditDialog extends Component<Props, Entry> {
     });
   }
 
+  startTimeChange = (/* evt: SyntheticInputEvent<> */) => {
+
+  }
+
+  endTimeChange = (/* evt: SyntheticInputEvent<> */) => {
+
+  }
+
   /**
    * Save current entry.
    */
   handleSave = () => {
     // Validate data
-
     this.closeWindow();
   }
 
@@ -247,15 +248,15 @@ class EditDialog extends Component<Props, Entry> {
         />
 
         <div className="input_field">
-          <textarea name="description" placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} onKeyPress={this.handleEnter} />
+          <textarea name="description" placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} />
         </div>
 
         <div className="input_field">
-          <MaskedInput mask={dateRegexp} placeholder="Start time" value={startTime} />
+          <MaskedInput mask={dateRegexp} placeholder="Start time" value={startTime} onChange={this.startTimeChange} />
         </div>
 
         <div className="input_field">
-          <MaskedInput mask={dateRegexp} placeholder="End time" value={endTime} />
+          <MaskedInput mask={dateRegexp} placeholder="End time" value={endTime} onChange={this.endTimeChange} />
         </div>
 
         <div className={styles.actions}>
@@ -290,16 +291,6 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
   loadActivities: (projectIdentifier: string): void => {
     dispatch(fetchActivities(projectIdentifier));
-  },
-  updateCurrentEntry: (data: any): void => {
-    dispatch(updateCurrentEntry(data));
-  },
-  stopCurrentEntry: (data: any, endTime: number, autoSync: boolean): void => {
-    dispatch(closeEntry(data, endTime, autoSync));
-  },
-
-  resetCurrentEntry: (): void => {
-    dispatch(resetCurrentEntry());
   }
 });
 
