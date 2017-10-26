@@ -37,12 +37,23 @@ type Props = {
   activities: Immutable.Map<string, Immutable.Map<number, string>>,
   loadActivities: (project: string) => void,
   // updateEntry: (index: number, data: Entry) => void,
-  // entryIndex: number,
+  entryIndex: number,
   currentEntry: Entry
 };
 
-
 class EditDialog extends Component<Props, Entry> {
+  static defaultProps = {
+    project: '',
+    projectName: '',
+    activity: 0,
+    activityName: '',
+    issue: 0,
+    issueName: '',
+    description: '',
+    startTime: 0,
+    endTime: 0
+  };
+
   props: Props;
 
   /**
@@ -67,22 +78,29 @@ class EditDialog extends Component<Props, Entry> {
     }
   }
 
-  componentWillReceiveProps(newProps: Props) {
-    const currentProject = this.state.project;
 
+  componentWillReceiveProps(newProps: Props) {
+    this.updateData(newProps, this.state.project);
+  }
+
+  componentWillUpdate(nextProps: Props, nextState: Entry) {
+    this.updateData(nextProps, nextState.project);
+  }
+
+  updateData(nextProps: Props, project: string) {
     // Don't remove this, we can force to refresh data
     // but in that case componentDidMount won't be called.
-    if (newProps.projects.size === 0) {
+    if (nextProps.projects.size === 0) {
       this.props.loadProjects();
     }
 
-    if (newProps.projects.size > 0 && currentProject.length > 0) {
-      if (!newProps.activities.has(currentProject)) {
-        this.props.loadActivities(currentProject);
+    if (nextProps.projects.size > 0 && project.length > 0) {
+      if (!nextProps.activities.has(project)) {
+        this.props.loadActivities(project);
       }
 
-      if (!newProps.issues.has(currentProject)) {
-        this.props.loadIssues(currentProject);
+      if (!nextProps.issues.has(project)) {
+        this.props.loadIssues(project);
       }
     }
   }
@@ -182,6 +200,8 @@ class EditDialog extends Component<Props, Entry> {
   /* eslint-enable class-methods-use-this */
 
   render() {
+    console.log("RENDER");
+
     const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
     const issues: Array<{value: number, label: string}> = [];
     const activities: Array<{value: number, label: string}> = [];

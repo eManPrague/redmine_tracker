@@ -91,7 +91,12 @@ class RedmineClient {
    *
    */
   async getIssues(projectIdentifier: string): Promise<Array<Issue>> {
-    const responses = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
+    let responses = [];
+    try {
+      responses = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
+    } catch (ex) {
+      responses = [];
+    }
 
     // Flat array and create full response
     const response: Array<Issue> = [];
@@ -145,7 +150,8 @@ class RedmineClient {
    */
   async createEntry(entry: Entry): Promise<number> {
     // Convert entry to hours
-    const hours = ((entry.endTime - entry.startTime) / 60) / 60;
+    let hours = ((entry.endTime - entry.startTime) / 60) / 60;
+    hours = Math.round(hours * 100) / 100;
 
     // Convert to time entry field
     const timeEntry = {
@@ -273,6 +279,11 @@ class RedmineClient {
         } else {
           // Response
           console.log('[Redmine] Response OK');
+
+          // Set default empty body as {}
+          if (!parsedBody || /^\s*$/.test(parsedBody)) {
+            parsedBody = {};
+          }
 
           // Parse body & create immutable
           parsedBody = Immutable.fromJS(parsedBody);
