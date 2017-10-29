@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import Select from 'react-select';
-// import moment from 'moment';
 import { ipcRenderer as ipc } from 'electron';
 import MaskedInput from 'react-text-mask';
 
@@ -11,6 +10,7 @@ import MaskedInput from 'react-text-mask';
 import { fetchProjects } from '../actions/projects';
 import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
+import { updateEntry } from '../actions/entries';
 
 // import {
 //  electronAlert
@@ -20,7 +20,7 @@ import {
   CLOSE_EDIT_ENTRY
 } from '../constants/dialogs';
 
-import { formatDateTime } from '../utils/Formatters';
+import { formatDateTime, parseDateTime } from '../utils/Formatters';
 
 // Types
 import type { Issue, Entry } from '../types/RedmineTypes';
@@ -36,7 +36,7 @@ type Props = {
   loadIssues: (projectIdentifier: string) => void,
   activities: Immutable.Map<string, Immutable.Map<number, string>>,
   loadActivities: (project: string) => void,
-  // updateEntry: (index: number, data: Entry) => void,
+  updateEntry: (index: number, entry: Entry) => void,
   entryIndex: number,
   currentEntry: Entry
 };
@@ -77,7 +77,6 @@ class EditDialog extends Component<Props, Entry> {
       loadProjects();
     }
   }
-
 
   componentWillReceiveProps(newProps: Props) {
     this.updateData(newProps, this.state.project);
@@ -170,24 +169,29 @@ class EditDialog extends Component<Props, Entry> {
     });
   }
 
-  startTimeChange = (/* evt: SyntheticInputEvent<> */) => {
-
+  startTimeChange = (evt: SyntheticInputEvent<>) => {
+    this.setState({
+      startTime: parseDateTime(evt.target.value)
+    });
   }
 
-  endTimeChange = (/* evt: SyntheticInputEvent<> */) => {
-
+  endTimeChange = (evt: SyntheticInputEvent<>) => {
+    this.setState({
+      endTime: parseDateTime(evt.target.value)
+    });
   }
 
-  /**
-   * Save current entry.
-   */
   handleSave = () => {
-    // Validate data
+    // TODO: Validate data
+    this.props.updateEntry(
+      this.props.entryIndex,
+      this.state
+    );
     this.closeWindow();
   }
 
   /**
-   * Cancel current entry.
+   * Cancel current entry and return back to history window.
    */
   handleCancel = () => {
     this.closeWindow();
@@ -200,8 +204,6 @@ class EditDialog extends Component<Props, Entry> {
   /* eslint-enable class-methods-use-this */
 
   render() {
-    console.log("RENDER");
-
     const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
     const issues: Array<{value: number, label: string}> = [];
     const activities: Array<{value: number, label: string}> = [];
@@ -311,6 +313,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
   loadActivities: (projectIdentifier: string): void => {
     dispatch(fetchActivities(projectIdentifier));
+  },
+  updateEntry: (index: number, entry: Entry): void => {
+    dispatch(updateEntry(index, entry));
   }
 });
 

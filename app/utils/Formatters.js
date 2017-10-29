@@ -1,6 +1,10 @@
 // @flow
 import moment from 'moment';
 
+// Formats
+export const DATE_TIME_FORMAT = 'DD.MM.YYYY HH:mm';
+export const DATE_FORMAT = 'DD.MM.YYYY';
+
 /**
  * 
  * Format time to readable form.
@@ -10,10 +14,24 @@ import moment from 'moment';
  */
 export const formatDateTime = (unix: number | void): string => {
   if (unix) {
-    return moment.unix(unix).format('DD.MM.YYYY HH:mm');
+    return moment.unix(unix).format(DATE_TIME_FORMAT);
   }
 
   return '';
+};
+
+/**
+ * Parse date time to unix timestamp.
+ * 
+ * @param {string} dateTime Date time in human readable form.
+ * @return {number} Unix timestamp
+ */
+export const parseDateTime = (dateTime: string | void): number => {
+  if (dateTime) {
+    return moment(dateTime, DATE_TIME_FORMAT).unix();
+  }
+
+  return moment().unix();
 };
 
 /**
@@ -28,6 +46,20 @@ export const formatDate = (unix: number | void): string => {
   }
 
   return '';
+};
+
+/**
+ * Parse date to unix timestamp.
+ * 
+ * @param {string} date Date in human readable form.
+ * @return {number} Unix timestamp
+ */
+export const parseDate = (date: string | void): number => {
+  if (date) {
+    return moment(date, DATE_FORMAT).unix();
+  }
+
+  return moment().unix();
 };
 
 /**
