@@ -179,6 +179,7 @@ const openEditWindow = (id) => {
       if (!editWindow) {
         throw new Error('"editWindow" is not defined');
       }
+
       editWindow.show();
       editWindow.focus();
 
@@ -186,6 +187,10 @@ const openEditWindow = (id) => {
         editWindow.openDevTools();
       }
     });
+
+  editWindow.on('close', () => {
+    editWindow = null;
+  });
 
   return editWindow;
 };
