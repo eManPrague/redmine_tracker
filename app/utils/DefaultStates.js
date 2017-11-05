@@ -12,5 +12,5 @@ export const defaultRouting = Immutable.fromJS({
 export const defaultUi = Immutable.fromJS({
   loading: [],
   message: '',
-  icon: 'black'
+  icon: process.platform === 'win32' ? 'white' : 'black'
 });
