@@ -29,6 +29,6 @@ export const hideLoading = (code: string) => ({
 export const changeIcon = (color: string) => ({
   type: CHANGE_ICON,
   payload: {
-    color
+    icon: color
   }
 });

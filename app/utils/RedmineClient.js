@@ -163,13 +163,11 @@ class RedmineClient {
       activity_id: entry.activity
     };
 
-    console.log(timeEntry);
-
     const response = await this.request('POST', `/issues/${entry.issue}/time_entries?format=json`, { time_entry: timeEntry });
     this.constructor.assertResponse(response, [201], 'Invalid data!');
     const data = response.json.get('time_entry');
 
-    return Promise.resolve(parseInt(data.get('id'), 10));
+    return parseInt(data.get('id'), 10);
   }
 
   /**
@@ -266,6 +264,9 @@ class RedmineClient {
           if (!error) {
             error = e;
           }
+          console.log('ERROR: ');
+          console.log(e);
+          console.log(error);
         }
 
         if (parsedBody != null && Object.prototype.hasOwnProperty.call(parsedBody, 'errors')) {

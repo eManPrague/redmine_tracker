@@ -8,14 +8,14 @@ import {
 
 import { changeIcon } from '../actions/ui';
 
+// Icon enumerations
+export const WHITE_ICON = 0;
+export const BLACK_ICON = 1;
+
 export default class TrayBuilder {
   store: any;
   icon: Tray;
   active: boolean;
-
-  // Icon enumeration
-  WHITE_ICON = 0;
-  BLACK_ICON = 1;
 
   // Both icons
   normalIcon: Array<typeof nativeImage>;
@@ -28,14 +28,17 @@ export default class TrayBuilder {
 
     // Set & prepare icon for tray
     this.activeColor = this.getIconColor();
-    prepareIcons();
+    this.prepareIcons();
   }
 
   buildIcon() {
     this.icon = new Tray(this.normalIcon[this.activeColor]);
 
     const contextMenu = Menu.buildFromTemplate([{
-      label: 'Remove',
+      label: 'Open tracker',
+      click: () => {
+        this.openTracker();
+      }
     }, {
       label: 'Switch icon color',
       click: () => {
@@ -51,50 +54,48 @@ export default class TrayBuilder {
     this.store.subscribe(this.handleChange);
   }
 
+  openTracker() {
+    console.log(this.store);
+  }
+
   prepareIcons() {
     this.normalIcon = [
-      this.generateIcon('black', ''),
-      this.generateIcon('white', '')
+      TrayBuilder.generateIcon('white', ''),
+      TrayBuilder.generateIcon('black', '')
     ];
     this.activeIcon = [
-      this.generateIcon('black', '_active'),
-      this.generateIcon('white', '_active')
+      TrayBuilder.generateIcon('white', '_active'),
+      TrayBuilder.generateIcon('black', '_active')
     ];
   }
 
-  generateIcon(color: string, active: string): typeof nativeImage {
-    const appPath = path.join(__dirname, '../assets/images/');
-    return nativeImage.createFromPath(path.join(`tray_${color}${active}.png`));
+  static generateIcon(color: string, active: string): nativeImage {
+    return nativeImage.createFromPath(path.join(__dirname, `../assets/images/tray_${color}${active}.png`));
   }
 
   switchIcon(): void {
     this.store.dispatch(
-      changeIcon(this.activeColor == TrayBuilder.WHITE_ICON ? 'black' : 'white')
+      changeIcon(this.activeColor === WHITE_ICON ? 'black' : 'white')
     );
   }
 
-  getIconColor(state: any): number {
-    if (!state) {
-      state = this.store.getState();
-    }
-
+  getIconColor(state: any = this.store.getState()): number {
     let color = 'black';
 
     if (state.has('ui')) {
       color = state.get('ui').get('icon');
     }
 
-    let ret = color === 'white' ? TrayBuilder.WHITE_ICON : TrayBuilder.BLACK_ICON; 
-
-    console.log(`Ret: ${ret}`);
-
-    return ret;
+    return (color === 'white' ? WHITE_ICON : BLACK_ICON);
   }
 
   handleChange = () => {
     const state = this.store.getState();
 
-    this.activeColor = getIconColor(state);
+    const oldColor = this.activeColor;
+    this.activeColor = this.getIconColor(state);
+
+    let changedIcon = false;
 
     if (state.has('entries') && state.get('entries').has('current')) {
       const startTime = parseInt(state.get('entries').get('current').get('startTime'), 10);
@@ -102,10 +103,18 @@ export default class TrayBuilder {
       if (startTime > 0 && this.active === false) {
         this.active = true;
         this.icon.setImage(this.activeIcon[this.activeColor]);
+        changedIcon = true;
       } else if (startTime === 0 && this.active) {
         this.active = false;
         this.icon.setImage(this.normalIcon[this.activeColor]);
+        changedIcon = true;
       }
+    }
+
+    // This always changes icon to normal icon, it's because
+    // if there is active entry code above changes icon to proper one.
+    if (changedIcon === false && oldColor !== this.activeColor) {
+      this.icon.setImage(this.normalIcon[this.activeColor]);
     }
   }
 

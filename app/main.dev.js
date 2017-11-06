@@ -233,6 +233,15 @@ const openEntriesWindow = () => {
   return entriesWindow;
 };
 
+const openMainWindow = () => {
+  if (!mainWindow) {
+    createMainWindow();
+  } else {
+    mainWindow.show();
+    mainWindow.focus();
+  }
+};
+
 const createMainWindow = async () => {
   if (debugMode === true) {
     try {
@@ -342,10 +351,5 @@ autoUpdater.on('updateAvailable', (event, releaseNotes, releaseName, releaseDate
 // On darwin platform - click on bar icon
 // wil reopen / focus main window.
 app.on('activate', async () => {
-  if (!mainWindow) {
-    createMainWindow();
-  } else {
-    mainWindow.show();
-    mainWindow.focus();
-  }
+  openMainWindow();
 });
