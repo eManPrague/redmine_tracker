@@ -229,7 +229,9 @@ class RedmineClient {
       uri: path,
       headers: {
         'X-Redmine-API-Key': this.token,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Connection: 'keep-alive'
       },
       method
     };
