@@ -2,9 +2,13 @@
 	<img src="https://raw.githubusercontent.com/Strnadj/redmine_tracker/master/readme/background.png" alt="Tracker Icon" align="center" />
 </p>
 
-## Installation 1.0.1 release candidate
+<p align="center">
+	<img src="https://raw.githubusercontent.com/Strnadj/redmine_tracker/master/readme/screenshots.png" alt="Tracker Icon" align="center" />
+</p>
 
-Go to [releases page](https://github.com/Strnadj/redmine_tracker/releases) and select version according to your operation system.
+## Installation 1.0.0 Release Candidate
+
+Go to [releases page](https://github.com/Strnadj/redmine_tracker/releases) and select version according to your operation system. After installation fill your redmine server and API token, you can find your api token on `My account` page.
 
 ### Requirements for Linux
 
@@ -35,7 +39,6 @@ end if include_in_api_response?('time_entry_activities')
 * Before submitting a bug report or feature request, check to make sure it hasn't already been submitted.
 * When submitting a bug report, please include a informations about Redmine version and operating system.
 * **For developers**: Ideally, a bug report should include a pull request with failing specs. :+1:
-
 
 ## Submitting a Pull Request
 
