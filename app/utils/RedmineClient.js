@@ -112,25 +112,26 @@ class RedmineClient {
     // Flat array and create full response
     const response: Array<Issue> = [];
 
+    if (resources !== undefined) {
+      resources
+        .map((val) => val.get('issues'))
+        .forEach((list) => {
+          list.forEach((issue) => {
+            const id = issue.get('id');
+            let userId = 0;
 
-    resources
-      .map((val) => val.get('issues'))
-      .forEach((list) => {
-        list.forEach((issue) => {
-          const id = issue.get('id');
-          let userId = 0;
+            if (issue.has('assigned_to')) {
+              userId = parseInt(issue.get('assigned_to').get('id'), 10);
+            }
 
-          if (issue.has('assigned_to')) {
-            userId = parseInt(issue.get('assigned_to').get('id'), 10);
-          }
-
-          response.push({
-            id: parseInt(id, 10),
-            subject: `#${id} - ${issue.get('subject')}`,
-            userId
+            response.push({
+              id: parseInt(id, 10),
+              subject: `#${id} - ${issue.get('subject')}`,
+              userId
+            });
           });
         });
-      });
+    }
 
     return Promise.resolve(response);
   }
@@ -217,7 +218,7 @@ class RedmineClient {
     const { error, response } = await this.request('GET', url, { limit: 1, status_id: 'open' });
 
     if (error || this.constructor.invalidResponse(response)) {
-      return Promise.reject({
+      return Promise.resolve({
         error
       });
     }
