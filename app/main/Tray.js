@@ -3,7 +3,8 @@ import path from 'path';
 import {
   Tray,
   Menu,
-  nativeImage
+  nativeImage,
+  app
 } from 'electron';
 
 import { changeIcon } from '../actions/ui';
@@ -21,10 +22,12 @@ export default class TrayBuilder {
   normalIcon: Array<typeof nativeImage>;
   activeIcon: Array<typeof nativeImage>;
   activeColor: number;
+  openMainWindow: any;
 
-  constructor(store: any) {
+  constructor(store: any, openMainWindow: any) {
     this.store = store;
     this.active = false;
+    this.openMainWindow = openMainWindow;
 
     // Set & prepare icon for tray
     this.activeColor = this.getIconColor();
@@ -35,14 +38,20 @@ export default class TrayBuilder {
     this.icon = new Tray(this.normalIcon[this.activeColor]);
 
     const contextMenu = Menu.buildFromTemplate([{
-      label: 'Open tracker',
+      label: 'Show tracker',
       click: () => {
-        this.openTracker();
+        this.openMainWindow();
       }
     }, {
       label: 'Switch icon color',
       click: () => {
         this.switchIcon();
+      }
+    }, {
+      label: 'Quit application',
+      click: () => {
+        this.close();
+        app.quit();
       }
     }]);
 
@@ -52,10 +61,6 @@ export default class TrayBuilder {
 
     // Start watching
     this.store.subscribe(this.handleChange);
-  }
-
-  openTracker() {
-    console.log(this.store);
   }
 
   prepareIcons() {

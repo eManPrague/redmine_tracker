@@ -53,8 +53,14 @@ class RedmineClient {
    * @return {Promise} User data
    */
   async getUser(): Promise<User> {
-    const response = await this.request('GET', '/users/current.json', {});
-    this.constructor.assertResponse(response, [200], 'Invalid credentials!');
+    const { error, response } = await this.request('GET', '/users/current.json', {});
+
+    if (error || this.constructor.invalidResponse(response, [200])) {
+      return Promise.reject({
+        error: 'Invalid credentials!'
+      });
+    }
+
     const data = response.json.get('user');
 
     return Promise.resolve({
@@ -72,15 +78,21 @@ class RedmineClient {
    * @returns {Object{ [string]: string }} activity map
    */
   async getActivities(projectIdentifier: string): { [string]: string } {
-    const data = await this.request('GET', `/projects/${projectIdentifier}.json?include=time_entry_activities`);
-    this.constructor.assertResponse(data);
-    const response = {};
+    const { error, response } = await this.request('GET', `/projects/${projectIdentifier}.json?include=time_entry_activities`);
 
-    data.json.get('project').get('time_entry_activities').forEach((item) => {
-      response[item.get('id')] = item.get('name');
+    if (error || this.constructor.invalidResponse(response)) {
+      return Promise.reject({
+        error: error || 'Invalid response!'
+      });
+    }
+
+    const data = {};
+
+    response.get('project').get('time_entry_activities').forEach((item) => {
+      data[item.get('id')] = item.get('name');
     });
 
-    return response;
+    return Promise.resolve(data);
   }
 
   /**
@@ -91,17 +103,16 @@ class RedmineClient {
    *
    */
   async getIssues(projectIdentifier: string): Promise<Array<Issue>> {
-    let responses = [];
-    try {
-      responses = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
-    } catch (ex) {
-      responses = [];
+    const { error, responses } = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
+
+    if (error) {
+      return Promise.reject(error);
     }
 
     // Flat array and create full response
     const response: Array<Issue> = [];
 
-    responses.map((val) => val.json.get('issues')).forEach((list) => {
+    responses.map((val) => val.get('issues')).forEach((list) => {
       list.forEach((issue) => {
         const id = issue.get('id');
         let userId = 0;
@@ -129,15 +140,21 @@ class RedmineClient {
     // Flat array, iterate over and create response.
     const response: Array<{ value: string, label: string }> = [];
 
-    let resources = await this.loadFullResource('/projects.json', 'name:asc');
-    resources = resources.map((val) => val.json.get('projects'));
-    resources.forEach((list) => {
-      list.forEach((prj) => {
-        response.push({
-          value: prj.get('identifier'), label: prj.get('name')
+    const { error, resources } = await this.loadFullResource('/projects.json', 'name:asc');
+
+    if (error) {
+      return Promise.reject(error);
+    }
+
+    resources
+      .map((val) => val.get('projects'))
+      .forEach((list) => {
+        list.forEach((prj) => {
+          response.push({
+            value: prj.get('identifier'), label: prj.get('name')
+          });
         });
       });
-    });
 
     // Return response
     return Promise.resolve(response);
@@ -163,8 +180,12 @@ class RedmineClient {
       activity_id: entry.activity
     };
 
-    const response = await this.request('POST', `/issues/${entry.issue}/time_entries?format=json`, { time_entry: timeEntry });
-    this.constructor.assertResponse(response, [201], 'Invalid data!');
+    const { error, response } = await this.request('POST', `/issues/${entry.issue}/time_entries?format=json`, { time_entry: timeEntry });
+
+    if (error || this.constructor.invalidResponse(response, [201])) {
+      return Promise.reject(error || 'Invalid response!');
+    }
+
     const data = response.json.get('time_entry');
 
     return parseInt(data.get('id'), 10);
@@ -176,11 +197,10 @@ class RedmineClient {
    * @param {{ json: any, status: integer }} response response object
    * @param {array<integer>} [acceptableStates=[ 200, 201 ]] default acceptable states
    * @param {string} defaultError string
+   * @param {boolean} showError
    */
-  static assertResponse(response: { json: any, status: number }, acceptableStates: Array<number> = [200, 201], defaultError: string = 'Invalid response!') {
-    if (acceptableStates.indexOf(response.status) < 0) {
-      throw new Error(defaultError);
-    }
+  static invalidResponse(response: { json: any, status: number }, acceptableStates: Array<number> = [200, 201]): boolean { // eslint-disable-line
+    return acceptableStates.indexOf(response.status) < 0;
   }
 
   /**
@@ -192,11 +212,16 @@ class RedmineClient {
    *
    */
   async loadFullResource(url: string, sort: string): Promise<*> {
-    const initialResponse = await this.request('GET', url, { limit: 1, status_id: 'open' });
-    this.constructor.assertResponse(initialResponse);
+    const { error, response } = await this.request('GET', url, { limit: 1, status_id: 'open' });
+
+    if (error || this.constructor.invalidResponse(response)) {
+      return Promise.reject({
+        error
+      });
+    }
 
     // Get total count
-    const totalCount = initialResponse.json.get('total_count');
+    const totalCount = response.json.get('total_count');
     const limit = 40;
 
     // Create promise with limit + offset according to total.
@@ -210,8 +235,23 @@ class RedmineClient {
       offset += limit;
     }
 
-    // $FlowFixMe
-    return Promise.all(promises);
+    return new Promise((resolve, reject) => {
+      const promise = Promise.all(promises);
+
+      promise.then((responses) => {
+        const responseArray = [];
+
+        responses.forEach((obj) => {
+          if (obj.error) {
+            return reject(obj.error);
+          }
+
+          responseArray.push(obj.response.json);
+        });
+
+        return resolve(responseArray);
+      }).catch(err => reject(err));
+    });
   }
 
   /**
@@ -222,13 +262,13 @@ class RedmineClient {
    * @param {Object} params options
    * @return {Promise} Promise with response.
    */
-  request(method: string, path: string, params: any): Promise<{json: any, status: number}> {
+  request(method: string, path: string, params: any): Promise<{error: boolean | string, response: { json: any, status: number }}> { // eslint-disable-line
     // Generate options
     const options = {
       baseUrl: this.server,
       uri: path,
       headers: {
-        'X-Redmine-API-Key': this.token,
+        'X-Redmine-API-Key': encodeURI(this.token),
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Connection: 'keep-alive'
@@ -250,11 +290,14 @@ class RedmineClient {
 
     return new Promise((resolve, reject) => {
       request(options, (err, res, body) => {
-        // Parse body
         let parsedBody = null;
-
-        // error?
         let error = err;
+
+        if (error && Object.prototype.hasOwnProperty.call(error, 'code')) {
+          if (error.code === 'ENOTFOUND') {
+            error = 'Invalid url address';
+          }
+        }
 
         try {
           if (body.trim().length > 0) {
@@ -266,9 +309,6 @@ class RedmineClient {
           if (!error) {
             error = e;
           }
-          console.log('ERROR: ');
-          console.log(e);
-          console.log(error);
         }
 
         if (parsedBody != null && Object.prototype.hasOwnProperty.call(parsedBody, 'errors')) {
@@ -278,7 +318,9 @@ class RedmineClient {
         if (error) {
           console.log('[Redmine] Error: ');
           console.log(error);
-          reject(error);
+          reject({
+            error
+          });
         } else {
           // Response
           console.log('[Redmine] Response OK');
@@ -293,8 +335,11 @@ class RedmineClient {
 
           // Prepare resolve object
           resolve({
-            json: parsedBody,
-            status: res.statusCode
+            error: false,
+            response: {
+              json: parsedBody,
+              status: res.statusCode
+            }
           });
         }
       });

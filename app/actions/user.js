@@ -63,14 +63,11 @@ export const userLogIn = (server: string, token: string) => async (dispatch: any
     url = `http://${server}`;
   }
 
-  // Test if server is valid url!
   if (!isUri(url)) {
     return electronAlert('Server URL is invalid!');
   }
 
-  // Show loading
   dispatch(showLoading('user', 'Loading user...'));
 
-  // Call fetch user in main process
   ipc.send(FETCH_USER, { server: url, token });
 };

@@ -74,7 +74,7 @@ if (debugMode === true) {
 }
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+  if (app.isQuiting) {
     app.quit();
 
     if (trayBuilder) {
@@ -264,18 +264,14 @@ const createMainWindow = async () => {
       oldToken = null;
     }
 
-    // Set old token to user.token position
     if (oldToken && oldState.user) {
       oldState.user.token = oldToken;
     }
 
-    // Convert into immutable object used in Redux Store
     oldState = Immutable.fromJS(oldState);
-
-    // Configure store
     store = configureStore(oldState, 'main');
 
-    // Persist state on change
+    // Persist state on changes
     store.subscribe(persistState);
   }
 
@@ -310,8 +306,13 @@ const createMainWindow = async () => {
     mainWindow = null;
   });
 
+  mainWindow.on('minimize', (event) => {
+    event.preventDefault();
+    mainWindow.hide();
+  });
+
   if (trayBuilder == null) {
-    trayBuilder = new TrayBuilder(store);
+    trayBuilder = new TrayBuilder(store, openMainWindow);
     trayBuilder.buildIcon();
   }
 

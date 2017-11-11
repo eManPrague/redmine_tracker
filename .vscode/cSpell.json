@@ -8,6 +8,7 @@
     "words": [
         "compat",
         "DEVTOOLS",
+        "ENOTFOUND",
         "firstname",
         "flowtype",
         "fsevents",
@@ -18,6 +19,8 @@
         "maximizable",
         "nsis",
         "parens",
+        "prebuild",
+        "Quiting",
         "Redmine",
         "Resizable",
         "submenu",

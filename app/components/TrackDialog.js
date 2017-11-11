@@ -184,6 +184,7 @@ class TrackDialog extends Component<Props, State> {
   handleTracking = () => {
     const currentTime = moment().unix();
 
+
     const {
       project,
       issue,

@@ -32,7 +32,7 @@ export default class IpcApiRenderer {
   fetchUserResponse = async (event, data) => {
     if (data.error) {
       this.store.dispatch(removeUser());
-      electronAlert(data.error);
+      electronAlert(data.error.error);
     } else {
       this.store.dispatch(routerActions.push('/'));
     }
