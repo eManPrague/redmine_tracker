@@ -2,6 +2,8 @@
 	<img src="https://raw.githubusercontent.com/Strnadj/redmine_tracker/master/readme/background.png" alt="Tracker Icon" align="center" />
 </p>
 
+[![Build Status](https://travis-ci.org/Strnadj/redmine_tracker.svg?branch=master)](https://travis-ci.org/Strnadj/redmine_tracker) [![Build status](https://ci.appveyor.com/api/projects/status/eb2mn67q47yx8v1l?svg=true)](https://ci.appveyor.com/project/Strnadj/redmine-tracker)
+
 <p align="center">
 	<img src="https://raw.githubusercontent.com/Strnadj/redmine_tracker/master/readme/screenshots.png" alt="Tracker Icon" align="center" />
 </p>
