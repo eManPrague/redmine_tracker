@@ -13,7 +13,6 @@ import styles from './TopBar.css';
 type Props = {
   logoutUser: () => void,
   refreshData: () => void,
-  currentEntry: Immutable.Map<string, mixed>,
   user: Immutable.Map<string, mixed>
 };
 
@@ -26,11 +25,6 @@ class TopBar extends Component<Props> {
 
   handleRefresh = () => {
     this.props.refreshData();
-  }
-
-  currentNotCounting = (): boolean => {
-    const entry = this.props.currentEntry;
-    return entry.get('startTime') === 0;
   }
 
   render() {
@@ -48,7 +42,7 @@ class TopBar extends Component<Props> {
           {userName}
         </div>
         <div className={styles.action_buttons}>
-          <button type="button" onClick={this.handleRefresh} disabled={!this.currentNotCounting()} className={styles.reload_button} />
+          <button type="button" onClick={this.handleRefresh} className={styles.reload_button} />
           <button type="button" onClick={this.handleLogout} className={styles.logout_button} />
         </div>
       </div>
@@ -65,8 +59,4 @@ const mapDispatchToProps = (dispatch: any) => ({
   }
 });
 
-const mapStateToProps = (state) => ({
-  currentEntry: state.get('entries').get('current')
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TopBar);
+export default connect(null, mapDispatchToProps)(TopBar);

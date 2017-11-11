@@ -2,7 +2,7 @@
 export type Issue = {
   id: number,
   subject: string,
-  userId?: number
+  userId: ?number
 };
 
 export type Project = {
@@ -20,5 +20,5 @@ export type Entry = {
   description: string,
   startTime: number,
   endTime: number,
-  id?: number
+  id: ?number
 };

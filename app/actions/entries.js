@@ -31,7 +31,7 @@ export const updateEntry = (index: number, entry: any) => ({
   }
 });
 
-export const stopEntry = (endTime: number, id?: number) => ({
+export const stopEntry = (endTime: number, id: ?number) => ({
   type: STOP_ENTRY,
   payload: {
     endTime,

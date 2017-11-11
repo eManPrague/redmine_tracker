@@ -1,11 +1,11 @@
 {
   "name": "redmine-tracker",
   "productName": "RedmineTracker",
-  "version": "0.0.15",
+  "version": "1.0.0-rc",
   "description": "Redmine time tracker.",
   "author": {
     "name": "Jan Strnadek",
-    "email": "jan.strnadek@gmail.com",
+    "email": "jan.strnadek@eman.cz",
     "url": "https://github.com/Strnadj"
   },
   "main": "main.js",

@@ -102,7 +102,7 @@ ipc.on(OPEN_ENTRY_WINDOW, () => {
 });
 
 ipc.on(ERROR_ALERT, (event, arg) => {
-  dialog.showErrorBox('Error', arg);
+  dialog.showErrorBox('Error', String(arg));
 });
 
 const installExtensions = async () => {
@@ -281,7 +281,9 @@ const createMainWindow = async () => {
     ipcApiMain.bind();
   }
 
-  mainWindow = new BrowserWindow({
+  // Get window bounds
+  const bounds = await SettingsStorage.get('windowBounds', {});
+  const windowSettings = {
     show: false,
     title: 'Redmine Tracker',
     width: 400,
@@ -289,9 +291,11 @@ const createMainWindow = async () => {
     useContentSize: true,
     resizable: false,
     maximizable: false,
-    fullscreenable: false
-  });
+    fullscreenable: false,
+    ...bounds
+  };
 
+  mainWindow = new BrowserWindow(windowSettings);
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
@@ -300,6 +304,14 @@ const createMainWindow = async () => {
     }
     mainWindow.show();
     mainWindow.focus();
+  });
+
+  mainWindow.on('close', async () => {
+    const currentBounds = mainWindow.getBounds();
+    await SettingsStorage.set('windowBounds', {
+      x: currentBounds.x,
+      y: currentBounds.y
+    });
   });
 
   mainWindow.on('closed', () => {

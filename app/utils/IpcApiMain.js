@@ -143,8 +143,6 @@ export default class IpcApiMain {
 
     let id = null;
 
-    console.log(entry);
-
     try {
       id = await redmineClient.createEntry(entry);
       info.id = id;

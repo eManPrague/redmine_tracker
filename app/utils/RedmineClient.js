@@ -77,7 +77,7 @@ class RedmineClient {
    * @param {string} projectIdentifier project identifier
    * @returns {Object{ [string]: string }} activity map
    */
-  async getActivities(projectIdentifier: string): { [string]: string } {
+  async getActivities(projectIdentifier: string): Promise<{ [string]: string }> {
     const { error, response } = await this.request('GET', `/projects/${projectIdentifier}.json?include=time_entry_activities`);
 
     if (error || this.constructor.invalidResponse(response)) {
@@ -88,7 +88,7 @@ class RedmineClient {
 
     const data = {};
 
-    response.get('project').get('time_entry_activities').forEach((item) => {
+    response.json.get('project').get('time_entry_activities').forEach((item) => {
       data[item.get('id')] = item.get('name');
     });
 
@@ -103,7 +103,7 @@ class RedmineClient {
    *
    */
   async getIssues(projectIdentifier: string): Promise<Array<Issue>> {
-    const { error, responses } = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
+    const { error, resources } = await this.loadFullResource(`/projects/${projectIdentifier}/issues.json`, 'name:asc');
 
     if (error) {
       return Promise.reject(error);
@@ -112,22 +112,25 @@ class RedmineClient {
     // Flat array and create full response
     const response: Array<Issue> = [];
 
-    responses.map((val) => val.get('issues')).forEach((list) => {
-      list.forEach((issue) => {
-        const id = issue.get('id');
-        let userId = 0;
 
-        if (issue.has('assigned_to')) {
-          userId = parseInt(issue.get('assigned_to').get('id'), 10);
-        }
+    resources
+      .map((val) => val.get('issues'))
+      .forEach((list) => {
+        list.forEach((issue) => {
+          const id = issue.get('id');
+          let userId = 0;
 
-        response.push({
-          id: parseInt(id, 10),
-          subject: `#${id} - ${issue.get('subject')}`,
-          userId
+          if (issue.has('assigned_to')) {
+            userId = parseInt(issue.get('assigned_to').get('id'), 10);
+          }
+
+          response.push({
+            id: parseInt(id, 10),
+            subject: `#${id} - ${issue.get('subject')}`,
+            userId
+          });
         });
       });
-    });
 
     return Promise.resolve(response);
   }
@@ -170,8 +173,8 @@ class RedmineClient {
     let hours = ((entry.endTime - entry.startTime) / 60) / 60;
     hours = Math.round(hours * 100) / 100;
 
-    // Convert to time entry field
     const timeEntry = {
+      // TODO: Uncomment on 1.5
       // time_from: entry.startTime,
       // time_to: entry.endTime,
       hours,
@@ -187,8 +190,7 @@ class RedmineClient {
     }
 
     const data = response.json.get('time_entry');
-
-    return parseInt(data.get('id'), 10);
+    return Promise.resolve(parseInt(data.get('id'), 10));
   }
 
   /**
@@ -243,13 +245,18 @@ class RedmineClient {
 
         responses.forEach((obj) => {
           if (obj.error) {
-            return reject(obj.error);
+            return resolve({
+              error: obj.error
+            });
           }
 
           responseArray.push(obj.response.json);
         });
 
-        return resolve(responseArray);
+        return resolve({
+          error: false,
+          resources: responseArray
+        });
       }).catch(err => reject(err));
     });
   }
@@ -288,7 +295,7 @@ class RedmineClient {
     // Generate server
     console.log(`[Redmine] [${method}] ${this.server}${path}`);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       request(options, (err, res, body) => {
         let parsedBody = null;
         let error = err;
@@ -313,12 +320,15 @@ class RedmineClient {
 
         if (parsedBody != null && Object.prototype.hasOwnProperty.call(parsedBody, 'errors')) {
           error = parsedBody.errors;
+          if (Object.prototype.toString.call(error) === '[object Array]') {
+            error = error[0];
+          }
         }
 
         if (error) {
-          console.log('[Redmine] Error: ');
+          console.log('[Redmine] Response ERROR');
           console.log(error);
-          reject({
+          resolve({
             error
           });
         } else {
