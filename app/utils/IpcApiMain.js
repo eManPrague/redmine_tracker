@@ -162,17 +162,16 @@ export default class IpcApiMain {
     let info = {};
 
     // Fetch information from data
-    const entry = data.entry;
-    const endTime = data.endTime;
+    const entry = {
+      ...data.entry,
+      endTime: data.endTime,
+      id: null
+    };
 
     let id = null;
 
     try {
-      id = await redmineClient.createEntry({
-        ...entry,
-        endTime
-      });
-
+      id = await redmineClient.createEntry(entry);
       info.id = id;
     } catch (e) {
       info = {
@@ -182,7 +181,7 @@ export default class IpcApiMain {
 
     this
       .store
-      .dispatch(stopEntry(endTime, id));
+      .dispatch(stopEntry(data.endTime, id));
 
     IpcApiMain.sendToAll(actions.SYNC_CURRENT_ENTRY_RESPONSE, info);
   }

@@ -184,7 +184,6 @@ class TrackDialog extends Component<Props, State> {
   handleTracking = () => {
     const currentTime = moment().unix();
 
-
     const {
       project,
       issue,
@@ -233,7 +232,6 @@ class TrackDialog extends Component<Props, State> {
 
     return true;
   }
-
 
   render() {
     const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
@@ -316,7 +314,7 @@ class TrackDialog extends Component<Props, State> {
 
         <Checkbox label="Filter assigned to me" value={this.state.filterMine} id="assigned_to_id" onChange={this.assignedToChange} />
 
-        <Checkbox label="Sync immediately" value={this.state.syncNow} id="sync_now" onChange={this.syncNowChange} />
+        <Checkbox label="Synchronize immediately" value={this.state.syncNow} id="sync_now" onChange={this.syncNowChange} />
 
         <div className={styles.tracking}>
           <div className={styles.tracking_time}>
