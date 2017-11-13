@@ -42,7 +42,7 @@
     "publish": [
       {
         "provider": "github",
-        "owner": "Strnadj",
+        "owner": "eManPrague",
         "repo": "redmine_tracker"
       }
     ],
@@ -100,11 +100,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Strnadj/redmine_tracker.git"
+    "url": "git@github.com:eManPrague/redmine_tracker.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Strnadj/redmine_tracker/issues"
+    "url": "https://github.com/eManPrague/redmine_tracker/issues"
   },
   "keywords": [
     "electron",
@@ -112,7 +112,7 @@
     "issue",
     "tracker"
   ],
-  "homepage": "https://github.com/Strnadj/redmine_tracker",
+  "homepage": "https://github.com/eManPrague/redmine_tracker",
   "jest": {
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
