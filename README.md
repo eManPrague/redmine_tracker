@@ -26,7 +26,6 @@ Also, you have to do some modifications in Redmine, it's necessary to add those 
 
 ```ruby
 # app/views/projects/show.api.rsb
-
 api.array :time_entry_activities do
   @project.activities.each do |activity|
     api.time_entry_activity(:id => activity.id, :name => activity.name)
