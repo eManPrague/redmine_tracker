@@ -44,6 +44,9 @@ ipcApi.bind();
 
 // Get proper entry from history
 const entry = store.getState().getIn(['entries', 'history', currentWindow.entryIndex]).toJS();
+if (entry && !Object.prototype.hasOwnProperty.call(entry, 'id')) {
+  entry.id = null;
+}
 
 render(
   <AppContainer>
