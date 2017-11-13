@@ -2,7 +2,7 @@
     <img src="https://raw.githubusercontent.com/eManPrague/redmine_tracker/master/readme/background.png" alt="Tracker Icon" align="center" />
 </p>
 
-[![Build Status](https://travis-ci.org/eManPrague/redmine_tracker.svg?branch=master)](https://travis-ci.org/eManPrague/redmine_tracker) [![Build status](https://ci.appveyor.com/api/projects/status/9ilogepvjtcvbxco?svg=true)](https://ci.appveyor.com/project/eManPrague/redmine-tracker)
+[![Build Status](https://travis-ci.org/eManPrague/redmine_tracker.svg?branch=master)](https://travis-ci.org/eManPrague/redmine_tracker) [![Build status](https://ci.appveyor.com/api/projects/status/9ilogepvjtcvbxco?svg=true)](https://ci.appveyor.com/project/Strnadj/redmine-tracker-f1d7n)
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/eManPrague/redmine_tracker/master/readme/screenshots.png" alt="Tracker Icon" align="center" />
