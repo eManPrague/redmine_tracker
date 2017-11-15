@@ -3,6 +3,7 @@ import moment from 'moment';
 
 // Formats
 export const DATE_TIME_FORMAT = 'DD.MM.YYYY HH:mm';
+export const DATE_TIME_INPUT_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const DATE_FORMAT = 'DD.MM.YYYY';
 
 /**
@@ -10,11 +11,12 @@ export const DATE_FORMAT = 'DD.MM.YYYY';
  * Format time to readable form.
  * 
  * @param {number} unix 
+ * @param {string} format
  * @returns Formatted time
  */
-export const formatDateTime = (unix: number | void): string => {
+export const formatDateTime = (unix: number | void, format: string = DATE_TIME_FORMAT): string => {
   if (unix) {
-    return moment.unix(unix).format(DATE_TIME_FORMAT);
+    return moment.unix(unix).format(format);
   }
 
   return '';
@@ -24,11 +26,12 @@ export const formatDateTime = (unix: number | void): string => {
  * Parse date time to unix timestamp.
  * 
  * @param {string} dateTime Date time in human readable form.
+ * @param {string} format
  * @return {number} Unix timestamp
  */
-export const parseDateTime = (dateTime: string | void): number => {
+export const parseDateTime = (dateTime: string | void, format: string = DATE_TIME_FORMAT): number => {
   if (dateTime) {
-    return moment(dateTime, DATE_TIME_FORMAT).unix();
+    return moment(dateTime, format).unix();
   }
 
   return moment().unix();

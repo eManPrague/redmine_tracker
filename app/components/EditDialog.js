@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import Select from 'react-select';
 import { ipcRenderer as ipc } from 'electron';
-import MaskedInput from 'react-text-mask';
 
 // Actions
 import { fetchProjects } from '../actions/projects';
@@ -12,15 +11,11 @@ import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
 import { updateEntry } from '../actions/entries';
 
-// import {
-//  electronAlert
-// } from '../utils/ElectronHelper';
-
 import {
   CLOSE_EDIT_ENTRY
 } from '../constants/dialogs';
 
-import { formatDateTime, parseDateTime } from '../utils/Formatters';
+import { formatDateTime, parseDateTime, DATE_TIME_INPUT_FORMAT } from '../utils/Formatters';
 
 // Types
 import type { Issue, Entry } from '../types/RedmineTypes';
@@ -171,13 +166,13 @@ class EditDialog extends Component<Props, Entry> {
 
   startTimeChange = (evt: SyntheticInputEvent<>) => {
     this.setState({
-      startTime: parseDateTime(evt.target.value)
+      startTime: parseDateTime(evt.target.value, DATE_TIME_INPUT_FORMAT)
     });
   }
 
   endTimeChange = (evt: SyntheticInputEvent<>) => {
     this.setState({
-      endTime: parseDateTime(evt.target.value)
+      endTime: parseDateTime(evt.target.value, DATE_TIME_INPUT_FORMAT)
     });
   }
 
@@ -230,15 +225,8 @@ class EditDialog extends Component<Props, Entry> {
     }
 
     // Change formatting start & end date
-    const startTime = formatDateTime(this.state.startTime);
-    const endTime = formatDateTime(this.state.endTime);
-
-    // Date regexp for masked input
-    const dateRegexp = [
-      /\d/, /\d/, '.', /\d/, /\d/, '.', /\d/, /\d/, /\d/, /\d/,
-      ' ',
-      /\d/, /\d/, ':', /\d/, /\d/
-    ];
+    const startTime = formatDateTime(this.state.startTime, DATE_TIME_INPUT_FORMAT);
+    const endTime = formatDateTime(this.state.endTime, DATE_TIME_INPUT_FORMAT);
 
     return (
       <div className={styles.editContainer}>
@@ -274,11 +262,11 @@ class EditDialog extends Component<Props, Entry> {
         </div>
 
         <div className="input_field">
-          <MaskedInput mask={dateRegexp} placeholder="Start time" value={startTime} onChange={this.startTimeChange} />
+          <input type="datetime-local" placeholder="Start time" defaultValue={startTime} onChange={this.startTimeChange} />
         </div>
 
         <div className="input_field">
-          <MaskedInput mask={dateRegexp} placeholder="End time" value={endTime} onChange={this.endTimeChange} />
+          <input type="datetime-local" placeholder="End time" defaultValue={endTime} onChange={this.endTimeChange} />
         </div>
 
         <div className={styles.actions}>

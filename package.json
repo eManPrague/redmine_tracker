@@ -1,7 +1,7 @@
 {
   "name": "redmine-tracker",
   "productName": "RedmineTracker",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0-rc4",
   "description": "Redmine time tracker.",
   "author": {
     "name": "Jan Strnadek",
@@ -224,7 +224,6 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "react-select": "^1.0.0-rc.10",
     "react-tap-event-plugin": "^3.0.2",
-    "react-text-mask": "^5.0.2",
     "redux": "^3.7.2",
     "redux-immutable": "^4.0.0",
     "redux-promise": "^0.5.3",
