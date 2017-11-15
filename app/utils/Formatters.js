@@ -29,7 +29,7 @@ export const formatDateTime = (unix: number | void, format: string = DATE_TIME_F
  * @param {string} format
  * @return {number} Unix timestamp
  */
-export const parseDateTime = (dateTime: string | void, format: string = DATE_TIME_FORMAT): number => {
+export const parseDateTime = (dateTime: string | void, format: string = DATE_TIME_FORMAT): number => { // eslint-disable-line max-len
   if (dateTime) {
     return moment(dateTime, format).unix();
   }
