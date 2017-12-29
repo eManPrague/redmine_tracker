@@ -143,6 +143,9 @@ export default class IpcApiMain {
 
     let id = null;
 
+    // Create entry expects id as null not undefined
+    entry.id = id;
+
     try {
       id = await redmineClient.createEntry(entry);
       info.id = id;
