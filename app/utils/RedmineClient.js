@@ -166,25 +166,32 @@ class RedmineClient {
 
   /**
    * Create entry on RM endpoint.
-   * @param {Entry} entry 
+   * @param {Entry} entry
    * @returns {Promise<number>} Entry id
    */
   async createEntry(entry: Entry): Promise<number> {
+    console.log('TEST');
+    console.log(entry);
+
     // Convert entry to hours
     let hours = ((entry.endTime - entry.startTime) / 60) / 60;
     hours = Math.round(hours * 100) / 100;
 
     const timeEntry = {
-      // TODO: Uncomment on 1.5
-      // time_from: entry.startTime,
-      // time_to: entry.endTime,
+      time_from_hours: moment.unix(entry.startTime).format('HH:mm'),
+      time_to_hours: moment.unix(entry.endTime).format('HH:mm'),
       hours,
       spent_on: moment.unix(entry.endTime).format('YYYY-MM-DD'),
       comments: entry.description,
       activity_id: entry.activity
     };
-
     const { error, response } = await this.request('POST', `/issues/${entry.issue}/time_entries?format=json`, { time_entry: timeEntry });
+
+    console.log('Error');
+    console.log(error);
+
+    console.log('Response');
+    console.log(response);
 
     if (error || this.constructor.invalidResponse(response, [201])) {
       return Promise.reject(error || 'Invalid response!');
