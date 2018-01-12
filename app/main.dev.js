@@ -43,6 +43,8 @@ import configureStore from './store';
 log.transports.file.level = 'debug';
 log.transports.console.level = 'debug';
 
+log.info(app.getPath('userData'));
+
 // Define auto updater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'debug';

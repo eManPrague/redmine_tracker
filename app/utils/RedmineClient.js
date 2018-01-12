@@ -308,9 +308,9 @@ class RedmineClient {
     }
 
     // Generate server
+    log.info('URL CALL');
     log.info(`[Redmine] [${method}] ${this.server}${path}`);
-    log.info('Options:');
-    log.info(options);
+    log.info(JSON.stringify(options));
 
     return new Promise((resolve) => {
       request(options, (err, res, body) => {
@@ -324,7 +324,7 @@ class RedmineClient {
         }
 
         log.info('Response body:');
-        log.info(body);
+        log.info(JSON.stringify(body));
 
         try {
           if (body.trim().length > 0) {
@@ -347,7 +347,7 @@ class RedmineClient {
 
         if (error) {
           log.info('[Redmine] Response ERROR');
-          log.info(error);
+          log.info(JSON.stringify(error));
           resolve({
             error
           });
