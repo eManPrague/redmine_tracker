@@ -308,7 +308,9 @@ class RedmineClient {
     }
 
     // Generate server
-    console.log(`[Redmine] [${method}] ${this.server}${path}`);
+    log.info(`[Redmine] [${method}] ${this.server}${path}`);
+    log.info('Options:');
+    log.info(options);
 
     return new Promise((resolve) => {
       request(options, (err, res, body) => {
@@ -320,6 +322,9 @@ class RedmineClient {
             error = 'Invalid url address';
           }
         }
+
+        log.info('Response body:');
+        log.info(body);
 
         try {
           if (body.trim().length > 0) {
@@ -341,14 +346,14 @@ class RedmineClient {
         }
 
         if (error) {
-          console.log('[Redmine] Response ERROR');
-          console.log(error);
+          log.info('[Redmine] Response ERROR');
+          log.info(error);
           resolve({
             error
           });
         } else {
           // Response
-          console.log('[Redmine] Response OK');
+          log.info('[Redmine] Response OK');
 
           // Set default empty body as {}
           if (!parsedBody || /^\s*$/.test(parsedBody)) {
