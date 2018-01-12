@@ -289,6 +289,7 @@ class RedmineClient {
     const options = {
       baseUrl: this.server,
       uri: path,
+      followAllRedirects: true,
       headers: {
         'X-Redmine-API-Key': encodeURI(this.token),
         'Content-Type': 'application/json',
