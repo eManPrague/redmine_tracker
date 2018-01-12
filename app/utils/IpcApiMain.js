@@ -153,6 +153,8 @@ export default class IpcApiMain {
         .store
         .dispatch(updateEntry(index, { id }));
     } catch (e) {
+      this.log.info('Error when creating entry:');
+      this.log.info(e);
       info = {
         error: e
       };
@@ -177,6 +179,8 @@ export default class IpcApiMain {
       id = await redmineClient.createEntry(entry);
       info.id = id;
     } catch (e) {
+      this.log.info('Error when syncing entry:');
+      this.log.info(e);
       info = {
         error: e
       };

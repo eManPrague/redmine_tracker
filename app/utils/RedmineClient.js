@@ -2,10 +2,14 @@
 import request from 'request';
 import Immutable from 'immutable';
 import moment from 'moment';
+import log from 'electron-log';
 
 // Types
 import type { User } from '../types/UserType';
 import type { Issue, Entry } from '../types/RedmineTypes';
+
+log.transports.console.level = 'debug';
+log.transports.file.level = 'debug';
 
 /**
  * Redmine Client is singleton class.
@@ -170,12 +174,15 @@ class RedmineClient {
    * @returns {Promise<number>} Entry id
    */
   async createEntry(entry: Entry): Promise<number> {
-    console.log('TEST');
-    console.log(entry);
+    log.info('Test creating entry!');
+    log.info(entry);
+    log.info(JSON.stringify(entry));
 
     // Convert entry to hours
     let hours = ((entry.endTime - entry.startTime) / 60) / 60;
     hours = Math.round(hours * 100) / 100;
+
+    log.info(`Hours: ${hours}`);
 
     const timeEntry = {
       time_from_hours: moment.unix(entry.startTime).format('HH:mm'),
@@ -185,13 +192,13 @@ class RedmineClient {
       comments: entry.description,
       activity_id: entry.activity
     };
+    log.info(`Final entry: ${JSON.stringify(timeEntry)}`);
+
     const { error, response } = await this.request('POST', `/issues/${entry.issue}/time_entries?format=json`, { time_entry: timeEntry });
 
-    console.log('Error');
-    console.log(error);
-
-    console.log('Response');
-    console.log(response);
+    log.info('Response:');
+    log.info(JSON.stringify(error));
+    log.info(JSON.stringify(response));
 
     if (error || this.constructor.invalidResponse(response, [201])) {
       return Promise.reject(error || 'Invalid response!');

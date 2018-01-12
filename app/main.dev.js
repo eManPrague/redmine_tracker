@@ -40,6 +40,7 @@ import TrayBuilder from './main/Tray';
 import configureStore from './store';
 
 // Set level
+log.transports.file.level = 'debug';
 log.transports.console.level = 'debug';
 
 // Define auto updater
