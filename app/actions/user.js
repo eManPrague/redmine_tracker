@@ -59,11 +59,18 @@ export const userLogIn = (server: string, token: string) => async (dispatch: any
   }
 
   let url = server;
-  if (!server.startsWith('http')) {
-    url = `http://${server}`;
+  if (!server.startsWith('http://') && !server.startsWith('https://')) {
+    url = `https://${server}`;
   }
 
-  if (!isUri(url)) {
+  const localhost = url.indexOf('localhost') >= 0;
+
+  // Request.js bug, to forward POST request from POSTS to GET, when http:// to https:// changes.
+  if (url.startsWith('http://') && localhost === false) {
+    url = url.replace('http', 'https');
+  }
+
+  if (!isUri(url) && localhost === false) {
     return electronAlert('Server URL is invalid!');
   }
 

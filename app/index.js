@@ -35,7 +35,7 @@ const history = createHashHistory();
 const store = configureStore(initialState, 'renderer', history);
 
 // Initialize renderer process 
-const ipcApi = new IpcApiRenderer(store, log);
+const ipcApi = new IpcApiRenderer(store);
 ipcApi.bind();
 
 render(

@@ -280,7 +280,7 @@ const createMainWindow = async () => {
 
   // Create ipc main
   if (!ipcApiMain) {
-    ipcApiMain = new IpcApiMain(store, log);
+    ipcApiMain = new IpcApiMain(store);
     ipcApiMain.bind();
   }
 

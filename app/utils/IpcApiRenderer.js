@@ -11,19 +11,13 @@ import {
   removeUser
 } from '../actions/user';
 
-import {
-  electronAlert
-} from './ElectronHelper';
-
 export default class IpcApiRenderer {
   store: null;
   ipc: null;
-  log: null;
 
-  constructor(store, log) {
+  constructor(store) {
     this.store = store;
     this.ipc = ipc;
-    this.log = log;
   }
 
   /**
@@ -32,7 +26,6 @@ export default class IpcApiRenderer {
   fetchUserResponse = async (event, data) => {
     if (data.error) {
       this.store.dispatch(removeUser());
-      electronAlert(data.error.error);
     } else {
       this.store.dispatch(routerActions.push('/'));
     }
@@ -44,10 +37,7 @@ export default class IpcApiRenderer {
    * Fetching general response.
    */
   fetchGeneralResponse = (event, data, loading) => {
-    if (data.error) {
-      electronAlert(data.error);
-    }
-
+    // Errors are currently dispatched by main user.
     if (loading) {
       this.store.dispatch(hideLoading(loading));
     }
@@ -68,5 +58,8 @@ export default class IpcApiRenderer {
 
     // Current entry response
     this.ipc.on(actions.SYNC_CURRENT_ENTRY_RESPONSE, (event, data) => this.fetchGeneralResponse(event, data, 'entries'));
+
+    // Sync all entry response
+    this.ipc.on(actions.SYNC_ENTRY_RESPONSE, (event, data) => this.fetchGeneralResponse(event, data, 'entries'));
   }
 }

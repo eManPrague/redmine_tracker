@@ -1,4 +1,5 @@
-import { ipcMain as ipc, webContents } from 'electron';
+import { ipcMain as ipc, webContents, dialog } from 'electron';
+import log from 'electron-log';
 
 import * as actions from '../constants/ipc';
 import redmineClient from '../utils/RedmineClient';
@@ -16,19 +17,23 @@ export default class IpcApiMain {
   // IPC electron
   ipc: null;
 
-  // Main file log
-  log: null;
-
   /**
    * Constructor.
    * 
    * @param {ReduxStore} store 
    * @param {ElectronLog} log 
    */
-  constructor(store, log) {
+  constructor(store) {
     this.store = store;
     this.ipc = ipc;
-    this.log = log;
+  }
+
+  /**
+   * Show error dialog.
+   * @param {*text} arg String arguments
+   */
+  static showErrorBox(arg) {
+    dialog.showErrorBox('Error', String(arg));
   }
 
   /**
@@ -38,6 +43,7 @@ export default class IpcApiMain {
    * @param {Any} object 
    */
   static sendToAll(action, object) {
+    log.info(`Send ${action} on ${JSON.stringify(object)}`);
     webContents.getAllWebContents().forEach((content) => {
       content.send(action, object);
     });
@@ -61,12 +67,13 @@ export default class IpcApiMain {
         server: data.server
       };
 
-      this.log.info('User response OK!');
+      log.info('User response OK!');
       this.store.dispatch(setUser(info));
     } catch (e) {
       info = {
         error: e
       };
+      IpcApiMain.showErrorBox(e.error || e.name);
     }
 
     IpcApiMain.sendToAll(actions.FETCH_USER_RESPONSE, info);
@@ -77,12 +84,13 @@ export default class IpcApiMain {
 
     try {
       const projects = await redmineClient.getProjects();
-      this.log.info('Projects response OK!');
+      log.info('Projects response OK!');
       this.store.dispatch(setProjects(projects));
     } catch (e) {
       info = {
         error: e
       };
+      IpcApiMain.showErrorBox(e);
     }
 
     IpcApiMain.sendToAll(actions.FETCH_PROJECTS_RESPONSE, info);
@@ -95,7 +103,7 @@ export default class IpcApiMain {
     try {
       const issues = await redmineClient.getIssues(projectIdentifier);
 
-      this.log.info(`Issues for ${projectIdentifier} response OK!`);
+      log.info(`Issues for ${projectIdentifier} response OK!`);
       this.store.dispatch(setIssues(
         projectIdentifier,
         issues
@@ -104,6 +112,7 @@ export default class IpcApiMain {
       info = {
         error: e
       };
+      IpcApiMain.showErrorBox(e);
     }
 
     IpcApiMain.sendToAll(actions.FETCH_ISSUES_RESPONSE, info);
@@ -115,7 +124,7 @@ export default class IpcApiMain {
 
     try {
       const issues = await redmineClient.getActivities(projectIdentifier);
-      this.log.info(`Activities for ${projectIdentifier} response OK!`);
+      log.info(`Activities for ${projectIdentifier} response OK!`);
       this.store.dispatch(setActivities(
         projectIdentifier,
         issues
@@ -124,6 +133,7 @@ export default class IpcApiMain {
       info = {
         error: e
       };
+      IpcApiMain.showErrorBox(e);
     }
 
     IpcApiMain.sendToAll(actions.FETCH_PROJECT_ACTIVITIES_RESPONSE, info);
@@ -153,11 +163,12 @@ export default class IpcApiMain {
         .store
         .dispatch(updateEntry(index, { id }));
     } catch (e) {
-      this.log.info('Error when creating entry:');
-      this.log.info(e);
+      log.info('[IPC MAIN] [Sync Entry] Error when creating entry:');
+      log.info(e);
       info = {
         error: e
       };
+      IpcApiMain.showErrorBox(e);
     }
 
     IpcApiMain.sendToAll(actions.SYNC_ENTRY_RESPONSE, info);
@@ -179,11 +190,12 @@ export default class IpcApiMain {
       id = await redmineClient.createEntry(entry);
       info.id = id;
     } catch (e) {
-      this.log.info('Error when syncing entry:');
-      this.log.info(e);
+      log.info('[IPC MAIN] [Current Entry] Error when creating entry:');
+      log.info(e);
       info = {
         error: e
       };
+      IpcApiMain.showErrorBox(e);
     }
 
     this
