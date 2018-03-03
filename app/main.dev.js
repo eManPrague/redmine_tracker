@@ -126,11 +126,12 @@ let oldToken = null;
 const persistState = async () => {
   // Get state
   const state = store.getState();
-
-  // Never persist `routing` and `ui` keys!
+  // Persist only color of the icon for 'ui'
+  const iconColor = state.getIn(['ui', 'icon']);
+  const ui = iconColor ? defaultUi.set('icon', iconColor) : defaultUi;
   const newState = state
-    .set('router', defaultRouting)
-    .set('ui', defaultUi)
+    .set('router', defaultRouting) // Never persist `routing`
+    .set('ui', ui)
     .setIn(['user', 'token'], null) // Never store user data in insecure storage
     .setIn(['user', 'user'], null);
 
