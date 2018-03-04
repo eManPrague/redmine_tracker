@@ -6,7 +6,8 @@ import {
   RESET_CURRENT_ENTRY,
   STOP_ENTRY,
   UPDATE_ENTRY,
-  DELETE_ENTRY
+  DELETE_ENTRY,
+  CLEAR_ENTRIES
 } from '../constants/actions';
 
 const emptyCurrent = Immutable.fromJS({
@@ -48,6 +49,10 @@ export default (state: Immutable.Map<string, mixed> = initialState, action: any)
       const index = action.payload.index;
       const currentEntry = state.get('history').get(index);
       return state.setIn(['history', index], currentEntry.merge(action.payload.entry));
+    }
+
+    case CLEAR_ENTRIES: {
+      return initialState;
     }
 
     default:

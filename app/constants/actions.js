@@ -26,3 +26,4 @@ export const RESET_CURRENT_ENTRY = 'RESET_CURRENT_ENTRY';
 export const STOP_ENTRY = 'STOP_ENTRY';
 export const DELETE_ENTRY = 'DELETE_ENTRY';
 export const UPDATE_ENTRY = 'UPDATE_ENTRY';
+export const CLEAR_ENTRIES = 'CLEAR_ENTRIES';

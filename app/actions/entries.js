@@ -6,7 +6,8 @@ import {
   DELETE_ENTRY,
   UPDATE_ENTRY,
   UPDATE_CURRENT_ENTRY,
-  RESET_CURRENT_ENTRY
+  RESET_CURRENT_ENTRY,
+  CLEAR_ENTRIES
 } from '../constants/actions';
 
 import {
@@ -17,6 +18,10 @@ import {
 import {
   showLoading
 } from './ui';
+
+export const clearEntries = () => ({
+  type: CLEAR_ENTRIES
+});
 
 export const updateCurrentEntry = (data: any) => ({
   type: UPDATE_CURRENT_ENTRY,

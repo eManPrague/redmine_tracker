@@ -13,7 +13,7 @@ import {
 } from '../utils/ElectronHelper';
 
 import resetData from './data';
-import { resetCurrentEntry } from './entries';
+import { resetCurrentEntry, clearEntries } from './entries';
 
 import type { Info } from '../types/UserType';
 
@@ -42,6 +42,7 @@ export const userLogOut = () => async (dispatch: any) => {
     dispatch(removeUser());
     dispatch(resetData());
     dispatch(resetCurrentEntry());
+    dispatch(clearEntries());
 
     // Redirect to login
     dispatch(routerActions.push('/login'));
