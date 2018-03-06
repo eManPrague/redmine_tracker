@@ -33,7 +33,7 @@ window.onerror = (error) => {
 const initialState = Immutable.fromJS(getInitialStateRenderer());
 const store = configureStore(initialState, 'renderer');
 
-// Initialize renderer process 
+// Initialize renderer process
 const ipcApi = new IpcApiRenderer(store);
 ipcApi.bind();
 

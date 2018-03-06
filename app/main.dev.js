@@ -77,7 +77,7 @@ if (debugMode === true) {
 }
 
 app.on('window-all-closed', () => {
-  if (app.isQuiting) {
+  if (process.platform !== 'darwin') {
     app.quit();
 
     if (trayBuilder) {

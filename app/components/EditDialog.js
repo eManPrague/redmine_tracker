@@ -9,7 +9,7 @@ import { ipcRenderer as ipc } from 'electron';
 import { fetchProjects } from '../actions/projects';
 import { fetchIssues } from '../actions/issues';
 import { fetchActivities } from '../actions/activities';
-import { updateEntry } from '../actions/entries';
+import { updateEntry, syncEntry } from '../actions/entries';
 
 import {
   CLOSE_EDIT_ENTRY
@@ -32,6 +32,7 @@ type Props = {
   activities: Immutable.Map<string, Immutable.Map<number, string>>,
   loadActivities: (project: string) => void,
   updateEntry: (index: number, entry: Entry) => void,
+  syncEntry: (index: number) => void,
   entryIndex: number,
   currentEntry: Entry
 };
@@ -176,6 +177,15 @@ class EditDialog extends Component<Props, Entry> {
     });
   }
 
+  handleSaveAndSynchronize = () => {
+    this.props.updateEntry(
+      this.props.entryIndex,
+      this.state
+    );
+    this.props.syncEntry(this.props.entryIndex);
+    this.closeWindow();
+  }
+
   handleSave = () => {
     // TODO: Validate data
     this.props.updateEntry(
@@ -270,6 +280,9 @@ class EditDialog extends Component<Props, Entry> {
         </div>
 
         <div className={styles.actions}>
+          <button className={'primary'} onClick={this.handleSaveAndSynchronize}>
+            Save & Synchronize
+          </button>
           <button className={'primary'} onClick={this.handleSave}>
             Save
           </button>
@@ -304,6 +317,9 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
   updateEntry: (index: number, entry: Entry): void => {
     dispatch(updateEntry(index, entry));
+  },
+  syncEntry: (index: number): void => {
+    dispatch(syncEntry(index));
   }
 });
 
