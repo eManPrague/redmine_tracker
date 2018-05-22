@@ -1,7 +1,7 @@
 {
   "name": "redmine-tracker",
   "productName": "RedmineTracker",
-  "version": "1.0.0-rc11",
+  "version": "1.0.1-rc1",
   "description": "Redmine time tracker.",
   "author": {
     "name": "Jan Strnadek",
