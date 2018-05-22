@@ -22,10 +22,10 @@ export default class MenuBuilder {
   }
 
   /**
-   * 
+   *
    * Return if platform is windows or mac (usefull for updater, which does not work on linux).
-   * 
-   * @returns {boolean} 
+   *
+   * @returns {boolean}
    * @memberof MenuBuilder
    */
   static windowsOrMac(): boolean {
@@ -35,7 +35,7 @@ export default class MenuBuilder {
   /**
    *  Build application menu.
    *
-   * @returns 
+   * @returns
    * @memberof MenuBuilder
    */
   buildMenu() {

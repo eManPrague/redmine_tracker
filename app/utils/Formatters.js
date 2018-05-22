@@ -7,10 +7,10 @@ export const DATE_TIME_INPUT_FORMAT = 'YYYY-MM-DDTHH:mm';
 export const DATE_FORMAT = 'DD.MM.YYYY';
 
 /**
- * 
+ *
  * Format time to readable form.
- * 
- * @param {number} unix 
+ *
+ * @param {number} unix
  * @param {string} format
  * @returns Formatted time
  */
@@ -24,7 +24,7 @@ export const formatDateTime = (unix: number | void, format: string = DATE_TIME_F
 
 /**
  * Parse date time to unix timestamp.
- * 
+ *
  * @param {string} dateTime Date time in human readable form.
  * @param {string} format
  * @return {number} Unix timestamp
@@ -39,7 +39,7 @@ export const parseDateTime = (dateTime: string | void, format: string = DATE_TIM
 
 /**
  * Format date to readable form.
- * 
+ *
  * @param {number} unix
  * @return Formatted date
  */
@@ -53,7 +53,7 @@ export const formatDate = (unix: number | void): string => {
 
 /**
  * Parse date to unix timestamp.
- * 
+ *
  * @param {string} date Date in human readable form.
  * @return {number} Unix timestamp
  */
@@ -67,8 +67,8 @@ export const parseDate = (date: string | void): number => {
 
 /**
  * Format miliseconds diff to readable form.
- * 
- * @param {number} unix 
+ *
+ * @param {number} unix
  * @returns String Formatted diff
  */
 export const formatDiff = (unix: number): string => {

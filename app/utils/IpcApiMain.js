@@ -19,9 +19,9 @@ export default class IpcApiMain {
 
   /**
    * Constructor.
-   * 
-   * @param {ReduxStore} store 
-   * @param {ElectronLog} log 
+   *
+   * @param {ReduxStore} store
+   * @param {ElectronLog} log
    */
   constructor(store) {
     this.store = store;
@@ -38,9 +38,9 @@ export default class IpcApiMain {
 
   /**
    * Send data to all objects.
-   * 
-   * @param {String} action 
-   * @param {Any} object 
+   *
+   * @param {String} action
+   * @param {Any} objectp
    */
   static sendToAll(action, object) {
     log.info(`Send ${action} on ${JSON.stringify(object)}`);

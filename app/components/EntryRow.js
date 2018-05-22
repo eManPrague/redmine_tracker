@@ -65,8 +65,8 @@ class EntryRow extends Component<Props, State> {
 
   /**
    * Open context menu for table row.
-   * 
-   * @param {any} e 
+   *
+   * @param {any} e
    */
   /* eslint-disable class-methods-use-this */
   openContextMenu = (e: any) => {
@@ -165,7 +165,7 @@ class EntryRow extends Component<Props, State> {
 
   /**
    * Render row.
-   * @returns 
+   * @returns
    */
   render() {
     const entry = this.props.entry;

@@ -21,11 +21,11 @@ class TrackInfo extends Component<Props> {
   props: Props;
 
   openIssue = () => {
-    /* eslint-disable flowtype-errors/show-errors */ 
-    /* eslint-disable no-undef */ 
+    /* eslint-disable flowtype-errors/show-errors */
+    /* eslint-disable no-undef */
     shell.openExternal(CONFIG.bugs.url);
-    /* eslint-enable flowtype-errors/show-errors */ 
-    /* eslint-enable no-undef */ 
+    /* eslint-enable flowtype-errors/show-errors */
+    /* eslint-enable no-undef */
   };
 
   openHistory = () => {
@@ -44,23 +44,23 @@ class TrackInfo extends Component<Props> {
     let itemError = null;
 
     if (itemCount > 0) {
-      /* eslint-disable react/no-unescaped-entities */ 
+      /* eslint-disable react/no-unescaped-entities */
       itemError = (
         <div className={styles.itemError} onClick={this.openHistory} role="presentation">
           You have <strong>{itemCount}</strong> not synchronized entries!
         </div>
       );
-      /* eslint-enable react/no-unescaped-entities */ 
+      /* eslint-enable react/no-unescaped-entities */
     } else {
-      /* eslint-disable flowtype-errors/show-errors */ 
-      /* eslint-disable no-undef */ 
+      /* eslint-disable flowtype-errors/show-errors */
+      /* eslint-disable no-undef */
       itemError = (
         <div className={styles.itemInfo}>
           Redmine Tracker {CONFIG.version}, <span role="presentation" className={styles.openIssue} onClick={this.openIssue}>Open Issue</span>
         </div>
       );
-      /* eslint-enable flowtype-errors/show-error */ 
-      /* eslint-enable no-undef */ 
+      /* eslint-enable flowtype-errors/show-error */
+      /* eslint-enable no-undef */
     }
 
     return (

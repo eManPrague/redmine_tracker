@@ -34,7 +34,7 @@ const initialState = Immutable.fromJS(getInitialStateRenderer());
 const history = createHashHistory();
 const store = configureStore(initialState, 'renderer', history);
 
-// Initialize renderer process 
+// Initialize renderer process
 const ipcApi = new IpcApiRenderer(store);
 ipcApi.bind();
 
