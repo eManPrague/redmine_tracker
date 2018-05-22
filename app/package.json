@@ -11,6 +11,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "keytar-prebuild": "^4.0.4"
+    "keytar": "^4.2.1"
   }
 }
