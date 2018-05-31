@@ -185,7 +185,7 @@ class RedmineClient {
     const timeEntry = {
       time_from_hours: moment.unix(entry.startTime).format('HH:mm'),
       time_to_hours: moment.unix(entry.endTime).format('HH:mm'),
-      hours,
+      original_hours: hours,
       spent_on: moment.unix(entry.endTime).format('YYYY-MM-DD'),
       comments: entry.description,
       activity_id: entry.activity
