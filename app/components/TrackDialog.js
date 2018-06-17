@@ -48,7 +48,8 @@ type Props = {
 // State
 type State = {
   filterMine: boolean,
-  syncNow: boolean
+  syncNow: boolean,
+  descriptionText: string
 };
 
 class TrackDialog extends Component<Props, State> {
@@ -63,7 +64,8 @@ class TrackDialog extends Component<Props, State> {
 
   state = {
     filterMine: true,
-    syncNow: true
+    syncNow: true,
+    descriptionText: ''
   };
 
   props: Props;
@@ -96,6 +98,17 @@ class TrackDialog extends Component<Props, State> {
 
       if (!newProps.issues.has(currentProject)) {
         this.props.loadIssues(currentProject);
+      }
+    }
+
+    // After click on "continue entry", we want to fill
+    // textarea also!
+    if (newProps.currentEntry) {
+      const desc = newProps.currentEntry.get('description');
+      if (desc && desc !== this.state.descriptionText) {
+        this.setState({
+          descriptionText: desc
+        });
       }
     }
   }
@@ -215,13 +228,10 @@ class TrackDialog extends Component<Props, State> {
   }
 
   resetDescription(): void {
-    if (this.description) {
-      this.description.value = '';
-    }
-  }
-
-  setDescription = (ref: ?HTMLTextAreaElement) => {
-    this.description = ref;
+    console.log('RESET DESCRIPTION');
+    this.setState({
+      descriptionText: ''
+    });
   }
 
   handleEnter = (event) => {
@@ -309,7 +319,14 @@ class TrackDialog extends Component<Props, State> {
         />
 
         <div className="input_field">
-          <textarea name="description" ref={this.setDescription} placeholder="Description" defaultValue={description} maxLength="255" onChange={this.descriptionChange} onKeyPress={this.handleEnter} />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={this.state.descriptionText}
+            maxLength="255"
+            onChange={this.descriptionChange}
+            onKeyPress={this.handleEnter}
+          />
         </div>
 
         <Checkbox label="Filter assigned to me" value={this.state.filterMine} id="assigned_to_id" onChange={this.assignedToChange} />
