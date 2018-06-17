@@ -24,11 +24,13 @@ export default function configureStore(initialState, scope = 'main', history = n
   middleware.push(promise);
 
   // Logging
-  const logger = createLogger({
-    level: scope === 'main' ? undefined : 'info',
-    collapsed: true,
-  });
-  middleware.push(logger);
+  if (process.env.NODE_ENV === 'development') {
+    const logger = createLogger({
+      level: scope === 'main' ? undefined : 'info',
+      collapsed: true,
+    });
+    middleware.push(logger);
+  }
 
   if (scope === 'renderer') {
     const browserMiddleware = routerMiddleware(history);
