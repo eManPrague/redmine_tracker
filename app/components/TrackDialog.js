@@ -59,7 +59,8 @@ class TrackDialog extends Component<Props, State> {
   // The same thing is in UpdateTimer for ms property.
   static defaultProps = {
     filterMine: true,
-    syncNow: true
+    syncNow: true,
+    descriptionText: ''
   };
 
   state = {
@@ -228,7 +229,6 @@ class TrackDialog extends Component<Props, State> {
   }
 
   resetDescription(): void {
-    console.log('RESET DESCRIPTION');
     this.setState({
       descriptionText: ''
     });
