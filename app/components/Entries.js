@@ -3,9 +3,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import shortid from 'shortid';
+import moment from 'moment';
+
+// Others
+import { formatDate } from '../utils/Formatters';
 
 // Local components & actions
 import EntryRow from './EntryRow';
+import TotalRow from './TotalRow';
 import * as entryActions from '../actions/entries';
 
 // Types
@@ -57,19 +62,46 @@ class Entries extends Component<Props> {
         </div>
       );
     } else {
-      const entryData = entries.map((entry, index) => (
-        <EntryRow
-          index={index}
-          projects={projects}
-          activities={activities}
-          entry={entry.toJS()}
-          currentEntry={currentEntry.toJS()}
-          syncEntry={syncEntry}
-          deleteEntry={deleteEntry}
-          continueEntry={continueEntry}
-          key={`entry_${shortid.generate()}`}
-        />
-      ));
+      const entryData = [];
+
+      let lastDay: string = '';
+      let total: number = 0;
+
+      entries.forEach((entry, index) => {
+        const date = formatDate(entry.get('startTime'));
+
+        if ((lastDay === '') || (lastDay !== date)) {
+          if (lastDay !== '') {
+            entryData.push(
+              <TotalRow date={lastDay} total={total} key={`total_row_${shortid.generate()}`} />
+            );
+          }
+
+          total = 0;
+          lastDay = date;
+        }
+
+        total += entry.get('endTime') - entry.get('startTime');
+
+        const row = (
+          <EntryRow
+            index={index}
+            projects={projects}
+            activities={activities}
+            entry={entry.toJS()}
+            currentEntry={currentEntry.toJS()}
+            syncEntry={syncEntry}
+            deleteEntry={deleteEntry}
+            continueEntry={continueEntry}
+            key={`entry_${shortid.generate()}`}
+          />
+        );
+        entryData.push(row);
+      });
+
+      entryData.push(
+        <TotalRow date={lastDay} total={total} />
+      );
 
       entryTable = (
         <div className={styles.entriesContainer}>
