@@ -106,15 +106,14 @@ class TrackDialog extends Component<Props, State> {
     // textarea also!
     if (newProps.currentEntry) {
       const desc = newProps.currentEntry.get('description');
-      if (desc && desc !== this.state.descriptionText) {
+
+      if (desc != null) {
         this.setState({
           descriptionText: desc
         });
       }
     }
   }
-
-  description: ?HTMLTextAreaElement;
 
   projectChange = (project: ?{ value: string, label: string }) => {
     let data;
@@ -244,7 +243,7 @@ class TrackDialog extends Component<Props, State> {
   }
 
   render() {
-    const projects: Array<{value: string, label: string}> = this.props.projects.toJSON();
+    let projects: Array<{value: string, label: string, favorite: boolean}> = this.props.projects.toJSON();
     const issues: Array<{value: number, label: string}> = [];
     const activities: Array<{value: number, label: string}> = [];
 
@@ -255,7 +254,6 @@ class TrackDialog extends Component<Props, State> {
       project,
       issue,
       activity,
-      description,
       startTime
     } = this.props.currentEntry.toJS();
 
@@ -269,6 +267,19 @@ class TrackDialog extends Component<Props, State> {
         }
       });
     }
+
+    // Sort projects favorites first than by alphabet
+    projects = projects.sort((a, b) => {
+      if (a.favorite === true && b.favorite === false) {
+        return -1;
+      } else if (a.favorite === false && b.favorite === true) {
+        return 1;
+      } else if (a.label < b.label) {
+        return -1;
+      }
+
+      return 1;
+    });
 
     if (this.props.activities.has(project)) {
       // Transform issues into usable object for select

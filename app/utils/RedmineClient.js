@@ -159,7 +159,9 @@ class RedmineClient {
       .forEach((list) => {
         list.forEach((prj) => {
           response.push({
-            value: prj.get('identifier'), label: prj.get('name')
+            value: prj.get('identifier'),
+            label: prj.get('name'),
+            favorite: prj.has('favorite') && prj.get('favorite')
           });
         });
       });
