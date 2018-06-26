@@ -1,7 +1,7 @@
 {
   "name": "redmine-tracker",
   "productName": "Redmine Tracker",
-  "version": "1.1.0-rc2",
+  "version": "1.1.0-rc3",
   "description": "Redmine time tracker.",
   "main": "./main.prod.js",
   "author": {
