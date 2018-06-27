@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import shortid from 'shortid';
-import moment from 'moment';
 
 // Others
 import { formatDate } from '../utils/Formatters';
@@ -53,6 +52,11 @@ class Entries extends Component<Props> {
       activities
     } = this.props;
 
+    let index = 0;
+    const sortedEntries = entries
+      .map((x) => x.set('index', index++))
+      .sort((a, b) => b.get('startTime') - a.get('startTime'));
+
     let entryTable = null;
 
     if (entries.size === 0) {
@@ -67,7 +71,7 @@ class Entries extends Component<Props> {
       let lastDay: string = '';
       let total: number = 0;
 
-      entries.forEach((entry, index) => {
+      sortedEntries.forEach((entry) => {
         const date = formatDate(entry.get('startTime'));
 
         if ((lastDay === '') || (lastDay !== date)) {
@@ -85,7 +89,7 @@ class Entries extends Component<Props> {
 
         const row = (
           <EntryRow
-            index={index}
+            index={entry.get('index')}
             projects={projects}
             activities={activities}
             entry={entry.toJS()}
@@ -100,7 +104,7 @@ class Entries extends Component<Props> {
       });
 
       entryData.push(
-        <TotalRow date={lastDay} total={total} />
+        <TotalRow date={lastDay} total={total} key={`total_row_${shortid.generate()}`} />
       );
 
       entryTable = (

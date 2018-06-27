@@ -8,6 +8,7 @@ import moment from 'moment';
 // Local components
 import UpdateTimer from './UpdateTimer';
 import Checkbox from '../inputs/Checkbox';
+import ProjectOption from './ProjectOption';
 
 // Actions
 import { fetchProjects } from '../actions/projects';
@@ -308,6 +309,7 @@ class TrackDialog extends Component<Props, State> {
           value={project}
           options={projects}
           onChange={this.projectChange}
+          optionComponent={ProjectOption}
           placeholder="Select project"
         />
 

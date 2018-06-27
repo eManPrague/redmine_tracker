@@ -1,0 +1,9 @@
+.favorite_icon {
+  background-image: url('assets/images/fav.png');
+  background-size: 20px;
+  width: 20px;
+  line-height: 20px;
+  height: 100%;
+  display: inline-block;
+  margin-right: 5px;
+}
