@@ -63,6 +63,11 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  console.log(reason.stack);
+});
+
 // Determine to DEBUG prod
 const debugMode = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD;
 
@@ -286,7 +291,14 @@ const createMainWindow = async () => {
   }
 
   // Get window bounds
-  const bounds = await SettingsStorage.get('windowBounds', {});
+  let bounds = {}
+  try
+  {
+    bounds = await SettingsStorage.get('windowBounds', {});
+  } catch (exception) {
+    bounds = {};
+  }
+
   const windowSettings = {
     show: false,
     title: 'Redmine Tracker',
