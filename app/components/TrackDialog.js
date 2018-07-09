@@ -188,8 +188,14 @@ class TrackDialog extends Component<Props, State> {
   }
 
   descriptionChange = (evt: SyntheticInputEvent<>) => {
+    const text = evt.target.value;
+
+    this.setState({
+      descriptionText: text
+    });
+
     this.props.updateCurrentEntry({
-      description: evt.target.value
+      description: text
     });
   }
 
