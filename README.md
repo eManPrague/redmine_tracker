@@ -8,7 +8,7 @@
     <img src="https://raw.githubusercontent.com/eManPrague/redmine_tracker/master/readme/screenshots.png" alt="Tracker Icon" align="center" />
 </p>
 
-## Installation 1.0.0 Release Candidate
+## Installation 1.1.0
 
 Go to [releases page](https://github.com/eManPrague/redmine_tracker/releases) and select a version according to your operating system. After the installation fills in your Redmine server and API token, you can find your API token on `My account` page.
 
@@ -19,6 +19,14 @@ For Linux it is necessary to install `libsecret` library. This library is used i
 ```
 sudo apt-get install libsecret-1-dev
 ```
+
+### Requirements for OS X
+
+No additional requirements, but application use keychain to store redmine server API token. Your password will be required.
+
+### Requirements for Windows
+
+No.
 
 ### Requirements for Redmine
 
