@@ -1,20 +1,21 @@
 /**
  * Webpack config for production electron main process
  */
-
-import webpack from 'webpack';
-import merge from 'webpack-merge';
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import baseConfig from './webpack.config.base';
-import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const baseConfig = require('./webpack.config.base');
+const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 CheckNodeEnv('production');
 
-export default merge.smart(baseConfig, {
+module.exports = merge.smart(baseConfig, {
   devtool: 'source-map',
   target: 'electron-main',
-  entry: './app/main.dev',
+  entry: './app/main.dev.ts',
+
+  mode: 'production',
 
   // 'main.js' in root
   output: {

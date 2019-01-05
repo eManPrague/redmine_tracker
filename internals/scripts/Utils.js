@@ -1,9 +1,7 @@
-// @flow
-
 /**
  * Slice keys from object.
  */
-const sliceKeys = (obj: any, keys: Array<string>) => {
+module.exports = function sliceKeys(obj, keys) {
   const reduced = {};
 
   keys.forEach(key => {
@@ -12,5 +10,3 @@ const sliceKeys = (obj: any, keys: Array<string>) => {
 
   return JSON.stringify(reduced);
 };
-
-export default sliceKeys;

@@ -2,21 +2,22 @@
  * Build config for electron renderer process
  */
 
-import path from 'path';
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import merge from 'webpack-merge';
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
-import baseConfig from './webpack.config.base';
-import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
-import sliceKeys from './internals/scripts/Utils';
+const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const baseConfig = require('./webpack.config.base');
+const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const sliceKeys = require('./internals/scripts/Utils');
 
 CheckNodeEnv('production');
 
-export default merge.smart(baseConfig, {
+module.exports = merge.smart(baseConfig, {
   devtool: 'source-map',
   target: 'electron-renderer',
+  mode: 'production',
 
   output: {
     path: path.join(__dirname, 'app/dist'),

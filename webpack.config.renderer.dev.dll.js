@@ -2,20 +2,22 @@
  * Builds the DLL for development electron renderer process
  */
 
-import webpack from 'webpack';
-import path from 'path';
-import { dependencies } from './package.json';
-import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
+const path = require('path');
+const webpack = require('webpack');
+const dependencies = require('./package.json').dependencies;
+const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
 
 CheckNodeEnv('development');
 
 const dist = path.resolve(process.cwd(), 'dll');
 
-export default {
+module.exports = {
   context: process.cwd(),
   devtool: 'eval',
   target: 'electron-renderer',
   externals: ['fsevents', 'crypto-browserify'],
+
+  mode: 'development',
 
   /**
    * @HACK: Copy and pasted from renderer dev config. Consider merging these

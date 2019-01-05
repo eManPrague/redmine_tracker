@@ -7,16 +7,16 @@
  * https://webpack.js.org/concepts/hot-module-replacement/
  */
 
-import path from 'path';
-import fs from 'fs';
-import webpack from 'webpack';
-import chalk from 'chalk';
-import merge from 'webpack-merge';
-import { spawn, execSync } from 'child_process';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import baseConfig from './webpack.config.base';
-import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
-import sliceKeys from './internals/scripts/Utils';
+const fs = require('fs');
+const chalk = require('chalk');
+const spawn = require('child_process').spawn;
+const execSync = require('child_process').execSync;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const baseConfig = require('./webpack.config.base');
+const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const sliceKeys = require('./internals/scripts/Utils');
 
 CheckNodeEnv('development');
 
@@ -36,9 +36,8 @@ if (!(fs.existsSync(dll) && fs.existsSync(manifest))) {
   execSync('npm run build-dll');
 }
 
-export default merge.smart(baseConfig, {
+module.exports = merge.smart(baseConfig, {
   devtool: 'inline-source-map',
-
   target: 'electron-renderer',
 
   entry: {
@@ -46,19 +45,19 @@ export default merge.smart(baseConfig, {
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, 'app/index.js'),
+      path.join(__dirname, 'app/index.ts'),
     ],
     entries: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, 'app/entries.js'),
+      path.join(__dirname, 'app/entries.ts'),
     ],
     edit: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, 'app/edit.js'),
+      path.join(__dirname, 'app/edit.ts'),
     ]
   },
 
@@ -69,21 +68,10 @@ export default merge.smart(baseConfig, {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true,
-            plugins: [
-              // Here, we include babel plugins that are only required for the
-              // renderer process. The 'transform-*' plugins must be included
-              // before react-hot-loader/babel
-              'transform-class-properties',
-              'transform-es2015-classes',
-              'react-hot-loader/babel'
-            ],
-          }
+          loader: 'ts-loader'
         }
       },
       {

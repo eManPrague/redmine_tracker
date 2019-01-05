@@ -2,33 +2,33 @@
  * Base webpack config used across other specific configs
  */
 
-import path from 'path';
-import webpack from 'webpack';
-import { dependencies as externals } from './app/package.json';
+const path = require('path');
+const webpack = require('webpack');
+const externals = require('./app/package.json').dependencies;
 
-export default {
+module.exports = {
   externals: Object.keys(externals || {}),
+  mode: 'development',
 
   module: {
     rules: [{
-      test: /\.jsx?$/,
+      test: /\.(ts|tsx)$/,
       exclude: /node_modules/,
       use: {
-        loader: 'babel-loader',
-        options: {
-          cacheDirectory: true
-        }
+        loader: require.resolve('ts-loader')
       }
     }, {
       test: /\.node$/,
-      use: 'node-loader'
+      use: {
+        loader: require.resolve('node-loader')
+      }
     }]
   },
 
   entry: {
-    app: ['index.js'],
-    entries: ['entries.js'],
-    edit: ['edit.js']
+    app: ['index.ts'],
+    entries: ['entries.ts'],
+    edit: ['edit.ts']
   },
 
   output: {
