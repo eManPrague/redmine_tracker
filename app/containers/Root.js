@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router/immutable'
 
 import Routes from '../routes';
 

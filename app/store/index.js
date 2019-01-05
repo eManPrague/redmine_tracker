@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
+import { routerMiddleware, connectRouter } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
 import createLogger from 'redux-logger';
@@ -66,11 +66,15 @@ export default function configureStore(initialState, scope = 'main', history = n
   }
 
   // Create Store
-  const store = createStore(rootReducer, initialState, enhancer);
+  const store = createStore(
+    connectRouter(history)(rootReducer),
+    initialState,
+    enhancer
+  );
 
   if (module.hot) {
     module.hot.accept('../reducers', () =>
-      store.replaceReducer(require('../reducers')) // eslint-disable-line global-require
+      store.replaceReducer(connectRouter(history)(require('../reducers'))) // eslint-disable-line global-require
     );
   }
 

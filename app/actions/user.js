@@ -1,6 +1,6 @@
 // @flow
 import { ipcRenderer as ipc } from 'electron';
-import { routerActions } from 'react-router-redux';
+import { push } from 'connected-react-router'
 import { isUri } from 'valid-url';
 
 import {
@@ -45,7 +45,7 @@ export const userLogOut = () => async (dispatch: any) => {
     dispatch(clearEntries());
 
     // Redirect to login
-    dispatch(routerActions.push('/login'));
+    dispatch(push('/login'));
   } catch (e) {
     electronAlert(e.message);
   }

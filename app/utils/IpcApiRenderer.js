@@ -1,5 +1,5 @@
 import { ipcRenderer as ipc } from 'electron';
-import { routerActions } from 'react-router-redux';
+import { push } from 'connected-react-router'
 
 import * as actions from '../constants/ipc';
 
@@ -27,7 +27,7 @@ export default class IpcApiRenderer {
     if (data.error) {
       this.store.dispatch(removeUser());
     } else {
-      this.store.dispatch(routerActions.push('/'));
+      this.store.dispatch(push('/'));
     }
 
     this.store.dispatch(hideLoading('user'));
