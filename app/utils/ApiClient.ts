@@ -1,4 +1,3 @@
-// @flow
 import axios from 'axios';
 import log from 'electron-log';
 import moment from 'moment';

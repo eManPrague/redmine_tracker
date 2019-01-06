@@ -1,42 +1,22 @@
-// @flow
 import React, { Component } from 'react';
 
-// JS imports
-import { userLogIn } from '../actions/user';
-
-// Styles
 import styles from './Login.css';
 
-type Props = {
-  userLogIn: (server: string, token: string) => void
-};
-
-type State = {
-  server: string,
-  token: string
-};
+interface LoginState {
+	server: string;
+	token: string;
+}
 
 // Login component
-class Login extends Component<Props, State> {
-  static defaultProps = {
-    server: '',
-    token: ''
-  };
-
-  /* eslint-disable flowtype-errors/show-errors */
-  /* eslint-disable no-undef */
+export default class Login extends Component<{}, LoginState> {
   static versionInfo(): string {
     return `Redmine Tracker ${CONFIG.version}`;
-  }
-  /* eslint-enable flowtype-errors/show-errors */
-  /* eslint-enable no-undef */
+	}
 
   state = {
     server: '',
     token: ''
   };
-
-  props: Props;
 
   loginBtn = () => {
     this.props.userLogIn(

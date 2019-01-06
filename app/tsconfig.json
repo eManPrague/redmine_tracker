@@ -19,23 +19,21 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "outDir": "dist"
   },
   "files": [
-    "app/index.tsx",
-    "app/entries.tsx",
-    "app/edit.tsx",
-    "app/main.dev.ts"
+    "index.tsx",
+    "entries.tsx",
+    "edit.tsx",
+    "main.dev.ts"
   ],
   "include": [
-    "app/**/*.ts",
-    "app/**/*.tsx",
-    "test/**/*.ts",
-    "test/**/*.tsx",
-    "node_modules/@types/**/*.d.ts"
+    "**/*.ts",
+    "**/*.tsx",
+    "../node_modules/@types/**/*.d.ts"
   ],
   "exclude": [
     "dist"
