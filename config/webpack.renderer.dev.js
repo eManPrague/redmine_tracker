@@ -45,19 +45,19 @@ module.exports = merge.smart(baseConfig, {
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, '..', 'app/index.ts'),
+      path.join(__dirname, '..', 'app/index.tsx'),
     ],
     entries: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, '..', 'app/entries.ts'),
+      path.join(__dirname, '..', 'app/entries.tsx'),
     ],
     edit: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, '..', 'app/edit.ts'),
+      path.join(__dirname, '..', 'app/edit.tsx'),
     ]
   },
 

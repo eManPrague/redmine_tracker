@@ -48,6 +48,8 @@ app/style.css.map
 dist
 main.js
 main.js.map
+app/**/*.js
+app/**/*.js.map
 
 .idea
 npm-debug.log.*

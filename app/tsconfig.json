@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "lib": ["dom", "es6", "dom.iterable", "scripthost"],
+    "types": ["node"],
+    "typeRoots": ["../node_modules/@types", "../node_modules/electron"],
+
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "sourceMap": true,
+
+    "outDir": "."
+  },
+  "files": ["./main.dev.ts"]
+}
