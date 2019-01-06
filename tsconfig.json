@@ -11,7 +11,6 @@
       "scripthost"
     ],
     "types": [],
-
     "alwaysStrict": true,
     "strictNullChecks": false,
     "noImplicitAny": true,
@@ -22,6 +21,7 @@
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
+    "rootDir": "app",
     "outDir": "dist"
   },
   "files": [

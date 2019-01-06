@@ -128,8 +128,11 @@
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/electron-json-storage": "^4.0.0",
     "@types/react": "^16.7.18",
     "@types/react-dom": "^16.0.11",
+    "@types/semver": "^5.5.0",
+    "@types/valid-url": "^1.0.2",
     "asar": "^0.14.3",
     "boiler-room-custodian": "^0.6.1",
     "concurrently": "^3.1.0",
