@@ -7,10 +7,10 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const baseConfig = require('./webpack.config.base');
-const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const baseConfig = require('./webpack.base');
+const CheckNodeEnv = require('./scripts/CheckNodeEnv');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const sliceKeys = require('./internals/scripts/Utils');
+const sliceKeys = require('./scripts/Utils');
 
 CheckNodeEnv('production');
 
@@ -20,7 +20,7 @@ module.exports = merge.smart(baseConfig, {
   mode: 'production',
 
   output: {
-    path: path.join(__dirname, 'app/dist'),
+    path: path.join(__dirname, '..', 'app/dist'),
     publicPath: '../dist/',
     filename: 'renderer.[name].prod.js'
   },

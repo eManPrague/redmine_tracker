@@ -4,7 +4,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const externals = require('./app/package.json').dependencies;
+const externals = require('../app/package.json').dependencies;
 
 module.exports = {
   externals: Object.keys(externals || {}),
@@ -14,9 +14,7 @@ module.exports = {
     rules: [{
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,
-      use: {
-        loader: require.resolve('ts-loader')
-      }
+      use: [ { loader: require.resolve('ts-loader') }]
     }, {
       test: /\.node$/,
       use: {
@@ -32,7 +30,7 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, 'app'),
+    path: path.join(__dirname, '..', 'app'),
     filename: 'renderer.[name].dev.js',
     // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2'

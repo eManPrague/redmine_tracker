@@ -4,8 +4,8 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const baseConfig = require('./webpack.config.base');
-const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const baseConfig = require('./webpack.base');
+const CheckNodeEnv = require('./scripts/CheckNodeEnv');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 CheckNodeEnv('production');
@@ -13,14 +13,14 @@ CheckNodeEnv('production');
 module.exports = merge.smart(baseConfig, {
   devtool: 'source-map',
   target: 'electron-main',
-  entry: './app/main.dev.ts',
+  entry: './app/main.dev',
 
   mode: 'production',
 
   // 'main.js' in root
   output: {
     path: __dirname,
-    filename: './app/main.prod.js'
+    filename: '../app/main.prod.js'
   },
 
   plugins: [
