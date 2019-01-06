@@ -7,6 +7,7 @@
  * https://webpack.js.org/concepts/hot-module-replacement/
  */
 
+const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
 const spawn = require('child_process').spawn;
@@ -22,7 +23,6 @@ CheckNodeEnv('development');
 
 const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
-
 const dll = path.resolve(process.cwd(), 'dll');
 const manifest = path.resolve(dll, 'renderer.json');
 

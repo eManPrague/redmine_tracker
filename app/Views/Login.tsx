@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import styles from './Login.css';
 
@@ -8,7 +8,7 @@ interface LoginState {
 }
 
 // Login component
-export default class Login extends Component<{}, LoginState> {
+export default class Login extends React.Component<{}, LoginState> {
   static versionInfo(): string {
     return `Redmine Tracker ${CONFIG.version}`;
 	}

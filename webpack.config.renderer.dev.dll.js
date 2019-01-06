@@ -2,10 +2,10 @@
  * Builds the DLL for development electron renderer process
  */
 
-const path = require('path');
 const webpack = require('webpack');
 const dependencies = require('./package.json').dependencies;
 const CheckNodeEnv = require('./internals/scripts/CheckNodeEnv');
+const path = require('path');
 
 CheckNodeEnv('development');
 
@@ -157,7 +157,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.jsx', '.json'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     modules: [
       path.join(__dirname, 'app'),
       'node_modules',
