@@ -1,12 +1,7 @@
 // @flow
-import request from 'request';
-import Immutable from 'immutable';
+import axios from 'axios';
+import log from 'electron-log';
 import moment from 'moment';
-import log from 'electron-log'; // eslint-disable-line flowtype-errors/show-errors
-
-// Types
-import type { User } from '../types/UserType';
-import type { Issue, Entry } from '../types/RedmineTypes';
 
 log.transports.console.level = 'debug';
 log.transports.file.level = 'debug';

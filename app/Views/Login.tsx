@@ -1,6 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 // JS imports
 import { userLogIn } from '../actions/user';
@@ -89,11 +88,3 @@ class Login extends Component<Props, State> {
     );
   }
 }
-
-const mapDispatchToProps = (dispatch: any) => ({
-  userLogIn: (server, token) => {
-    dispatch(userLogIn(server, token));
-  }
-});
-
-export default connect(undefined, mapDispatchToProps)(Login);

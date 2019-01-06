@@ -1,11 +1,11 @@
 // @flow
-import path from 'path';
 import {
-  Tray,
+  app,
   Menu,
   nativeImage,
-  app
+  Tray
 } from 'electron';
+import path from 'path';
 
 import { changeIcon } from '../actions/ui';
 
@@ -14,13 +14,17 @@ export const WHITE_ICON = 0;
 export const BLACK_ICON = 1;
 
 export default class TrayBuilder {
+  static generateIcon(color: string, active: string): nativeImage {
+    return nativeImage.createFromPath(path.join(__dirname, `../assets/images/tray_${color}${active}.png`));
+	}
+
   store: any;
-  icon: Tray;
+  icon?: Tray;
   active: boolean;
 
   // Both icons
-  normalIcon: Array<typeof nativeImage>;
-  activeIcon: Array<typeof nativeImage>;
+  normalIcon: nativeImage[] = [];
+  activeIcon: nativeImage[] = [];
   activeColor: number;
   openMainWindow: any;
 
@@ -72,10 +76,6 @@ export default class TrayBuilder {
       TrayBuilder.generateIcon('white', '_active'),
       TrayBuilder.generateIcon('black', '_active')
     ];
-  }
-
-  static generateIcon(color: string, active: string): nativeImage {
-    return nativeImage.createFromPath(path.join(__dirname, `../assets/images/tray_${color}${active}.png`));
   }
 
   switchIcon(): void {

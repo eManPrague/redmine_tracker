@@ -2,7 +2,7 @@ import { ipcMain as ipc, webContents, dialog } from 'electron';
 import log from 'electron-log';
 
 import * as actions from '../constants/ipc';
-import redmineClient from '../utils/RedmineClient';
+import redmineClient from './ApiClient';
 
 import { setUser } from '../actions/user';
 import { setProjects } from '../actions/projects';

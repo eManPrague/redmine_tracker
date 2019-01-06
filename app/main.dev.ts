@@ -1,8 +1,8 @@
 import {
   app,
   BrowserWindow,
-  ipcMain as ipc,
-  dialog
+  dialog,
+  ipcMain as ipc
 } from 'electron';
 
 import installExtension, {
@@ -17,19 +17,20 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 
 import {
-  OPEN_ENTRY_WINDOW,
-  ERROR_ALERT,
+  CLOSE_EDIT_ENTRY,
   EDIT_ENTRY,
-  CLOSE_EDIT_ENTRY
+  ERROR_ALERT,
+  OPEN_ENTRY_WINDOW
 } from './constants/dialogs';
 
 import {
-  SERVICE_NAME, ACCOUNT_NAME
+	ACCOUNT_NAME,
+	SERVICE_NAME
 } from './constants/storage';
 
 // Utils
-import IpcApiMain from './utils/IpcApiMain';
 import { defaultRouting, defaultUi } from './utils/DefaultStates';
+import IpcApiMain from './utils/IpcApiMain';
 import SettingsStorage from './utils/SettingsStorage';
 
 // Main window
@@ -47,24 +48,29 @@ log.info(app.getPath('userData'));
 
 // Define auto updater
 autoUpdater.logger = log;
+
+// @ts-ignore
 autoUpdater.logger.transports.file.level = 'debug';
 log.info('App starting...');
 
 // Window, store, history etc. references
-let mainWindow = null;
-let entriesWindow = null;
-let editWindow = null;
-let trayBuilder = null;
-let store = null;
-let ipcApiMain = null;
+let mainWindow: BrowserWindow | null = null;
+let entriesWindow: BrowserWindow | null = null;
+let editWindow: BrowserWindow | null = null;
+let trayBuilder: TrayBuilder | null = null;
+let store: { getState: () => void; subscribe: (arg0: () => Promise<void>) => void; } | null = null;
+let ipcApiMain: IpcApiMain | null = null;
 
 if (process.env.NODE_ENV === 'production') {
+  // tslint:disable-next-line:no-var-requires
   const sourceMapSupport = require('source-map-support'); // eslint-disable-line
   sourceMapSupport.install();
 }
 
 process.on('unhandledRejection', (reason, p) => {
+  // tslint:disable-next-line:no-console
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // tslint:disable-next-line:no-console
   console.log(reason.stack);
 });
 
@@ -73,9 +79,12 @@ const debugMode = process.env.NODE_ENV === 'development' || process.env.DEBUG_PR
 
 if (debugMode === true) {
   log.info('Starting APP in DEBUG MODE!');
+  // tslint:disable-next-line:no-var-requires
   require('electron-debug')(); // eslint-disable-line global-require
+  // tslint:disable-next-line:no-var-requires
   const path = require('path'); // eslint-disable-line
   const p = path.join(__dirname, '..', 'app', 'node_modules'); // eslint-disable-line
+  // tslint:disable-next-line:no-var-requires
   require('module').globalPaths.push(p); // eslint-disable-line
 } else {
   log.info('Starting APP in PRODUCTION MODE');
@@ -94,7 +103,7 @@ app.on('window-all-closed', () => {
 /**
  * IPC window actions.
  */
-ipc.on(EDIT_ENTRY, (event, arg) => {
+ipc.on(EDIT_ENTRY, (_event, arg) => {
   openEditWindow(arg.id);
 });
 
@@ -379,6 +388,6 @@ autoUpdater.on('updateAvailable', (event, releaseNotes, releaseName, releaseDate
 
 // On darwin platform - click on bar icon
 // wil reopen / focus main window.
-app.on('activate', async () => {
+app.on('activate', () => {
   openMainWindow();
 });

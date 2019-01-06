@@ -1,0 +1,36 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-sonarts"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "config/**/*.ts"
+    ]
+  },
+  "rules": {
+    "object-literal-sort-keys": false,
+    "ordered-imports": true,
+    "curly": [
+      true,
+      "ignore-same-line"
+    ],
+    "member-access": [
+      true,
+      "no-public"
+    ],
+    "interface-name": [
+      true,
+      "never-prefix"
+    ],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore"
+    ]
+  }
+}

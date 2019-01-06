@@ -1,5 +1,3 @@
-// @flow
-
 /**
  * This is constants for storage data.
  */

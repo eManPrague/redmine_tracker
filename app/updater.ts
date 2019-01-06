@@ -1,7 +1,7 @@
 import { dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 
-let updater;
+let updater: any;
 autoUpdater.autoDownload = false;
 
 autoUpdater.on('error', (event, error) => {
