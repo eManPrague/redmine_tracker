@@ -8,25 +8,23 @@ const externals = require('../app/package.json').dependencies;
 
 module.exports = {
   externals: Object.keys(externals || {}),
-  mode: 'development',
 
   module: {
     rules: [{
       test: /\.(ts|tsx)$/,
       exclude: /node_modules/,
-      use: [ { loader: require.resolve('ts-loader') }]
+      use: [ {
+        loader: require.resolve('ts-loader'),
+        options: {
+          configFile: '../tsconfig.json'
+        }
+      }]
     }, {
       test: /\.node$/,
       use: {
         loader: require.resolve('node-loader')
       }
     }]
-  },
-
-  entry: {
-    app: ['index.tsx'],
-    entries: ['entries.tsx'],
-    edit: ['edit.tsx']
   },
 
   output: {
@@ -40,11 +38,7 @@ module.exports = {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-    modules: [
-      path.join(__dirname, 'app'),
-      'node_modules',
-    ],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
 
   plugins: [

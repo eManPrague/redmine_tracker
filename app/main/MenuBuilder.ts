@@ -1,13 +1,24 @@
-// @flow
-import { app, Menu, shell, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, MenuItemConstructorOptions, shell } from 'electron';
+
 import checkForUpdates from '../updater';
 
 export default class MenuBuilder {
+  /**
+   *
+   * Return if platform is windows or mac (usefull for updater, which does not work on linux).
+   *
+   * @returns {boolean}
+   * @memberof MenuBuilder
+   */
+  static windowsOrMac(): boolean {
+    return process.platform === 'darwin' || process.platform === 'win32';
+	}
+
   // Default tracking window
   mainWindow: BrowserWindow;
 
   // History entries window
-  entriesWindow: BrowserWindow;
+  entriesWindow?: BrowserWindow;
 
   // Function to open history window
   openEntriesWindow: () => BrowserWindow;
@@ -19,17 +30,6 @@ export default class MenuBuilder {
     this.mainWindow = mainWindow;
     this.openEntriesWindow = openEntriesWindow;
     this.debugMode = debugMode;
-  }
-
-  /**
-   *
-   * Return if platform is windows or mac (usefull for updater, which does not work on linux).
-   *
-   * @returns {boolean}
-   * @memberof MenuBuilder
-   */
-  static windowsOrMac(): boolean {
-    return process.platform === 'darwin' || process.platform === 'win32';
   }
 
   /**
@@ -58,6 +58,7 @@ export default class MenuBuilder {
   }
 
   setupDevelopmentEnvironment() {
+		// @ts-ignore
     this.mainWindow.openDevTools();
     this.mainWindow.webContents.on('context-menu', (e, props) => {
       const { x, y } = props;
@@ -65,8 +66,10 @@ export default class MenuBuilder {
       Menu.buildFromTemplate([{
         label: 'Inspect element',
         click: () => {
+					// @ts-ignore
           this.mainWindow.inspectElement(x, y);
         }
+				// @ts-ignore
       }]).popup(this.mainWindow);
     });
   }
@@ -74,7 +77,7 @@ export default class MenuBuilder {
   openEntries = () => {
     this.entriesWindow = this.openEntriesWindow();
     this.entriesWindow.on('close', () => {
-      this.entriesWindow = null;
+      this.entriesWindow = undefined;
     });
   }
 
@@ -85,18 +88,18 @@ export default class MenuBuilder {
     }
   }
 
-  buildDarwinTemplate() {
+  buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout = {
       label: 'Tracker',
       submenu: [
         { label: 'About Redmine Tracker', selector: 'orderFrontStandardAboutPanel:' },
         { label: 'Check for updates', click: () => { checkForUpdates(this); } },
         { label: 'History', click: () => { this.openEntries(); } },
-        { type: 'separator' },
+        { type: 'separator' as "separator" },
         { label: 'Hide Redmine Tracker', accelerator: 'Command+H', selector: 'hide:' },
         { label: 'Hide Others', accelerator: 'Command+Shift+H', selector: 'hideOtherApplications:' },
         { label: 'Show All', selector: 'unhideAllApplications:' },
-        { type: 'separator' },
+        { type: 'separator' as "separator" },
         { label: 'Quit', accelerator: 'Command+Q', click: () => { app.quit(); } }
       ]
     };
@@ -115,7 +118,7 @@ export default class MenuBuilder {
           selector: 'redo:'
         },
         {
-          type: 'separator'
+          type: 'separator' as "separator"
         },
         {
           label: 'Cut',
@@ -143,7 +146,8 @@ export default class MenuBuilder {
     const subMenuViewDev = {
       label: 'View',
       submenu: [
-        { label: 'Reload', accelerator: 'Command+R', click: () => { this.refreshWindows(); } },
+				{ label: 'Reload', accelerator: 'Command+R', click: () => { this.refreshWindows(); } },
+				// @ts-ignore
         { label: 'Toggle Developer Tools', accelerator: 'Alt+Command+I', click: () => { this.mainWindow.toggleDevTools(); } }
       ]
     };
@@ -172,7 +176,7 @@ export default class MenuBuilder {
     return menu;
   }
 
-  buildDefaultTemplate() {
+  buildDefaultTemplate(): MenuItemConstructorOptions[] {
     const templateDefault = [{
       label: '&File',
       submenu: [{
@@ -217,6 +221,7 @@ export default class MenuBuilder {
         label: 'Toggle &Developer Tools',
         accelerator: 'Alt+Ctrl+I',
         click: () => {
+					// @ts-ignore
           this.mainWindow.toggleDevTools();
         }
       }] : [{

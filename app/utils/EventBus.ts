@@ -1,19 +1,21 @@
 import {
 	ipcMain,
-	ipcRenderer
+	ipcRenderer,
+	webContents
 } from 'electron';
 
 export type HandlerFunction = (...args: any[]) => void;
 
 export type BusType = 'renderer' | 'main';
 
+export const EVENT_BUS_ACTION = '_EVENT_BUS_ACTION';
+
 export class EventBus {
   // Turn on-off debug mode
   static DEBUG_MODE = process.env.NODE_ENV === 'development';
-
 	private handlers: { [event: string]: HandlerFunction[] } = {};
-
 	private type: BusType;
+	private ipc;
 
 	/**
 	 * Bus type.
@@ -21,6 +23,25 @@ export class EventBus {
 	 */
 	constructor(type: BusType = 'main') {
 		this.type = type;
+
+		if (this.type === 'main') {
+			this.ipc = ipcMain;
+		} else {
+			this.ipc = ipcRenderer;
+		}
+
+		this.ipc.on(EVENT_BUS_ACTION, this.receiveEvent);
+	}
+
+	/**
+	 * Accept event through IPC.
+	 */
+	receiveEvent = (id: string, data: { event: string, data: any }) => {
+    if (this.hasEvent(data.event)) {
+      this.handlers[data.event].forEach((fct) => {
+        fct(data.data);
+      });
+    }
 	}
 
   /**
@@ -54,11 +75,14 @@ export class EventBus {
       console.log(`-> EventBus - trigger handler for ${event} ${JSON.stringify(data)}`);
     }
 
-    if (this.hasEvent(event)) {
-      this.handlers[event].forEach((fct) => {
-        fct(data);
-      });
-    }
+		if (this.type === 'main') {
+			// Send to all contents
+			webContents.getAllWebContents().forEach((content) => {
+				content.send(EVENT_BUS_ACTION, { event, data });
+			});
+		} else {
+			this.ipc.send(EVENT_BUS_ACTION, { event, data });
+		}
   }
 
   /**

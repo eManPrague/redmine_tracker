@@ -10,8 +10,8 @@ import installExtension, {
   REDUX_DEVTOOLS
 } from 'electron-devtools-installer';
 
-import Immutable from 'immutable';
-import * as keytar from 'keytar';
+// tslint:disable:no-commented-code
+// import * as keytar from 'keytar';
 
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
@@ -23,22 +23,19 @@ import {
   OPEN_ENTRY_WINDOW
 } from './constants/dialogs';
 
-import {
+/* import {
 	ACCOUNT_NAME,
 	SERVICE_NAME
-} from './constants/storage';
+} from './constants/storage'; */
 
 // Utils
-import { defaultRouting, defaultUi } from './utils/DefaultStates';
-import IpcApiMain from './utils/IpcApiMain';
-import SettingsStorage from './utils/SettingsStorage';
+// import { defaultRouting, defaultUi } from './Utils/DefaultStates';
+// import IpcApiMain from './utils/IpcApiMain';
+// import SettingsStorage from './utils/SettingsStorage';
 
 // Main window
 import MenuBuilder from './main/MenuBuilder';
-import TrayBuilder from './main/Tray';
-
-// Initialize store to share it between windows
-import configureStore from './store';
+// import TrayBuilder from './main/Tray';
 
 // Set level
 log.transports.file.level = 'debug';
@@ -57,9 +54,8 @@ log.info('App starting...');
 let mainWindow: BrowserWindow | null = null;
 let entriesWindow: BrowserWindow | null = null;
 let editWindow: BrowserWindow | null = null;
-let trayBuilder: TrayBuilder | null = null;
-let store: { getState: () => void; subscribe: (arg0: () => Promise<void>) => void; } | null = null;
-let ipcApiMain: IpcApiMain | null = null;
+// let trayBuilder: TrayBuilder | null = null;
+// let ipcApiMain: any = null;
 
 if (process.env.NODE_ENV === 'production') {
   // tslint:disable-next-line:no-var-requires
@@ -75,7 +71,7 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 // Determine to DEBUG prod
-const debugMode = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD;
+const debugMode: boolean = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === "true";
 
 if (debugMode === true) {
   log.info('Starting APP in DEBUG MODE!');
@@ -94,16 +90,16 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
 
-    if (trayBuilder) {
+    /* if (trayBuilder) {
       trayBuilder.close();
-    }
+    } */
   }
 });
 
 /**
  * IPC window actions.
  */
-ipc.on(EDIT_ENTRY, (_event, arg) => {
+ipc.on(EDIT_ENTRY, (_event: any, arg: any) => {
   openEditWindow(arg.id);
 });
 
@@ -118,22 +114,23 @@ ipc.on(OPEN_ENTRY_WINDOW, () => {
   openEntriesWindow();
 });
 
-ipc.on(ERROR_ALERT, (event, arg) => {
+ipc.on(ERROR_ALERT, (_event: any, arg: string) => {
   dialog.showErrorBox('Error', String(arg));
 });
 
 const installExtensions = async () => {
-  let extensions = [
+  const extensions = [
     REACT_DEVELOPER_TOOLS,
     REDUX_DEVTOOLS
   ];
 
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  extensions = extensions.map(name => installExtension(name, forceDownload));
-  return Promise.all(extensions);
+  return Promise.all(extensions.map(name => installExtension(name, forceDownload)));
 };
 
 // First state
+/*
+
 let oldState = null;
 let oldToken = null;
 
@@ -163,9 +160,9 @@ const persistState = async () => {
     keytar.setPassword(SERVICE_NAME, ACCOUNT_NAME, userToken);
     oldToken = userToken;
   }
-};
+}; */
 
-const openEditWindow = (id) => {
+const openEditWindow = (id: number) => {
   if (entriesWindow === null) {
     return null;
   }
@@ -187,12 +184,14 @@ const openEditWindow = (id) => {
     parent: entriesWindow
   });
 
+	// @ts-ignore
   editWindow.entryIndex = id;
 
   editWindow.loadURL(`file://${__dirname}/edit.html`);
 
   editWindow
     .webContents
+    // tslint:disable-next-line:no-duplicate-string
     .on('did-finish-load', () => {
       if (!editWindow) {
         throw new Error('"editWindow" is not defined');
@@ -202,6 +201,7 @@ const openEditWindow = (id) => {
       editWindow.focus();
 
       if (debugMode === true) {
+				// @ts-ignore
         editWindow.openDevTools();
       }
     });
@@ -236,6 +236,7 @@ const openEntriesWindow = () => {
       entriesWindow.focus();
 
       if (debugMode === true) {
+				// @ts-ignore
         entriesWindow.openDevTools();
       }
     });
@@ -265,10 +266,12 @@ const createMainWindow = async () => {
     try {
       await installExtensions();
     } catch (ex) {
+      // tslint:disable-next-line:no-console
       console.log(`Error when installing extensions: ${ex}`);
     }
   }
 
+	/*
   // Get default state
   if (!store) {
     // Get store from unsecured electron storage
@@ -306,7 +309,7 @@ const createMainWindow = async () => {
     bounds = await SettingsStorage.get('windowBounds', {});
   } catch (exception) {
     bounds = {};
-  }
+  } */
 
   const windowSettings = {
     show: false,
@@ -317,7 +320,7 @@ const createMainWindow = async () => {
     resizable: false,
     maximizable: false,
     fullscreenable: false,
-    ...bounds
+    // ...bounds
   };
 
   mainWindow = new BrowserWindow(windowSettings);
@@ -331,27 +334,31 @@ const createMainWindow = async () => {
     mainWindow.focus();
   });
 
+	/*
   mainWindow.on('close', async () => {
     const currentBounds = mainWindow.getBounds();
     await SettingsStorage.set('windowBounds', {
       x: currentBounds.x,
       y: currentBounds.y
     });
-  });
+  }); */
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
-  mainWindow.on('minimize', (event) => {
+  mainWindow.on('minimize', (event: any) => {
     event.preventDefault();
+		// @ts-ignore
     mainWindow.hide();
   });
 
+	/*
   if (trayBuilder == null) {
     trayBuilder = new TrayBuilder(store, openMainWindow);
     trayBuilder.buildIcon();
-  }
+	}
+	*/
 
   const menuBuilder = new MenuBuilder(mainWindow, openEntriesWindow, debugMode);
   menuBuilder.buildMenu();
@@ -370,6 +377,7 @@ autoUpdater.on('updateRequired', () => {
  * Update is available... send message to views.
  */
 autoUpdater.on('updateAvailable', (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) => {
+	// @ts-ignore
   const index = dialog.showMessageBox(mainWindow, {
     type: 'info',
     buttons: ['Restart', 'Later'],

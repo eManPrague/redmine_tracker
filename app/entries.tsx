@@ -1,13 +1,13 @@
-import { ipcRenderer as ipc } from 'electron';
+import { ipcRenderer as ipc, remote } from 'electron';
 import log from 'electron-log';
-import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
-import IpcApiRenderer from './utils/IpcApiRenderer';
+// tslint:disable-next-line:no-commented-code
+// import IpcApiRenderer from './utils/IpcApiRenderer';
 
 // Containers + store
-import Entries from './components/Entries';
+import Root from './containers/DefaultContainer';
 
 // Global styles
 import './app.global.css';
@@ -21,15 +21,9 @@ window.onerror = (error) => {
   log.error(error);
 };
 
-// Initialize renderer process
-const ipcApi = new IpcApiRenderer(store);
-ipcApi.bind();
-
 render(
   <AppContainer>
-    <Provider store={store}>
-      <Entries />
-    </Provider>
+		<Root />
   </AppContainer>,
   document.getElementById('root')
 );

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import styles from './App.css';
 
@@ -6,7 +6,7 @@ interface AppProps {
   children: React.ReactNode;
   loading: boolean;
   loadingMessage: string;
-};
+}
 
 export default class App extends React.Component<AppProps> {
   render() {

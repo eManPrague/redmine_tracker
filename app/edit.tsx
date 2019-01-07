@@ -1,32 +1,22 @@
-import React from 'react';
+import { ipcRenderer as ipc } from 'electron';
+import log from 'electron-log';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Immutable from 'immutable';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import { ipcRenderer as ipc, remote } from 'electron';
-import log from 'electron-log';
-import { Provider } from 'react-redux';
-import { getInitialStateRenderer } from 'electron-redux';
 
-import IpcApiRenderer from './utils/IpcApiRenderer';
+// tslint:disable-next-line:no-commented-code
+// import IpcApiRenderer from './utils/IpcApiRenderer';
 
 // Containers + store
-import configureStore from './store';
-
-// Entry dialog
-import EditDialog from './components/EditDialog';
+import Root from './containers/DefaultContainer';
 
 // Global styles
 import './app.global.css';
 
-// This is important for material-ui
-injectTapEventPlugin();
-
 // Current window
-const currentWindow = remote.getCurrentWindow();
+// const currentWindow: any = remote.getCurrentWindow();
 
 // Test if log run
-log.info(`Start edit entry ${currentWindow.entryIndex}...`);
+// log.info(`Start edit entry ${currentWindow.entryIndex}...`);
 
 // Bind error catcher
 window.onerror = (error) => {
@@ -35,26 +25,31 @@ window.onerror = (error) => {
 };
 
 // Init app
-const initialState = Immutable.fromJS(getInitialStateRenderer());
-const store = configureStore(initialState, 'renderer');
+// const initialState = Immutable.fromJS(getInitialStateRenderer());
+// const store = configureStore(initialState, 'renderer');
 
 // Initialize renderer process
-const ipcApi = new IpcApiRenderer(store);
-ipcApi.bind();
-
-// Get proper entry from history
-const entry = store.getState().getIn(['entries', 'history', currentWindow.entryIndex]).toJS();
-console.log(entry);
-if (entry && !Object.prototype.hasOwnProperty.call(entry, 'id')) {
-  entry.id = null;
-}
-console.log(entry);
+// const ipcApi = new IpcApiRenderer(store);
+// ipcApi.bind();
 
 render(
-  <AppContainer>
-    <Provider store={store}>
-      <EditDialog entryIndex={currentWindow.entryIndex} currentEntry={entry} />
-    </Provider>
-  </AppContainer>,
+	<AppContainer>
+		<Root />
+	</AppContainer>,
   document.getElementById('root')
 );
+
+// @ts-ignore
+if (module.hot) {
+	// @ts-ignore
+  module.hot.accept('./containers/DefaultContainer', () => {
+    // tslint:disable-next-line:variable-name
+    const NextRoot = require('./containers/DefaultContainer');
+    render(
+			<AppContainer>
+				<NextRoot />
+			</AppContainer>,
+      document.getElementById('root')
+    );
+  });
+}

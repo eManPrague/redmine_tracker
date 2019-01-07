@@ -1,13 +1,13 @@
 import { ipcRenderer as ipc } from 'electron';
 import log from 'electron-log';
-import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
-import IpcApiRenderer from './utils/IpcApiRenderer';
+// tslint:disable-next-line:no-commented-code
+// import IpcApiRenderer from './utils/IpcApiRenderer';
 
 // Containers + store
-import Root from './containers/Root';
+import Root from './containers/DefaultContainer';
 
 // Global styles
 import './app.global.css';
@@ -22,23 +22,26 @@ window.onerror = (error) => {
 };
 
 // Initialize renderer process
-const ipcApi = new IpcApiRenderer(store);
-ipcApi.bind();
+// const ipcApi = new IpcApiRenderer(store);
+// ipcApi.bind();
 
 render(
-  <AppContainer>
-    <Root store={store} history={history} />
-  </AppContainer>,
+	<AppContainer>
+		<Root />
+	</AppContainer>,
   document.getElementById('root')
 );
 
+// @ts-ignore
 if (module.hot) {
-  module.hot.accept('./containers/Root', () => {
-    const NextRoot = require('./containers/Root'); // eslint-disable-line global-require
+	// @ts-ignore
+  module.hot.accept('./containers/DefaultContainer', () => {
+    // tslint:disable-next-line:variable-name
+    const NextRoot = require('./containers/DefaultContainer');
     render(
-      <AppContainer>
-        <NextRoot store={store} history={history} />
-      </AppContainer>,
+			<AppContainer>
+				<NextRoot />
+			</AppContainer>,
       document.getElementById('root')
     );
   });

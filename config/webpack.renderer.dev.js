@@ -21,43 +21,48 @@ const sliceKeys = require('./scripts/Utils');
 
 CheckNodeEnv('development');
 
-const port = process.env.PORT || 1212;
-const publicPath = `http://localhost:${port}/dist`;
-const dll = path.resolve(process.cwd(), 'dll');
+const port = process.env.PORT || 3000;
+const dll = path.join(__dirname, '..', 'dll');
 const manifest = path.resolve(dll, 'renderer.json');
+const requiredByDLLConfig = module.parent.filename.includes(
+  'webpack.renderer.dev.dll'
+);
 
 /**
  * Warn if the DLL is not built
  */
-if (!(fs.existsSync(dll) && fs.existsSync(manifest))) {
-  console.log(chalk.black.bgYellow.bold(
-    'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
-  ));
-  execSync('npm run build-dll');
+if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
+  console.log(
+    chalk.black.bgYellow.bold(
+      'The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'
+    )
+  );
+  execSync('yarn build-dll');
 }
 
 module.exports = merge.smart(baseConfig, {
   devtool: 'inline-source-map',
   target: 'electron-renderer',
+  mode: 'development',
 
   entry: {
     app: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, '..', 'app/index.tsx'),
+      require.resolve('../app/app.tsx')
     ],
     entries: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, '..', 'app/entries.tsx'),
+      require.resolve('../app/entries.tsx')
     ],
     edit: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}/`,
       'webpack/hot/only-dev-server',
-      path.join(__dirname, '..', 'app/edit.tsx'),
+      require.resolve('../app/edit.tsx')
     ]
   },
 
@@ -202,11 +207,13 @@ module.exports = merge.smart(baseConfig, {
   },
 
   plugins: [
-    new webpack.DllReferencePlugin({
-      context: process.cwd(),
-      manifest: require(manifest),
-      sourceType: 'var',
-    }),
+    requiredByDLLConfig
+      ? null
+      : new webpack.DllReferencePlugin({
+          context: path.join(__dirname, '..', 'dll'),
+          manifest: require(manifest),
+          sourceType: 'var'
+        }),
 
     new webpack.HotModuleReplacementPlugin({
       multiStep: true
@@ -238,5 +245,10 @@ module.exports = merge.smart(baseConfig, {
     new ExtractTextPlugin({
       filename: '[name].css'
     }),
-  ]
+  ],
+
+  node: {
+    __dirname: false,
+    __filename: false
+  },
 });

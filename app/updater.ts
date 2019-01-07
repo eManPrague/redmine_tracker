@@ -43,7 +43,7 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 // export this to MenuItem click callback
-export default function checkForUpdates(menuItem) {
+export default function checkForUpdates(menuItem: any) {
   updater = menuItem;
   updater.enabled = false;
   autoUpdater.checkForUpdates();

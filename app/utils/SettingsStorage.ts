@@ -9,7 +9,7 @@ export default class SettingsStorage {
    * @return {Promise}
    *
    */
-  static get(key, defaults = null) {
+  static get(key: string, defaults: any = null): any {
     return new Promise((resolve, reject) => {
       const promise = this.hasKey(key);
       promise.then(val => {
@@ -34,9 +34,9 @@ export default class SettingsStorage {
    *
    * @memberOf SettingsStorage
    */
-  static set(key, value) {
+  static set(key: string, value: any) {
     return new Promise((resolve, reject) => {
-      storage.set(key, value, (error) => {
+      storage.set(key, value, (error: any) => {
         if (error) {
           reject(error);
         } else {
@@ -50,9 +50,9 @@ export default class SettingsStorage {
    * Override methods to return promise
    * instead of call cb
    */
-  static getKey(key) {
+  static getKey(key: string) {
     return new Promise((resolve, reject) => {
-      storage.get(key, (error, data) => {
+      storage.get(key, (error: any, data: any) => {
         if (error) {
           reject(error);
         } else {
@@ -62,9 +62,9 @@ export default class SettingsStorage {
     });
   }
 
-  static hasKey(key) {
+  static hasKey(key: string) {
     return new Promise((resolve, reject) => {
-      storage.has(key, (error, hasKey) => {
+      storage.has(key, (error: any, hasKey: any) => {
         if (error) {
           reject(error);
         } else {

@@ -11,24 +11,25 @@
       "scripthost"
     ],
     "types": [],
+
     "alwaysStrict": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
+
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
+
     "sourceMap": true,
-    "rootDir": "app",
+
     "outDir": "dist"
   },
   "files": [
-    "app/index.tsx",
-    "app/entries.tsx",
+    "app/app.tsx",
     "app/edit.tsx",
-    "app/main.dev.ts"
+    "app/entries.tsx"
   ],
   "include": [
     "app/**/*.ts",
