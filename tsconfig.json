@@ -1,24 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "moduleResolution": "node",
     "module": "commonjs",
-    "jsx": "react",
-    "lib": [
-      "dom",
-      "es6",
-      "dom.iterable",
-      "scripthost"
-    ],
+    "jsx": "preserve",
     "types": [],
-
     "alwaysStrict": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-
+    "allowSyntheticDefaultImports" : true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 

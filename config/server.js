@@ -33,7 +33,7 @@ app.use(wdm);
 app.use(webpackHotMiddleware(compiler));
 
 function createHotElectronProcess(cb) {
-  const electronProcess = spawn('npm', ['run', 'start-hot'], { /* shell: true, */ env: process.env, stdio: 'inherit' });
+  const electronProcess = spawn('yarn', ['start-hot'], { /* shell: true, */ env: process.env, stdio: 'inherit' });
   electronProcess.on('error', spawnError => console.error(spawnError));
   return electronProcess;
 }
