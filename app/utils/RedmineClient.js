@@ -130,7 +130,7 @@ class RedmineClient {
 
             response.push({
               id: parseInt(id, 10),
-              subject: `#${id} - ${issue.get('subject')}`,
+              subject: issue.has('display_name') ? issue.get('display_name') : `#${id} - ${issue.get('subject')}`,
               userId
             });
           });
@@ -188,6 +188,7 @@ class RedmineClient {
       time_from_hours: moment.unix(entry.startTime).format('HH:mm'),
       time_to_hours: moment.unix(entry.endTime).format('HH:mm'),
       original_hours: hours,
+      hours: hours,
       spent_on: moment.unix(entry.endTime).format('YYYY-MM-DD'),
       comments: entry.description,
       activity_id: entry.activity
