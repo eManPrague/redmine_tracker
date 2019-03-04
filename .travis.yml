@@ -34,7 +34,6 @@ install:
 - nvm install 8.3.0
 - npm install npm@latest -g
 - yarn install
-- yarn add electron-builder@next --dev # force install next version to test electron-builder
 
 script:
 - yarn run build
