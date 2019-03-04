@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Immutable from 'immutable';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import { ipcRenderer as ipc } from 'electron';
 import log from 'electron-log';
 import { Provider } from 'react-redux';
@@ -16,9 +15,6 @@ import configureStore from './store';
 
 // Global styles
 import './app.global.css';
-
-// This is important for material-ui
-injectTapEventPlugin();
 
 // Test if log run
 log.info('Start entries frontend...');

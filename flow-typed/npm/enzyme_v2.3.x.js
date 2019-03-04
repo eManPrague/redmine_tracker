@@ -1,5 +1,5 @@
-// flow-typed signature: ac18e8756b9f77851123c33e78aaa670
-// flow-typed version: 792f604e07/enzyme_v2.3.x/flow_>=v0.53.x
+// flow-typed signature: a8a6bd18ed59824a1f0c34e3872381df
+// flow-typed version: de6ef9adc3/enzyme_v2.3.x/flow_>=v0.53.x
 
 import * as React from "react";
 
@@ -9,7 +9,7 @@ declare module "enzyme" {
     index: number
   ) => boolean;
   declare type NodeOrNodes = React.Node | Array<React.Node>;
-  declare type EnzymeSelector = string | Class<React.Component<*, *>> | Object;
+  declare type EnzymeSelector = string | Class<React.Component<*, *>> | {};
 
   // CheerioWrapper is a type alias for an actual cheerio instance
   // TODO: Reference correct type from cheerio's type declarations
