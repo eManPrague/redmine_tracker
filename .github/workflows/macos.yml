@@ -22,8 +22,8 @@ jobs:
       with:
         node-version: '8.3.0'
 
-		- name: Show node version
-			uses: node -v
+    - name: Show node version
+      run: node -v
 
     - name: Install dependencies
       run: yarn install
