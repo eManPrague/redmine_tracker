@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  release:
+		name: Release
+		runs-on: macOS-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+		- name: Use node
+			uses: actions/setup-node@v2
+			with:
+				node-version: '8.3.0'
+
+    - name: Install dependencies
+      run: yarn install
+
+		- name: Release
+		  run: yarn run release
